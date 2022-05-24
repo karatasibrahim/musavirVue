@@ -6,14 +6,13 @@
   >
     <template #button-content>
       <feather-icon
-        badge="6"
+        :badge="items.length"
         badge-classes="bg-danger"
         class="text-body"
         icon="BellIcon"
         size="21"
       />
     </template>
-
     <!-- Header -->
     <li class="dropdown-menu-header">
       <div class="dropdown-header d-flex">
@@ -24,43 +23,35 @@
           pill
           variant="light-primary"
         >
-          6 Yeni
+          3 Yeni
         </b-badge>
       </div>
     </li>
-
     <!-- Notifications -->
     <vue-perfect-scrollbar
-      v-once
+
       :settings="perfectScrollbarSettings"
       class="scrollable-container media-list scroll-area"
       tagname="li"
     >
       <!-- Account Notification -->
+
       <b-link
-        v-for="notification in notifications"
+        v-for="notification in getNot"
         :key="notification.subtitle"
       >
         <b-media>
-          <template #aside>
-            <b-avatar
-              size="32"
-              :src="notification.avatar"
-              :text="notification.avatar"
-              :variant="notification.type"
-            />
-          </template>
           <p class="media-heading">
             <span class="font-weight-bolder">
-              {{ notification.title }}
+              {{ notification.Mesaj }}
             </span>
           </p>
-          <small class="notification-text">{{ notification.subtitle }}</small>
+          <small class="notification-text">{{ notification.Tarih }}</small>
         </b-media>
       </b-link>
 
       <!-- System Notification Toggler -->
-      <div class="media d-flex align-items-center">
+      <!-- <div class="media d-flex align-items-center">
         <h6 class="font-weight-bolder mr-auto mb-0">
          Sistem Bildirimleri
         </h6>
@@ -68,10 +59,10 @@
           :checked="true"
           switch
         />
-      </div>
+      </div> -->
 
       <!-- System Notifications -->
-      <b-link
+      <!-- <b-link
         v-for="notification in systemNotifications"
         :key="notification.subtitle"
       >
@@ -91,7 +82,7 @@
           </p>
           <small class="notification-text">{{ notification.subtitle }}</small>
         </b-media>
-      </b-link>
+      </b-link> -->
     </vue-perfect-scrollbar>
 
     <!-- Cart Footer -->
@@ -110,7 +101,7 @@ import {
 } from 'bootstrap-vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import Ripple from 'vue-ripple-directive'
-
+import {mapGetters,mapActions} from 'vuex'
 export default {
   components: {
     BNavItemDropdown,
@@ -124,6 +115,33 @@ export default {
   },
   directives: {
     Ripple,
+  },
+  data(){
+    return{
+      items:[]
+    }
+  },
+  computed:{
+...mapGetters(['renotification']),
+getNot(){
+    return this.renotification
+}
+  },
+  methods:{
+  ...mapActions(['fetchMesaj']),
+    fetchNot(){
+this.fetchMesaj('657aa3d1-cc29-434e-9523-16cfc51a7d92')
+setTimeout(()=>{
+  this.items=this.getNot
+  this.items.sort(function(a, b) {
+    a = new Date(a.Tarih);
+    b = new Date(b.Tarih);
+    return a>b ? -1 : a<b ? 1 : 0;
+});
+  console.log( this.items);
+  console.log("çaliştim");
+},1000)
+  },
   },
   setup() {
     /* eslint-disable global-require */
@@ -181,6 +199,12 @@ export default {
       perfectScrollbarSettings,
     }
   },
+  created(){
+    },
+mounted(){
+  this.fetchNot() 
+  console.log("not");
+}
 }
 </script>
 

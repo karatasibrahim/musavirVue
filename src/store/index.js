@@ -16,7 +16,9 @@ import {
   doc,
   updateDoc,
   setDoc,
-  deleteDoc
+  deleteDoc,
+  addDoc,
+  orderBy
 } from "firebase/firestore";
 var firebase = require("firebase/app")
 import {
@@ -69,7 +71,9 @@ export default new Vuex.Store({
     ilce: [],
     Sifre: {},
     calisan: [],
-    sgkVizite: []
+    sgkVizite: [],
+    notification:[]
+
   },
   getters: {
     rePerson(state) {
@@ -137,6 +141,9 @@ export default new Vuex.Store({
     },
     reSgkVizite(state) {
       return state.sgkVizite
+    },
+    renotification(state){
+      return state.notification
     }
   },
   mutations: {
@@ -246,6 +253,7 @@ export default new Vuex.Store({
       state.il.push(payload)
     },
     SetSifreler(state, payload) {
+      console.log(payload);
       payload.forEach(el => {
         state.Sifre = el.data()
       })
@@ -260,6 +268,10 @@ export default new Vuex.Store({
         console.log(el.data());
         state.sgkVizite.push(el.data()) 
       })
+    },
+    setMesaj(state,payload){
+      console.log(payload);
+  state.notification.push(payload)
     }
   },
   actions: {
@@ -364,18 +376,6 @@ export default new Vuex.Store({
         MutName: "setGidenFatura"
       })
 
-
-      // console.log("giden vuex",payload);
-      // const q = query(
-      //   collection(db, "GidenFaturalar"),
-
-      //   limit(10)
-      // );
-      // const Gelendata = await getDocs(q);
-      // Gelendata.forEach(doc=>{
-
-      //   context.commit("setGidenFatura",doc.data())
-      // })
     },
 
     async fecthGibTebligat(context, payload) {
@@ -452,7 +452,7 @@ export default new Vuex.Store({
 
     },
     async fetchSgkBildirge(context, payload) {
-      this.state.SgkBildirge = []
+      this.state.SgkBildirge = [] 
 
       console.log(payload);
       context.dispatch("actionArr", {
@@ -591,7 +591,21 @@ export default new Vuex.Store({
 
       return id
     },
-
+    async fetchMesaj(context,payload){
+      console.log(payload);
+      this.state.notification=[]
+      console.log("çaliştim");
+      this.state.mesaj = []   
+          let q =query(
+        collection(db,"MukellefBildirim"),
+        where("KullaniciId", "==",payload),
+      )
+      const dat=await getDocs(q)
+      dat.forEach(el=>{
+        console.log(el.data());
+        context.commit('setMesaj',el.data())
+      })
+    },
 
     //!  UPTADE 
     async updateProfileDate(context, paylod) {
@@ -639,6 +653,12 @@ export default new Vuex.Store({
       const Gelendata = await updateDoc(q, payload);
       console.log(Gelendata);
     },
+    async uptadeSifre(context, payload) {
+      console.log(documentıd);
+      const q = doc(db, "Sifreler", payload.SifreId.toString())
+      const Gelendata = await updateDoc(q, payload);
+      console.log(Gelendata);
+    },
     //! ADD DATA
     async AddNewSgkData(context, payload) {
       // await setDoc(doc(db, "Firma", payload.SubeId ), payload);
@@ -656,6 +676,19 @@ export default new Vuex.Store({
       const q = doc(db, "Mukellef", payload.MukellefId.toString())
       const Gelendata = await setDoc(q, payload);
       console.log(Gelendata);
+    },
+    async AddNewsNotification(context, payload) {
+      console.log(payload);
+      
+      const Gelendata = await addDoc(collection(db, "MukellefBildirim"),{
+        Gonderilenler:payload.Gonderilenler,
+        KullaniciId:payload.KullaniciId,
+        Mesaj:payload.Mesaj,
+        Tarih:payload.Tarih
+      });
+      context.commit('setMesaj',Gelendata)
+      console.log(Gelendata);
+      context.dispatch('fetchMesaj',payload.KullaniciId)
     },
     //! DELETE DATA
     async DeleteSgkData(context, payload) {
