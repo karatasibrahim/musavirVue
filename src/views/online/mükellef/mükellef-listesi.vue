@@ -904,8 +904,9 @@ return this.reFaaliyet
     //#endregion
 
     //#region SAYFA ICIN
-    showPanelClick() {
-      window.open("", "_blank");
+    showPanelClick(kod,sifre,id) {
+      console.log(kod,sifre);
+       window.open("http://localhost:8081/dashboard?cid="+kod+ "&pwd="+ sifre+"&asd="+id, "_blank");
     },
     showTaxPayerInfoClicks(e, v, y) {
       this.$refs.taxPayerPopup.show();

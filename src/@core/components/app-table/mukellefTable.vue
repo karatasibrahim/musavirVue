@@ -114,7 +114,7 @@
 
       <template #panelColumnTemplate="{ data }">
         <div class="text-center">
-                      <feather-icon  @click="showPanelClick(data.data.beyan_pdf)" icon="BriefcaseIcon"/>
+         <feather-icon  @click="showPanelClick(data.data.PanelKodu,data.data.PanelSifre,data.data.MukellefId)" icon="BriefcaseIcon"/>
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"

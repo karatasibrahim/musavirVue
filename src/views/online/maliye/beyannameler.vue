@@ -340,47 +340,23 @@ console.log(now);
     ...mapActions(["fetchBeyanname"]),
 fetch(){
 this.fetchBeyanname([this.getPerson])
-//setTimeout(()=>{
-  //console.log(this.beyannameData);
-// this.setünvan
-//},800)
+setTimeout(()=>{
+this.setünvan()
+},800)
 },
-//     setünvan() {
-//   let arrUnvan=[];
-//       let arrtype=[]
-//       this.beyannameData.forEach((els) => {
-//         arr.push(els)
-//         arrtype.push(els.beyan_turu)
-//          });
-//          arr.forEach(el=>{
-//                 this.mukelefData.forEach((data) => {
-//           if (el.MukellefID == data.MukellefId) {
-//             el.unvan = data.Unvan;
-//             console.log(el.unvan);
-//             arrUnvan.push(data.Unvan);
-//             this.items.push(el)
-//           }
-        
-//         });
-//          })
-   
-//      this.unvanlar=[...new Set(arrUnvan)]
-//       console.log(this.items);
-//       this.setType(arrtype)
-//     },
-//     setType(arr){
-
-//        arr.filter((item, index) => {
-// console.log(arr.indexOf(item)=== index);
-//         // Eğer mevcut öğenin indeksi aynı ise, yeni diziye dön.
-//         if(arr.indexOf(item) === index){
-//           console.log(item);
-//           this.turler.push(item)
-//         }
-        
+    setünvan() {
+  let arrUnvan=[];
+      let arrtype=[]
+      this.beyannameData.forEach((els) => {
+        arr.push(els)
+        arrUnvan.push(els.unvan)
+        arrtype.push(els.beyannameTuru)
+         });
+  
+     this.unvanlar=[...new Set(arrUnvan)]
+       this.turler=[...new Set(arrtype)]
+    },
  
-//     });
-//     }
   },
   mounted() {
     this.fetch();

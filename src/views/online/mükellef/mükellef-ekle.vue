@@ -534,7 +534,7 @@ import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import 'cleave.js/dist/addons/cleave-phone.us'
 import { mapGetters, mapActions } from "vuex";
-
+import Ripple from 'vue-ripple-directive'
 export default {
   components: {
     AppTable,
@@ -560,6 +560,7 @@ export default {
   data() {
     return {
       options: {
+  
               phone: {
           phone: true,
           phoneRegionCode: 'TR',
@@ -755,7 +756,8 @@ DAMGA:null,
    hitapField:['HitapŞekli','Telefon','Mail','GönderimYapılsın',"Sil"]
     };
   },
-  directives: {
+  directives: {     
+     Ripple,
   focus: {
     componentUpdated: function (el, binding, vnode) {
       console.log(el.value);
@@ -977,18 +979,7 @@ console.log(dataa);
   },
 
   watch: {
-    popupSection() {
-      console.log(this.popupSection == "branch");
-      if (this.popupSection == "branch") {
-        this.fetch("branch");
-      }
-      if (this.popupSection == "beyan") {
-        this.fetch("beyan");
-      }
-      if(this.popupSection=="passwords"){
-        this.fetch("passwords")
-      }
-    },
+
     person(newValue,OldValue){
 if(newValue[0]!=OldValue[0]){
    this.beyanDataValue={

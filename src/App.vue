@@ -125,7 +125,8 @@ export default {
     locale("tr"); 
   },
   mounted() {
-   console.log("çaliştim ");
+  
+
   },
 };
 </script>
