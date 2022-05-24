@@ -61,6 +61,13 @@
             <i class="gg-track"> </i>
             Hızlı Girişler
           </li>
+            <li
+            :class="popupSection == 'pass' ? 'active' : 'false'"
+            @click="popupSection = 'pass'"
+          >
+            <i class="gg-track"> </i>
+           Şifreler
+          </li>
         </ul>
 
         <!-- SECTION INFO -->
@@ -559,7 +566,43 @@ v-if="uptadeActive"
  </div>
     </div>
 
+     <div
+          class="m-popup"
+          v-if="  popupSection == 'pass'"
+          :style="[
+            popupSection == 'pass'
+              ? { display: 'flex' }
+              : { display: 'none' },
+          ]"
+        >
+          <h2>{{ popup.Unvan }}</h2>
+          <hr />
+          <div class="m-flex-row">
+            <div class="m-input">
+              <label>Panel Kodu</label>
+              <input type="text" v-model="popup.PanelKodu" />
+            </div>
 
+            <div class="m-input">
+              <label>Panel Şifre</label>
+              <input type="text" v-model="popup.PanelSifre" />
+            </div>
+
+          </div>
+                   <div class="m-flex-row">
+            <div class="m-input">
+              <label>Edevlet TC</label>
+              <input type="text" v-model="popup.EdevletTc" />
+            </div>
+
+            <div class="m-input">
+              <label>Edevlet Şifre</label>
+              <input type="text" v-model="popup.eDevletSifre" />
+            </div>
+
+
+          </div>
+         </div>
                
       </template>
     </b-modal>
@@ -814,7 +857,51 @@ faaliyetget(space)
   })
 }
   }
-},
+  },
+  computed: {
+    inquireMinDate() {
+      return this.inquireRequest.startDate;
+    },
+    inquireMaxDate() {
+      return this.inquireRequest.endDate;
+    },
+    listMinDate() {
+      return this.listRequest.startDate;
+    },
+    listMaxDate() {
+      return this.listRequest.endDate;
+    },
+    ...mapGetters(["reilce","reil","reFaaliyet","reKalanBeyanname","reBeyanTakipProperties","reMukellef", "reSgkFirmalar", "reTicaretSicilGazetesi"]),
+
+    getIl(){
+      return this.reil.map(el=>{
+     return {value:el.SehirId,text:el.SehirAdi}
+    })
+      },
+      getIlce(){
+        return this.reilce.map(el=>{
+          return {value:el.IlceId,text:el.IlceAdi}
+        })
+      },
+    getMukellefData() {
+      return this.reMukellef;
+    },
+    getFirmadata() {
+      return this.reSgkFirmalar;
+    },
+    getFaaliyet() {
+      return this.reFaaliyet;
+    },
+    getKalanBeyanname() {
+      return this.reKalanBeyanname;
+    },
+    getBeyanTakipProperties() {
+      return this.reBeyanTakipProperties;
+    },
+    filterfaaliyet(){
+return this.reFaaliyet
+    },
+  },
   methods: {
     //#region Ust Bar Butonları
     queryClick() {
@@ -850,12 +937,13 @@ faaliyetget(space)
  
   console.log(this.popup.FaaliyetAlani, this.faaliyetdata);
     },
-    ...mapActions(["AddNewBeyanTakip","AddNewMükellef","DeleteSgkData","fetchİlce","fetchİller","fetchFaaliyet","fetchKalanBeyanname","fetchBeyanTakipProperties","uptadeSgkFirma","fetchSgkFirmaalar", "AddNewSgkData"]),
+    ...mapActions(["uptadeSifre","fetchsifreler","AddNewBeyanTakip","AddNewMükellef","DeleteSgkData","fetchİlce","fetchİller","fetchFaaliyet","fetchKalanBeyanname","fetchBeyanTakipProperties","uptadeSgkFirma","fetchSgkFirmaalar", "AddNewSgkData"]),
         inquireClick() {
       this.popup.iletisim=this.iletisimdata
       this.popup.FaaliyetAlani=this.faaliyetdata
 console.log(this.popup);
 this.AddNewMükellef(this.popup)
+
     },
     fetch(data) {
        
@@ -954,7 +1042,12 @@ this.beyanDataValue.FORMBS=el.beyantakip
   console.log(this.beyanDataValue);
 },400)
        }
-
+else if(data=="pass"){
+  setTimeout(()=>{
+    console.log(this.sifre );
+    
+  },100)
+}
     },
     //#endregion
    getsgkdata(data){
@@ -1097,15 +1190,7 @@ console.log(dataa);
   watch: {
     popupSection() {
       console.log(this.popupSection == "branch");
-      if (this.popupSection == "branch") {
-        this.fetch("branch");
-      }
-      if (this.popupSection == "beyan") {
-        this.fetch("beyan");
-      }
-      if(this.popupSection=="passwords"){
-        this.fetch("passwords")
-      }
+  this.fetch(this.popupSection);
     },
     person(newValue,OldValue){
 if(newValue[0]!=OldValue[0]){
@@ -1144,51 +1229,10 @@ this.popup.hasOwnProperty("FaaliyetAlani")?this.faaliyetdata=this.popup.Faaliyet
       this.fetchİlce([this.selectedil])
     },
   },
-  computed: {
-    inquireMinDate() {
-      return this.inquireRequest.startDate;
-    },
-    inquireMaxDate() {
-      return this.inquireRequest.endDate;
-    },
-    listMinDate() {
-      return this.listRequest.startDate;
-    },
-    listMaxDate() {
-      return this.listRequest.endDate;
-    },
-    ...mapGetters(["reilce","reil","reFaaliyet","reKalanBeyanname","reBeyanTakipProperties","reMukellef", "reSgkFirmalar", "reTicaretSicilGazetesi"]),
-      getIl(){
-      return this.reil.map(el=>{
-     return {value:el.SehirId,text:el.SehirAdi}
-    })
-      },
-      getIlce(){
-        return this.reilce.map(el=>{
-          return {value:el.IlceId,text:el.IlceAdi}
-        })
-      },
-    getMukellefData() {
-      return this.reMukellef;
-    },
-    getFirmadata() {
-      return this.reSgkFirmalar;
-    },
-    getFaaliyet() {
-      return this.reFaaliyet;
-    },
-    getKalanBeyanname() {
-      return this.reKalanBeyanname;
-    },
-    getBeyanTakipProperties() {
-      return this.reBeyanTakipProperties;
-    },
-    filterfaaliyet(){
-return this.reFaaliyet
-    },
-  },
+
   mounted(){
     this.fetchIlAndIlce()
+    
   }
 };
 </script>
