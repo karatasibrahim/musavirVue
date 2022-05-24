@@ -906,7 +906,7 @@ return this.reFaaliyet
     //#region SAYFA ICIN
     showPanelClick(kod,sifre,id) {
       console.log(kod,sifre);
-       window.open("http://localhost:8081/dashboard?cid="+kod+ "&pwd="+ sifre+"&asd="+id, "_blank");
+       window.open("http://mukellef.emusavirim.com/dashboard?cid="+kod+ "&pwd="+ sifre+"&asd="+id, "_blank");
     },
     showTaxPayerInfoClicks(e, v, y) {
       this.$refs.taxPayerPopup.show();
