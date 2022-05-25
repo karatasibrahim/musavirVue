@@ -210,26 +210,17 @@
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 multiple
                 :close-on-select="false"
-                :options="guestsOptions"
+                :options="getMükellef"
                 label="name"
                 input-id="add-guests"
               >
 
-                <template #option="{ avatar, name }">
-                  <b-avatar
-                    size="sm"
-                    :src="avatar"
-                  />
-                  <span class="ml-50 align-middle"> {{ name }}</span>
+                <template #option="{  Unvan }">
+                  <span class="ml-50 align-middle"> {{ Unvan }}</span>
                 </template>
 
-                <template #selected-option="{ avatar, name }">
-                  <b-avatar
-                    size="sm"
-                    class="border border-white"
-                    :src="avatar"
-                  />
-                  <span class="ml-50 align-middle"> {{ name }}</span>
+                <template #selected-option="{ Unvan}">
+                  <span class="ml-50 align-middle"> {{ Unvan }}</span>
                 </template>
               </v-select>
             </b-form-group>
@@ -257,7 +248,6 @@
                 v-model="eventLocal.extendedProps.description"
               />
             </b-form-group>
-
             <!-- Form Actions -->
             <div class="d-flex mt-2">
               <b-button
@@ -266,7 +256,7 @@
                 class="mr-2"
                 type="submit"
               >
-                {{ eventLocal.id ? 'Update' : 'Kaydet ' }}
+                {{ eventLocal.end ? 'Update' : 'Kaydet ' }}
               </b-button>
               <b-button
                 v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -295,7 +285,7 @@ import { required, email, url } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import { ref, toRefs } from '@vue/composition-api'
 import useCalendarEventHandler from './useCalendarEventHandler'
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -345,7 +335,10 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(["reMukellef"])
+    ...mapGetters(["reMukellef"]),
+    getMükellef(){
+      return this.reMukellef
+    }
   },
   setup(props, { emit }) {
     /*

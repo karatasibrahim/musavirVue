@@ -78,6 +78,8 @@ export default {
         const q=  query(collection(db, "Takvim"),where("extendedProps.calendar", "in", calendars)  );
         const mukellefdata =  getDocs(q);
       mukellefdata.then(snapshot=>{
+
+
         resolve(snapshot)
       
       })
@@ -93,19 +95,21 @@ export default {
 
 
     updateEvent(ctx, { event }) {
+      console.log(event);
       return new Promise((resolve, reject) => {
-        axios
-          .post(`/apps/calendar/events/${event.id}`, { event })
-          .then(response => resolve(response))
-          .catch(error => reject(error))
+        const profile = doc(db, "Takvim", event.id)
+        const gProfile =  updateDoc(profile, event);
+        console.log(gProfile);
+
+     resolve(event)
       })
     },
     removeEvent(ctx, { id }) {
+      console.log(id);
       return new Promise((resolve, reject) => {
-        axios
-          .delete(`/apps/calendar/events/${id}`)
-          .then(response => resolve(response))
-          .catch(error => reject(error))
+      deleteDoc(doc(db, "Takvim", id))
+      resolve(id)
+   
       })
     },
   },

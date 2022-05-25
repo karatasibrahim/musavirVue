@@ -32,11 +32,11 @@ export default function userCalendar() {
   // calendars
   // ------------------------------------------------
   const calendarsColor = {
-    Business: 'primary',
+    Toplantı: 'primary',
     Holiday: 'success',
-    Personal: 'danger',
+    Kişisel: 'danger',
     Family: 'warning',
-    ETC: 'info',
+    Özel: 'info',
   }
 
   // ------------------------------------------------
@@ -181,7 +181,8 @@ export default function userCalendar() {
   // ------------------------------------------------
   const updateEvent = eventData => {
     store.dispatch('calendar/updateEvent', { event: eventData }).then(response => {
-      const updatedEvent = response.data.event
+      console.log(response)
+      const updatedEvent = response
 
       const propsToUpdate = ['id', 'title', 'url']
       const extendedPropsToUpdate = ['calendar', 'guests', 'location', 'description']
@@ -194,6 +195,7 @@ export default function userCalendar() {
   // removeEvent
   // ------------------------------------------------
   const removeEvent = () => {
+    console.log(event);
     const eventId = event.value.id
     store.dispatch('calendar/removeEvent', { id: eventId }).then(() => {
       removeEventInCalendar(eventId)
@@ -229,8 +231,11 @@ console.log(info);
         calendars: selectedCalendars.value,
       }).then(response => {    
         let arr=[]
+        let dat=[]
         response.forEach(element => {
-          arr.push(element.data())
+          dat.id= element.id
+         console.log(dat);
+          arr.push(Object.assign(element.data(),dat))
         });
         console.log(arr);
       successCallback(arr)

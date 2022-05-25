@@ -167,4 +167,7 @@ Tarih:new Date().toISOString().slice(0, 10)
 };
 </script>
 
-<style></style>
+<style >
+.content-right{
+ width: 100%!important; 
+}</style>
