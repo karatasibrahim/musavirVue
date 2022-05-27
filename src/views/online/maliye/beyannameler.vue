@@ -179,10 +179,11 @@ export default {
       //#endregion
       listRequest: {
         startDate: new Date(),
-        endDate: new Date( ),
+        endDate: new Date(),
         type: [],
         title: [],
       },
+
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/0012167353%2FBEYANNAME%2F10l09o1t551oys.pdf?alt=media",
       items: [],
@@ -269,18 +270,42 @@ export default {
     getPerson(){
      return this.rePerson.KullaniciId
       
+    },
+    getUserUid()
+    {
+return this.rePerson.kullaniciUid;
+ 
     }
   },
+  
   methods: {
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {
-      
+     ...mapActions(['AddNewsBeyanSorgu']),
+    
+    inquireClick() {     
+const data={
+KullaniciUid:this.getUserUid, 
+ BasTarih: this.inquireRequest.startDate.toISOString().slice(0, 10).replace('-','').replace('-',''),
+ // BitTarih: this.inquireRequest.endDate.toISOString().slice(0, 10).replace('-','').replace('-',''),
+//  Yil:this.inquireRequest.startDate.toISOString().slice(0,4),
+//  Ay:this.inquireRequest.startDate.toISOString().slice(5,7),
+//  Gun:this.inquireRequest.startDate.toISOString().slice(8,10),
+// BasTarih:this.inquireRequest.startDate,
+ BitTarih:this.inquireRequest.endDate.slice(0, 10).replace('-','').replace('-',''),
+SorguDurumu:0
  
+
+}
+console.log(data);
+//Actionu çağirip ona veri göndermemiz lazım aksi halde çalişmaz 
+this.AddNewsBeyanSorgu(data)
+//Data da ayarladiğimiz verileri vuexe gönderdik 
+      // window.open("http://mukellef.emusavirim.com/");    
     },
-    showPdfPopup(pdfUrl) {
-      //this.activePdfUrl=pdfUrl;
+    showPdfPopup(e,tck,is) {
+      this.activePdfUrl= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2F"+is+"%2F"+ e+".pdf?alt=media"}`;
       this.$refs.pdfPopup.show();
     },
     downloadClick(e) {},
@@ -314,6 +339,7 @@ const fil=this.beyannameData.filter(el=>{
 })
 this.items=fil
 console.log(now);
+
 // let time2=new Date(this.listRequest.startDate)
 // for (let el = 0; el < this.items.length; el++) {
 //   const element = this.items[el];

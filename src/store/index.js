@@ -329,6 +329,7 @@ export default new Vuex.Store({
       this.state.beyanname = []
 
       console.log(payload);
+      
       context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "KullaniciId",
@@ -677,6 +678,15 @@ export default new Vuex.Store({
       const Gelendata = await setDoc(q, payload);
       console.log(Gelendata);
     },
+async AddNewsBeyanSorgu(contex, payload)
+{
+  //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
+  console.log(payload);
+  //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
+  const a=collection(db,"BeyannameSorgu")
+  const son=await addDoc(a,payload)
+},
+
     async AddNewsNotification(context, payload) {
       console.log(payload);
       

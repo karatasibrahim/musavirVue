@@ -142,7 +142,7 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.beyan_pdf)"
+            @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
           />
         </div>
       </template>
@@ -151,7 +151,7 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
+            @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
           />
         </div>
       </template>
@@ -312,7 +312,11 @@ export default {
     },
   },
   methods: {
-
+window(e,tck){
+  let url= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2FTAHAKKUK%2F"+ e+".pdf?alt=media"}`
+  window.open(url,'_blank')
+  console.log(e);
+},
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;

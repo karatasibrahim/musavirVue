@@ -10,7 +10,7 @@
       :pk="id"
       :items="items"
       :totalRows="16"
-      :title="'Beyannameler'"
+      :title="'Lütfen Bİldirim Gönderilecek Mükellefleri Seçiniz'"
       :columns="columns"
     />
 

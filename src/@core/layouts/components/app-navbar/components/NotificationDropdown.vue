@@ -139,7 +139,7 @@ setTimeout(()=>{
     return a>b ? -1 : a<b ? 1 : 0;
 });
   console.log( this.items);
-  console.log("çaliştim");
+
 },1000)
   },
   },

@@ -208,7 +208,7 @@ export default {
       });
     },
     fecthBeyan(){
-        console.log("çaliştim");
+        console.log("çaliştim fecthBeyan");
    let arr=[]
   this.mukellefData.forEach(element => {
 arr.push(element.MukellefId)
@@ -234,7 +234,7 @@ this.fetchBeyanname(arr)
    this.FecthPersonData()
    setTimeout(()=>{
        this.fecthBeyan()
-   },5000)
+   },400)
   }
 }
 </script>
