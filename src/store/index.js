@@ -39,7 +39,7 @@ import "firebase/auth";
 import "firebase/firestore";
 const db = getFirestore(firebase.initializeApp(firebaseConfig));
 let documentıd = ""
-
+let kId=  JSON.parse(localStorage.getItem("userData")).userId
 
 Vue.use(Vuex);
 
@@ -155,7 +155,7 @@ export default new Vuex.Store({
     },
     setBeyanname(state, payload) {
       payload.forEach(el => {
-        console.log(el.data());
+     
         return state.beyanname.push(el.data())
       })
     },
@@ -291,7 +291,7 @@ export default new Vuex.Store({
         console.log("kullanıcı", doc.id);
         documentıd = doc.id;
         context.commit("setperson", doc.data())
-
+console.log(doc.data());
         console.log(documentıd);
 
       });
@@ -303,7 +303,7 @@ export default new Vuex.Store({
       console.log(this.state.mukellef);
       this.state.mukellef = []
       const q = query(collection(db, "Mukellef"),
-        where("KullaniciId", "==", payload),limit(2));
+        where("KullaniciId", "==", payload),limit(10));
       const mukellefdata = await getDocs(q);
       let arr = []
       mukellefdata.forEach((doc) => {
@@ -327,13 +327,13 @@ export default new Vuex.Store({
     },
     async fetchBeyanname(context, payload) {
       this.state.beyanname = []
-
-      console.log(payload);
+console.log(payload);
+   let kId=  JSON.parse(localStorage.getItem("userData")).userId
       
       context.dispatch("actionArr", {
         dbName: "Beyanname",
-        İtemName: "KullaniciId",
-        payload: payload,
+        İtemName: "Kullanici",
+        payload: [kId],
         MutName: "setBeyanname"
       })
 

@@ -171,9 +171,7 @@ export default {
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
         startDate: new Date(),
-        endDate: new Date(
-
-        ),
+        endDate: new Date(),
       },
       id:"",
       //#endregion
@@ -268,7 +266,7 @@ export default {
       return this.reMukellef;
     },
     getPerson(){
-     return this.rePerson.KullaniciId
+     return this.rePerson.kullaniciUid
       
     },
     getUserUid()
@@ -287,13 +285,14 @@ return this.rePerson.kullaniciUid;
     inquireClick() {     
 const data={
 KullaniciUid:this.getUserUid, 
- BasTarih: this.inquireRequest.startDate.toISOString().slice(0, 10).replace('-','').replace('-',''),
+ //BasTarih: this.inquireRequest.startDate.slice(0, 10).replace('-','').replace('-',''),
  // BitTarih: this.inquireRequest.endDate.toISOString().slice(0, 10).replace('-','').replace('-',''),
 //  Yil:this.inquireRequest.startDate.toISOString().slice(0,4),
 //  Ay:this.inquireRequest.startDate.toISOString().slice(5,7),
 //  Gun:this.inquireRequest.startDate.toISOString().slice(8,10),
-// BasTarih:this.inquireRequest.startDate,
- BitTarih:this.inquireRequest.endDate.slice(0, 10).replace('-','').replace('-',''),
+ BasTarih:this.inquireRequest.startDate,
+ BitTarih:this.inquireRequest.endDate,
+ //BitTarih:this.inquireRequest.endDate.slice(0, 10).replace('-','').replace('-',''),
 SorguDurumu:0
  
 
@@ -365,6 +364,7 @@ console.log(now);
     /////////////////////////////////
     ...mapActions(["fetchBeyanname"]),
 fetch(){
+console.log(this.kullaniciUid);
 this.fetchBeyanname([this.getPerson])
 setTimeout(()=>{
 this.setünvan()
