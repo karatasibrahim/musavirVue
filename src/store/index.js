@@ -39,7 +39,7 @@ import "firebase/auth";
 import "firebase/firestore";
 const db = getFirestore(firebase.initializeApp(firebaseConfig));
 let documentıd = ""
-let kId=  JSON.parse(localStorage.getItem("userData")).userId
+//let kId=  JSON.parse(localStorage.getItem("userData")).userId
 
 Vue.use(Vuex);
 
@@ -328,12 +328,12 @@ console.log(doc.data());
     async fetchBeyanname(context, payload) {
       this.state.beyanname = []
 console.log(payload);
-   let kId=  JSON.parse(localStorage.getItem("userData")).userId
+  // let kId=  JSON.parse(localStorage.getItem("userData")).userId
       
       context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "Kullanici",
-        payload: [kId],
+        payload: payload,
         MutName: "setBeyanname"
       })
 
