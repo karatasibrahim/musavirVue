@@ -686,6 +686,12 @@ async AddNewsBeyanSorgu(contex, payload)
   const a=collection(db,"BeyannameSorgu")
   const son=await addDoc(a,payload)
 },
+async AddNewsBildirgeSorgu(context,payload)
+{
+  console.log(payload);
+const a =collection(db,"BildirgeSorgu")
+const sonn=await addDoc(a,payload)
+},
 
     async AddNewsNotification(context, payload) {
       console.log(payload);

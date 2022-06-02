@@ -18,81 +18,44 @@
     <!-- Sorgula Popup -->
     <b-modal
       ref="queryPopup"
-      title="Bildirge Sorgula"
+      title="Beyanname Sorgula"
       ok-title="Sorgula"
-      no-close-on-backdrop
-      cancel-title="Kapat"
+      cancel-title="İptal"
       cancel-variant="outline-secondary"
       @ok="inquireClick"
     >
       <b-row>
         <b-col cols="12">
-          <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4">
-            <v-select
-              v-model="inquireRequest.title"
-              :options="unvanlar"
-              placeholder="Ünvan Seçiniz"
-              label="Unvan"
+          <b-form-group
+            label="Başlangıç Tarihi"
+            label-for="h-start-date"
+            label-cols-md="4"
+          >
+            <b-form-datepicker
+              id="h-start-date"
+              v-model="inquireRequest.startDate"
+              :max="inquireMaxDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
+              :locale="dateTimeLanguage.locale"
+              class="mb-1"
             />
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
         <b-col cols="12">
           <b-form-group
-            style="
-              margin-bottom: 0rem !important;
-              margin-top: 0.5rem !important;
-            "
-            label="İlk Dönem"
-            label-for="h-type"
+            label="Bitiş Tarihi"
+            label-for="h-end-date"
             label-cols-md="4"
-          ></b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="6">
-          <v-select
-            v-model="inquireRequest.startDate.month"
-            :options="months"
-            placeholder="Ay Seçiniz"
-          />
-        </b-col>
-        <b-col cols="6">
-          <v-select
-            v-model="inquireRequest.startDate.year"
-            :options="years"
-            placeholder="Yıl Seçiniz"
-          />
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12">
-          <b-form-group
-            style="
-              margin-bottom: 0rem !important;
-              margin-top: 0.5rem !important;
-            "
-            label="Son Dönem"
-            label-for="h-type"
-            label-cols-md="4"
-          ></b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="6">
-          <v-select
-            v-model="inquireRequest.endDate.month"
-            :options="months"
-            placeholder="Ay Seçiniz"
-          />
-        </b-col>
-        <b-col cols="6">
-          <v-select
-            v-model="inquireRequest.endDate.year"
-            :options="years"
-            placeholder="Yıl Seçiniz"
-          />
+          >
+            <b-form-datepicker
+              id="h-end-date"
+              v-model="inquireRequest.endDate"
+              :min="inquireMinDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
+              :locale="dateTimeLanguage.locale"
+              class="mb-1"
+            />
+          </b-form-group>
         </b-col>
       </b-row>
     </b-modal>
@@ -367,7 +330,7 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["reSgkBildirge", "reSgkFirmalar", "reMukellef"]),
+    ...mapGetters(["reSgkBildirge", "reSgkFirmalar", "reMukellef","rePerson"]),
     getFirmadata() {
       return this.reSgkFirmalar;
     },
@@ -377,6 +340,14 @@ export default {
     getMukellefdata() {
       return this.reMukellef;
     },
+    getPerson()
+    {
+      return this.rePerson.kullaniciUid;
+    },
+    getUserUid()
+    {
+      return this.rePerson.kullaniciUid;
+    }
   },
 
   methods: {
@@ -384,7 +355,17 @@ export default {
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {},
+    ...mapActions(['AddNewsBildirgeSorgu']),
+    inquireClick() {
+const data={
+KullaniciUid:this.getUserUid,
+baslangic:this.inquireRequest.startDate.toString().replace("-","").replace("-",""),
+bitis:this.inquireRequest.endDate.replace("-","").replace("-",""),
+SorguDurumu:0
+}
+this.AddNewsBildirgeSorgu(data)
+
+    },
     downloadClick(e) {},
     printClick(e) {},
     sendClick(e) {},

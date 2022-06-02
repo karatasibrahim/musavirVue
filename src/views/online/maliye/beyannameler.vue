@@ -170,8 +170,18 @@ export default {
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: {
+          title:null,
+          startDate:
+          {
+            month:"",
+            year:"",
+          },
+        },
+        endDate:{
+          month:"",
+          year:"",
+        },
       },
       id:"",
       //#endregion
@@ -285,14 +295,10 @@ return this.rePerson.kullaniciUid;
     inquireClick() {     
 const data={
 KullaniciUid:this.getUserUid, 
- //BasTarih: this.inquireRequest.startDate.slice(0, 10).replace('-','').replace('-',''),
- // BitTarih: this.inquireRequest.endDate.toISOString().slice(0, 10).replace('-','').replace('-',''),
-//  Yil:this.inquireRequest.startDate.toISOString().slice(0,4),
-//  Ay:this.inquireRequest.startDate.toISOString().slice(5,7),
-//  Gun:this.inquireRequest.startDate.toISOString().slice(8,10),
- BasTarih:this.inquireRequest.startDate,
- BitTarih:this.inquireRequest.endDate,
- //BitTarih:this.inquireRequest.endDate.slice(0, 10).replace('-','').replace('-',''),
+ 
+ baslangic:this.inquireRequest.startDate.replace("-","").replace("-",""),
+ bitis:this.inquireRequest.endDate.replace("-","").replace("-",""),
+ 
 SorguDurumu:0
  
 
@@ -313,6 +319,8 @@ this.AddNewsBeyanSorgu(data)
     listClick() {
       this.$refs.listPopup.show();
     },
+
+
     listRunClick() {
       let now=new Date(this.listRequest.startDate)
      let time2=new Date(this.listRequest.startDate)
