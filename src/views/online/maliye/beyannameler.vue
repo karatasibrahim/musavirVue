@@ -153,6 +153,7 @@ import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 import { mapGetters , mapActions} from "vuex";
     let arr=[]
@@ -308,6 +309,16 @@ console.log(data);
 this.AddNewsBeyanSorgu(data)
 //Data da ayarladiğimiz verileri vuexe gönderdik 
       // window.open("http://mukellef.emusavirim.com/");    
+
+         this.$toast({
+                  component: ToastificationContent,
+                  position: "top-right",
+                  props: {                    
+                    icon: "SearchIcon",
+                    variant: "success",
+                    text: `Beyanname Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+                  },
+                });
     },
     showPdfPopup(e,tck,is) {
       this.activePdfUrl= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2F"+is+"%2F"+ e+".pdf?alt=media"}`;

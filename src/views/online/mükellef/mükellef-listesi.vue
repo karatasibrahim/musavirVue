@@ -77,7 +77,7 @@
             popupSection == 'info' ? { display: 'flex' } : { display: 'none' },
           ]"
         >
-          <h2>{{ popup.Unvan }}</h2>
+          <h2>{{ popup.unvan }}</h2>
           <hr>
 
           <div class="m-flex-row">
@@ -723,11 +723,11 @@ iletisimdata:[],
           cellTemplate: "mukellefColumnTemplate",
         },
         {
-          dataField: "Unvan",
+          dataField: "unvan",
           caption: "Ünvan",
         },
         {
-          dataField: "VergiDairesi",
+          dataField: "vergiDairesi",
           caption: "Vergi Dairesi",
         },
         {
@@ -735,7 +735,7 @@ iletisimdata:[],
           caption: "Vergi No",
         },
         {
-          dataField: "MukellefId",
+          dataField: "tckn",
           caption: "TC No",
         },
         {
@@ -920,10 +920,18 @@ return this.reFaaliyet
     },
     ...mapActions(["uptadeSifre","fetchsifreler","AddNewBeyanTakip","AddNewMükellef","DeleteSgkData","fetchİlce","fetchİller","fetchFaaliyet","fetchKalanBeyanname","fetchBeyanTakipProperties","uptadeSgkFirma","fetchSgkFirmaalar", "AddNewSgkData"]),
         inquireClick() {
+console.log(this.popup.iletisim)
       this.popup.iletisim=this.iletisimdata
+
       this.popup.FaaliyetAlani=this.faaliyetdata
 console.log(this.popup);
-this.AddNewMükellef(this.popup)
+const data={
+  data:this.popup,
+  id:this.popup.id
+}
+delete this.popup.id
+console.log(data);
+ this.AddNewMükellef(data)
 
     },
     fetch(data) {

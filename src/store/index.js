@@ -303,16 +303,13 @@ console.log(doc.data());
       console.log(this.state.mukellef);
       this.state.mukellef = []
       const q = query(collection(db, "Mukellef"),
-        where("KullaniciId", "==", payload),limit(10));
+        where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
-      let arr = []
       mukellefdata.forEach((doc) => {
-        context.commit("setMukkellef", doc.data())
+        context.commit("setMukkellef",Object.assign( doc.data(),{id:doc.id}))
 
       });
-      arr.forEach(el => {
-        console.log(el.get());
-      })
+
       return mukellefdata
     },
     async addMükellefid(context, payload) {
@@ -649,9 +646,9 @@ console.log(payload);
       context.commit('SetSgkBildirge', Gelendata)
     },
     async AddNewMükellef(context, payload) {
-      console.log(documentıd);
-      const q = doc(db, "Mukellef", payload.MukellefId.toString())
-      const Gelendata = await updateDoc(q, payload);
+      console.log(payload);
+      const q = doc(db, "Mukellef", payload.id)
+      const Gelendata = await updateDoc(q, payload.data);
       console.log(Gelendata);
     },
     async uptadeSifre(context, payload) {

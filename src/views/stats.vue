@@ -201,8 +201,8 @@ export default {
       this.fetch().then((res) => {
         console.log(res);
         res.forEach((el) => {
-          console.log(el.data().KullaniciId);
-          this.fetchMukellef(el.data().KullaniciId)
+          console.log(el.data().kullaniciUid);
+          this.fetchMukellef(el.data().kullaniciUid)
 
         });
       });
