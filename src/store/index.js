@@ -300,12 +300,13 @@ console.log(doc.data());
 
 
     async fetchMukellef(context, payload) {
-      console.log(this.state.mukellef);
+      console.log(payload);
       this.state.mukellef = []
       const q = query(collection(db, "Mukellef"),
         where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
       mukellefdata.forEach((doc) => {
+        console.log(Object.assign( doc.data(),{id:doc.id}));
         context.commit("setMukkellef",Object.assign( doc.data(),{id:doc.id}))
 
       });
@@ -657,8 +658,10 @@ console.log(payload);
     },
     async AddNewMükellef(context, payload) {
       console.log(payload);
-      const q = doc(db, "Mukellef", payload.id)
-      const Gelendata = await updateDoc(q, payload.data);
+let data=JSON.parse(JSON.stringify(payload))
+      const q = doc(db, "Mukellef", data.id)
+      delete  data.data.id
+      const Gelendata = await updateDoc(q, data.data);
       console.log(Gelendata);
     },
     async uptadeSifre(context, payload) {

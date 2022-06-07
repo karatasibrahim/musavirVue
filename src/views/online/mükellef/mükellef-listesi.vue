@@ -94,12 +94,13 @@
             <div class="s-input">
               <label><b>İl</b> </label>
                           <b-form-select  
-                          v-model="selectedil"
+                          v-model="popup.selectedil"
              :options="getIl" 
             
              />
               <label><b>İlçe</b> </label>
                           <b-form-select  
+                           v-model="popup.selectedilce"
              :options="getIlce" 
             
              />
@@ -705,7 +706,6 @@ iletisimdata:[],
       years: ["2018", "2019", "2020", "2021", "2022"],
       items: [ ],
       il:[],
-      selectedil:"",
       ilce:[],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
@@ -920,18 +920,16 @@ return this.reFaaliyet
     },
     ...mapActions(["uptadeSifre","fetchsifreler","AddNewBeyanTakip","AddNewMükellef","DeleteSgkData","fetchİlce","fetchİller","fetchFaaliyet","fetchKalanBeyanname","fetchBeyanTakipProperties","uptadeSgkFirma","fetchSgkFirmaalar", "AddNewSgkData"]),
         inquireClick() {
-console.log(this.popup.iletisim)
+console.log(this.popup)
       this.popup.iletisim=this.iletisimdata
-
       this.popup.FaaliyetAlani=this.faaliyetdata
 console.log(this.popup);
-const data={
-  data:this.popup,
-  id:this.popup.id
-}
-delete this.popup.id
-console.log(data);
- this.AddNewMükellef(data)
+
+
+ let id=this.popup.id
+
+console.log({data:this.popup,id:id});
+  this.AddNewMükellef({data:this.popup,id:id})
 
     },
     fetch(data) {
@@ -1214,8 +1212,8 @@ this.popup.hasOwnProperty("FaaliyetAlani")?this.faaliyetdata=this.popup.Faaliyet
 }
    
     },
-    selectedil(){
-      this.fetchİlce([this.selectedil])
+    'popup.selectedil'(){
+      this.fetchİlce([this.popup.selectedil])
     },
   },
 
