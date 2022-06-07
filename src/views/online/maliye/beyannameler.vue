@@ -7,6 +7,7 @@
       :listClick="listClick"
       :printClick="printClick"
       :sendClick="sendClick"
+@selected="gelendata($event)"
       :pk="id"
       :items="beyannameData"
       :totalRows="16"
@@ -143,6 +144,10 @@
         </b-col>
       </b-row>
     </b-modal>
+    <!-- <input type="text" v-model="phone">
+    <input type="text" v-model="msg"> -->
+  <!-- <button @click="getQRCode">deneme</button>   -->
+           
 
   </div>
 </template>
@@ -154,12 +159,14 @@ import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
-
 import { mapGetters , mapActions} from "vuex";
+import axios from 'axios'
+import QrcodeVue from 'qrcode.vue'
     let arr=[]
 export default {
   components: {
     AppTable,
+    QrcodeVue,
     BRow,
     vSelect,
     BCol,
@@ -168,6 +175,10 @@ export default {
   }, 
    data() {
     return {
+      setQRCode:null,
+      size:125,
+      phone:null,
+      msg:"",
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
@@ -288,11 +299,41 @@ return this.rePerson.kullaniciUid;
   },
   
   methods: {
+  async  getQRCode(phone,msg) {
+
+    const res = await axios.post("http://localhost:8087/api", { phone, msg });
+    this.setQRCode=res.data;
+    console.log(res.data);
+  },
+
     queryClick() {
       this.$refs.queryPopup.show();
     },
      ...mapActions(['AddNewsBeyanSorgu']),
-    
+
+    sendClick(e)
+    {
+    var arr=[]
+
+      e.forEach(element => {
+
+     let data=this.mukelefData.find(el=>{
+      
+      return  element.tckn==el.tckn
+      })
+console.log(data,element);
+arr.push(Object.assign(element,data))
+      });
+arr.forEach(iletim=>{
+ iletim.iletisim.forEach(tel=>{
+         let phone=tel.Telefon;   
+     let msg=tel.HitapŞekli+ " "+ iletim.unvan + " " + iletim.donem + " " + "beyannameniz ektedir. "+ " Toplam Borç Tuarınız" + " " + iletim.Toplam+ " " +`${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" + iletim.tckn + "%2FTAHAKKUK%2F"+ iletim.tahakkukOid+".pdf?alt=media"}`;
+ this.getQRCode(phone,msg)
+  })
+})
+
+
+    },
     inquireClick() {     
 const data={
 KullaniciUid:this.getUserUid, 
@@ -326,7 +367,7 @@ this.AddNewsBeyanSorgu(data)
     },
     downloadClick(e) {},
     printClick(e) {},
-    sendClick(e) {},
+   
     listClick() {
       this.$refs.listPopup.show();
     },

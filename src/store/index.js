@@ -325,6 +325,16 @@ console.log(doc.data());
     async fetchBeyanname(context, payload) {
       this.state.beyanname = []
 console.log(payload);
+
+// const first  = await getDocs (query( collection(db, 'Beyanname'),limit(10)))
+
+//   //const snapshot = await first;
+// console.log("GELDİ 3 Data-------------------------");
+// console.log(first);
+
+// Get the last document
+//const last = first.docs[first.docs.length - 1];
+
   // let kId=  JSON.parse(localStorage.getItem("userData")).userId
       
       context.dispatch("actionArr", {

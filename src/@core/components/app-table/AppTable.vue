@@ -15,6 +15,7 @@
       @selection-changed="onSelectionChanged"
       :columns-auto-width="true"
       :data-source="items"
+      
       @exporting="onExporting"
     >
       <DxExport :enabled="true" :allow-export-selected-data="true" />
@@ -50,28 +51,30 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" template="listTemplate" />
+        <DxItem location="before" template="wpTemplate" />
         <DxItem location="before" template="printTemplate" />
-        <DxItem location="before" template="sendTemplate" />
+        <DxItem location="before" template="epostaTemplate" />
+                <DxItem location="before" template="smsTemplate" />
+
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
       </DxToolbar>
 
-      <template #sendTemplate>
+      <!-- <template #sendTemplate>
         <DxDropDownButton
           width="150"
           ref="sendDrop"
           :split-button="false"
           :use-select-mode="false"
           :items="sendSettings"
-          @item-click="sendClick"
+          @click="sendClick(data)"
           display-expr="name"
           key-expr="id"
           text="Gönder"
           icon="share"
         />
-      </template>
+      </template> -->
 
       <template #printTemplate>
         <DxDropDownButton
@@ -84,13 +87,30 @@
           key-expr="id"
           text="Yazdır"
           icon="print"
+          type="back"
         />
       </template>
-
-      <template #listTemplate>
+ <template #wpTemplate>
         <DxButton
-          type="normal"
-          text="Listele"
+          type="success"
+          text="Whatsapp"
+          icon="detailslayout"
+      
+          @click="sendClick(selectedRowKeys)"
+        />
+      </template>
+       <template #smsTemplate>
+        <DxButton
+          type="default"
+          text="Sms"
+          icon="detailslayout"
+          @click="listClick"
+        />
+      </template>
+       <template #epostaTemplate>
+        <DxButton
+          type=""
+          text="E-posta"
           icon="detailslayout"
           @click="listClick"
         />
@@ -98,11 +118,11 @@
 
       <template #inquireTemplate>
         <DxButton
-          type="normal"
+          type="danger"
           text="Sorgula"
           icon="search"
         
-          @click="inquireClick('http://89.43.29.189:1880/test1')"
+          @click="inquireClick('http://89.43.29.189:1880/test1')"  
         />
       </template>
 
@@ -299,11 +319,7 @@ export default {
         { id: 2, name: "Tahakkuk", icon: "pdffile" },
         { id: 3, name: "Tümü", icon: "pdffile" },
       ],
-      sendSettings: [
-        { id: 1, name: "Sms", icon: "rename" },
-        { id: 2, name: "E-Posta", icon: "email" },
-        { id: 3, name: "Whatsapp", icon: "attach" },
-      ],
+  
     };
   },
   computed: {

@@ -7,10 +7,12 @@ import router from "./router";
 import store from "./store";
 import App from "./App.vue";
 import { initializeApp } from "firebase/app";
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 // Global Components
 import "./global-components";
-
+Vue.use(VueAxios, axios)
 // 3rd party plugins
 import "@axios";
 import "@/libs/acl";
