@@ -9,10 +9,12 @@
       :sendClick="sendClick"
 @selected="gelendata($event)"
       :pk="id"
-      :items="beyannameData"
+      :items="items"
       :totalRows="16"
       :title="'Beyannameler'"
       :columns="columns"
+      :prevButton="prevButton"
+      :nextButton="nextButton"
     />
 
     <!-- Sorgula Popup -->
@@ -161,12 +163,10 @@ import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters , mapActions} from "vuex";
 import axios from 'axios'
-import QrcodeVue from 'qrcode.vue'
     let arr=[]
 export default {
   components: {
     AppTable,
-    QrcodeVue,
     BRow,
     vSelect,
     BCol,
@@ -282,7 +282,7 @@ export default {
     },
     ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
     beyannameData() {
-      return this.reBeyanname;
+     return this.reBeyanname
     },
     mukelefData() {
       return this.reMukellef;
@@ -299,6 +299,19 @@ return this.rePerson.kullaniciUid;
   },
   
   methods: {
+    ...mapActions(['AddNewsBeyanSorgu','fetchBeyanname','nextButtons']),
+    nextButton(){
+this.nextButtons().then(el=>{
+  console.log(el);
+  el.forEach(e=>{
+    console.log(e.data());
+    this.items.push(e.data())
+  })
+})
+    },
+    prevButton(){
+console.log("prev");
+    },
   async  getQRCode(phone,msg) {
 
     const res = await axios.post("http://localhost:8087/api", { phone, msg });
@@ -309,7 +322,6 @@ return this.rePerson.kullaniciUid;
     queryClick() {
       this.$refs.queryPopup.show();
     },
-     ...mapActions(['AddNewsBeyanSorgu']),
 
     sendClick(e)
     {
@@ -422,16 +434,19 @@ console.log(now);
 // })
     },
     /////////////////////////////////
-    ...mapActions(["fetchBeyanname"]),
 fetch(){
 console.log(this.kullaniciUid);
-this.fetchBeyanname([this.getPerson])
+this.fetchBeyanname()
 setTimeout(()=>{
-this.setünvan()
-},800)
+  this.setünvan()
+  },4000)
 },
     setünvan() {
-  let arrUnvan=[];
+      this.beyannameData.forEach(el=>{
+        console.log(el.data());
+        this.items.push(el.data())
+      })
+      let arrUnvan=[];
       let arrtype=[]
       this.beyannameData.forEach((els) => {
         arr.push(els)
@@ -444,9 +459,9 @@ this.setünvan()
     },
  
   },
+
   mounted() {
     this.fetch();
-    console.log(typeof this.listRequest.startDate);
   },
 };
 </script>

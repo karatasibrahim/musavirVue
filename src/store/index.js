@@ -17,6 +17,7 @@ import {
   updateDoc,
   setDoc,
   deleteDoc,
+  startAfter,
   addDoc,
   orderBy
 } from "firebase/firestore";
@@ -72,7 +73,7 @@ export default new Vuex.Store({
     Sifre: {},
     calisan: [],
     sgkVizite: [],
-    notification:[]
+    notification: []
 
   },
   getters: {
@@ -83,7 +84,12 @@ export default new Vuex.Store({
       return state.mukellef
     },
     reBeyanname(state) {
-      return state.beyanname
+      let arr = []
+
+      state.beyanname.forEach(el => {
+        arr.push(el)
+      })
+      return arr
     },
     rePosSorgu(state) {
       return state.posSorgu
@@ -142,7 +148,7 @@ export default new Vuex.Store({
     reSgkVizite(state) {
       return state.sgkVizite
     },
-    renotification(state){
+    renotification(state) {
       return state.notification
     }
   },
@@ -154,10 +160,8 @@ export default new Vuex.Store({
       return state.mukellef.push(payload)
     },
     setBeyanname(state, payload) {
-      payload.forEach(el => {
-     
-        return state.beyanname.push(el.data())
-      })
+
+      return state.beyanname = payload
     },
     setPosSorgu(state, payload) {
 
@@ -266,12 +270,11 @@ export default new Vuex.Store({
     SetSgkVizite(state, payload) {
       payload.forEach(el => {
         console.log(el.data());
-        state.sgkVizite.push(el.data()) 
+        state.sgkVizite.push(el.data())
       })
     },
-    setMesaj(state,payload){
-      console.log(payload);
-  state.notification.push(payload)
+    setMesaj(state, payload) {
+      state.notification.push(payload)
     }
   },
   actions: {
@@ -291,7 +294,7 @@ export default new Vuex.Store({
         console.log("kullanıcı", doc.id);
         documentıd = doc.id;
         context.commit("setperson", doc.data())
-console.log(doc.data());
+        console.log(doc.data());
         console.log(documentıd);
 
       });
@@ -306,8 +309,12 @@ console.log(doc.data());
         where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
       mukellefdata.forEach((doc) => {
-        console.log(Object.assign( doc.data(),{id:doc.id}));
-        context.commit("setMukkellef",Object.assign( doc.data(),{id:doc.id}))
+        console.log(Object.assign(doc.data(), {
+          id: doc.id
+        }));
+        context.commit("setMukkellef", Object.assign(doc.data(), {
+          id: doc.id
+        }))
 
       });
 
@@ -325,24 +332,25 @@ console.log(doc.data());
     },
     async fetchBeyanname(context, payload) {
       this.state.beyanname = []
-console.log(payload);
+      console.log(JSON.parse(localStorage.getItem("userData")).userId);
 
-// const first  = await getDocs (query( collection(db, 'Beyanname'),limit(10)))
+      // const first  = await getDocs (query( collection(db, 'Beyanname'),limit(10)))
 
-//   //const snapshot = await first;
-// console.log("GELDİ 3 Data-------------------------");
-// console.log(first);
+      //   //const snapshot = await first;
+      // console.log("GELDİ 3 Data-------------------------");
+      // console.log(first);
 
-// Get the last document
-//const last = first.docs[first.docs.length - 1];
+      // Get the last document
+      //const last = first.docs[first.docs.length - 1];
 
-  // let kId=  JSON.parse(localStorage.getItem("userData")).userId
-      
+      // let kId=  JSON.parse(localStorage.getItem("userData")).userId
+
       context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "Kullanici",
-        payload: payload,
-        MutName: "setBeyanname"
+        payload: JSON.parse(localStorage.getItem("userData")).userId,
+        MutName: "setBeyanname",
+        Next: payload
       })
 
     },
@@ -461,7 +469,7 @@ console.log(payload);
 
     },
     async fetchSgkBildirge(context, payload) {
-      this.state.SgkBildirge = [] 
+      this.state.SgkBildirge = []
 
       console.log(payload);
       context.dispatch("actionArr", {
@@ -528,7 +536,7 @@ console.log(payload);
 
 
     },
-     async fetchİlce(context, payload) {
+    async fetchİlce(context, payload) {
       this.state.ilce = []
 
       context.dispatch("actionArr", {
@@ -550,7 +558,7 @@ console.log(payload);
 
     },
 
-    async fetchCalisan(context,payload){
+    async fetchCalisan(context, payload) {
       console.log(payload);
       this.state.calisan = []
       context.dispatch("actionArr", {
@@ -560,34 +568,53 @@ console.log(payload);
         MutName: "setCalisan"
       })
     },
-    async fetchSgkVizite(context,payload){
+    async fetchSgkVizite(context, payload) {
       console.log(payload);
-      this.state.sgkVizite.length>0?console.log("data var"):
-      context.dispatch("actionArr", {
-        dbName: "Vizite",
-        İtemName: "CalisanId",
-        payload: payload,
-        MutName: "SetSgkVizite"
-      })
+      this.state.sgkVizite.length > 0 ? console.log("data var") :
+        context.dispatch("actionArr", {
+          dbName: "Vizite",
+          İtemName: "CalisanId",
+          payload: payload,
+          MutName: "SetSgkVizite"
+        })
     },
     async actionArr(context, data) {
-      let queries = [];
-      for (let i = 0; i < data.payload.length; i += 10) {
-        queries.push(query(
-          collection(db, data.dbName),
-          where(data.İtemName, "in", data.payload.slice(i, i + 10)),
+      let queries = query(collection(db, data.dbName),
+        where(data.İtemName, "==", data.payload), limit(10)
+      )
+      let documentSnapshots = await getDocs(queries)
+      console.log(documentSnapshots.docs[documentSnapshots.docs.length-1]);
+      context.commit(data.MutName, documentSnapshots.docs);
+      console.log("ifteyim");
 
-        ))
-      }
-      let usersDocsSnaps = [];
-      for (let i = 0; i < queries.length; i++) {
-        usersDocsSnaps.push(getDocs(queries[i]));
-      }
-      usersDocsSnaps = await Promise.all(usersDocsSnaps);
-      let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
-      console.log(usersDocs);
-      context.commit(data.MutName, usersDocs);
+      // Construct a new query starting at this document,
 
+
+    },
+    async nextButtons(context) {
+      return new Promise((resolve,reject)=>{
+ console.log(this.state.beyanname[this.state.beyanname.length-1]);
+
+      const lastVisible = this.state.beyanname[this.state.beyanname.length-1]
+      console.log("last", this.state.beyanname);
+      //get the next 25 cities.
+      const next = query(collection(db, "Beyanname"),
+        startAfter(lastVisible),
+        limit(10));
+      console.log(next);
+      
+      // for (let i = 0; i < queries.length; i++) {
+      //   usersDocsSnaps.push(getDocs(queries[i]));
+      // }
+      // usersDocsSnaps = await Promise.all(usersDocsSnaps);
+      // let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
+      let nextdocumentSnapshots =  getDocs(next)
+   nextdocumentSnapshots.then(res=>{
+    context.commit("setBeyanname", res.docs);
+    resolve(res.docs)
+   })
+      })
+     
 
     },
     async addkalanıd(context, payload) {
@@ -600,19 +627,18 @@ console.log(payload);
 
       return id
     },
-    async fetchMesaj(context,payload){
+    async fetchMesaj(context, payload) {
       console.log(payload);
-      this.state.notification=[]
+      this.state.notification = []
       console.log("çaliştim");
-      this.state.mesaj = []   
-          let q =query(
-        collection(db,"MukellefBildirim"),
-        where("KullaniciId", "==",payload),
+      this.state.mesaj = []
+      let q = query(
+        collection(db, "MukellefBildirim"),
+        where("KullaniciId", "==", payload),
       )
-      const dat=await getDocs(q)
-      dat.forEach(el=>{
-        console.log(el.data());
-        context.commit('setMesaj',el.data())
+      const dat = await getDocs(q)
+      dat.forEach(el => {
+        context.commit('setMesaj', el.data())
       })
     },
 
@@ -658,9 +684,9 @@ console.log(payload);
     },
     async AddNewMükellef(context, payload) {
       console.log(payload);
-let data=JSON.parse(JSON.stringify(payload))
+      let data = JSON.parse(JSON.stringify(payload))
       const q = doc(db, "Mukellef", data.id)
-      delete  data.data.id
+      delete data.data.id
       const Gelendata = await updateDoc(q, data.data);
       console.log(Gelendata);
     },
@@ -688,33 +714,31 @@ let data=JSON.parse(JSON.stringify(payload))
       const Gelendata = await setDoc(q, payload);
       console.log(Gelendata);
     },
-async AddNewsBeyanSorgu(contex, payload)
-{
-  //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
-  console.log(payload);
-  //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
-  const a=collection(db,"BeyannameSorgu")
-  const son=await addDoc(a,payload)
-},
-async AddNewsBildirgeSorgu(context,payload)
-{
-  console.log(payload);
-const a =collection(db,"BildirgeSorgu")
-const sonn=await addDoc(a,payload)
-},
+    async AddNewsBeyanSorgu(contex, payload) {
+      //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
+      console.log(payload);
+      //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
+      const a = collection(db, "BeyannameSorgu")
+      const son = await addDoc(a, payload)
+    },
+    async AddNewsBildirgeSorgu(context, payload) {
+      console.log(payload);
+      const a = collection(db, "BildirgeSorgu")
+      const sonn = await addDoc(a, payload)
+    },
 
     async AddNewsNotification(context, payload) {
       console.log(payload);
-      
-      const Gelendata = await addDoc(collection(db, "MukellefBildirim"),{
-        Gonderilenler:payload.Gonderilenler,
-        KullaniciId:payload.KullaniciId,
-        Mesaj:payload.Mesaj,
-        Tarih:payload.Tarih
+
+      const Gelendata = await addDoc(collection(db, "MukellefBildirim"), {
+        Gonderilenler: payload.Gonderilenler,
+        KullaniciId: payload.KullaniciId,
+        Mesaj: payload.Mesaj,
+        Tarih: payload.Tarih
       });
-      context.commit('setMesaj',Gelendata)
+      context.commit('setMesaj', Gelendata)
       console.log(Gelendata);
-      context.dispatch('fetchMesaj',payload.KullaniciId)
+      context.dispatch('fetchMesaj', payload.KullaniciId)
     },
     //! DELETE DATA
     async DeleteSgkData(context, payload) {

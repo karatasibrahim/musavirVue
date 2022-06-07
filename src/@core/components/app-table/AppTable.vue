@@ -15,7 +15,6 @@
       @selection-changed="onSelectionChanged"
       :columns-auto-width="true"
       :data-source="items"
-      
       @exporting="onExporting"
     >
       <DxExport :enabled="true" :allow-export-selected-data="true" />
@@ -26,15 +25,8 @@
       <DxHeaderFilter :visible="true" />
       <DxSearchPanel :visible="true" />
       <DxScrolling row-rendering-mode="virtual" />
-      <DxPager
-        :visible="true"
-        :allowed-page-sizes="pageSizes"
-        display-mode="full"
-        :show-page-size-selector="true"
-        :show-info="false"
-        :show-navigation-buttons="true"
-      />
-      <DxPaging :page-size="10" />
+
+      <!-- <DxPaging :page-size="5" v-pager /> -->
       <DxSorting mode="multiple" />
       <DxSelection
         :select-all-mode="'allPages'"
@@ -54,7 +46,7 @@
         <DxItem location="before" template="wpTemplate" />
         <DxItem location="before" template="printTemplate" />
         <DxItem location="before" template="epostaTemplate" />
-                <DxItem location="before" template="smsTemplate" />
+        <DxItem location="before" template="smsTemplate" />
 
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
@@ -90,16 +82,15 @@
           type="back"
         />
       </template>
- <template #wpTemplate>
+      <template #wpTemplate>
         <DxButton
           type="success"
           text="Whatsapp"
           icon="detailslayout"
-      
           @click="sendClick(selectedRowKeys)"
         />
       </template>
-       <template #smsTemplate>
+      <template #smsTemplate>
         <DxButton
           type="default"
           text="Sms"
@@ -107,7 +98,7 @@
           @click="listClick"
         />
       </template>
-       <template #epostaTemplate>
+      <template #epostaTemplate>
         <DxButton
           type=""
           text="E-posta"
@@ -121,8 +112,7 @@
           type="danger"
           text="Sorgula"
           icon="search"
-        
-          @click="inquireClick('http://89.43.29.189:1880/test1')"  
+          @click="inquireClick('http://89.43.29.189:1880/test1')"
         />
       </template>
 
@@ -138,7 +128,10 @@
 
       <template #panelColumnTemplate="{ data }">
         <div class="text-center">
-                      <feather-icon  @click="showPanelClick(data.data.beyan_pdf)" icon="BriefcaseIcon"/>
+          <feather-icon
+            @click="showPanelClick(data.data.beyan_pdf)"
+            icon="BriefcaseIcon"
+          />
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
@@ -149,7 +142,12 @@
 
       <template #mukellefColumnTemplate="{ data }">
         <div class="text-center">
-                  <feather-icon   @click="showTaxPayerInfoClick(data.data.beyan_pdf,data.data.MukellefId)" icon="UserIcon"/>
+          <feather-icon
+            @click="
+              showTaxPayerInfoClick(data.data.beyan_pdf, data.data.MukellefId)
+            "
+            icon="UserIcon"
+          />
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
@@ -162,7 +160,13 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
+            @click="
+              showPdfPopupClick(
+                data.data.beyannameOid,
+                data.data.tckn,
+                'BEYANNAME'
+              )
+            "
           />
         </div>
       </template>
@@ -171,7 +175,13 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
+            @click="
+              showPdfPopupClick(
+                data.data.tahakkukOid,
+                data.data.tckn,
+                'TAHAKKUK'
+              )
+            "
           />
         </div>
       </template>
@@ -197,11 +207,21 @@
         </div>
       </template>
     </DxDataGrid>
+    <b-row class="navigator" align-h="end">
+      <b-col cols="1">
+        <feather-icon icon="ArrowLeftCircleIcon" size="30" @click="prevButton"/>
+      </b-col>
+      <b-col cols="1">
+        <feather-icon icon="ArrowRightCircleIcon" size="30" @click="nextButton"/>
+      </b-col>
+    </b-row>
   </b-card>
 </template>
 
 <script>
 import {
+  BRow,
+  BCol,
   BCard,
   BCardHeader,
   BCardBody,
@@ -248,6 +268,8 @@ export default {
     BCardTitle,
     BCardText,
     DxDataGrid,
+    BRow,
+    BCol,
     DxScrolling,
     DxPager,
     BCardHeader,
@@ -304,10 +326,12 @@ export default {
     deleteInsuranceClick: Function,
     showTaxPayerInfoClick: Function,
     showPanelClick: Function,
+    nextButton:Function,
+    prevButton:Function,
   },
   data() {
     return {
-      mukellefid:"",
+      mukellefid: "",
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
       downloadSettings: [
@@ -319,7 +343,6 @@ export default {
         { id: 2, name: "Tahakkuk", icon: "pdffile" },
         { id: 3, name: "Tümü", icon: "pdffile" },
       ],
-  
     };
   },
   computed: {
@@ -327,12 +350,36 @@ export default {
       return this.$refs.appGrid.instance;
     },
   },
+  directives: {
+    pager: {
+      bind(el, bind, vnode) {
+        console.log(
+          el,
+          JSON.stringify(document.getElementsByClassName("dx-next-button"))
+        );
+        document
+          .getElementsByClassName("dx-next-button")[0]
+          .addEventListener("onclick", () => {
+            console.log("dneem");
+          });
+      },
+    },
+  },
   methods: {
-window(e,tck){
-  let url= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2FTAHAKKUK%2F"+ e+".pdf?alt=media"}`
-  window.open(url,'_blank')
-  console.log(e);
-},
+    deneme() {
+      console.log("deneme");
+    },
+    window(e, tck) {
+      let url = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tck +
+        "%2FTAHAKKUK%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
+      window.open(url, "_blank");
+      console.log(e);
+    },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
@@ -386,6 +433,7 @@ window(e,tck){
       e.cancel = true;
     },
   },
+  mounted() {},
 };
 </script>
 <style scoped>
@@ -393,9 +441,8 @@ window(e,tck){
   margin-bottom: 10px;
 }
 .feather.feather-trash,
-.feather.feather-user{
-    width: 27px;
+.feather.feather-user {
+  width: 27px;
   height: 19px;
 }
-
 </style>
