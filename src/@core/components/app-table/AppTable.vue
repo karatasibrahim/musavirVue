@@ -25,7 +25,14 @@
       <DxHeaderFilter :visible="true" />
       <DxSearchPanel :visible="true" />
       <DxScrolling row-rendering-mode="virtual" />
-
+  <DxPager
+        :visible="true"
+        :allowed-page-sizes="pageSizes"
+        display-mode="full"
+        :show-page-size-selector="true"
+        :show-info="false"
+      />
+      <DxPaging :page-size="10" :page-index="pageIndex"/>
       <!-- <DxPaging :page-size="5" v-pager /> -->
       <DxSorting mode="multiple" />
       <DxSelection
@@ -343,6 +350,8 @@ export default {
         { id: 2, name: "Tahakkuk", icon: "pdffile" },
         { id: 3, name: "Tümü", icon: "pdffile" },
       ],
+      pageIndex: 0,
+      CountEquil:true,
     };
   },
   computed: {
@@ -350,24 +359,24 @@ export default {
       return this.$refs.appGrid.instance;
     },
   },
-  directives: {
-    pager: {
-      bind(el, bind, vnode) {
-        console.log(
-          el,
-          JSON.stringify(document.getElementsByClassName("dx-next-button"))
-        );
-        document
-          .getElementsByClassName("dx-next-button")[0]
-          .addEventListener("onclick", () => {
-            console.log("dneem");
-          });
-      },
-    },
-  },
+
   methods: {
-    deneme() {
-      console.log("deneme");
+    prevbutton() { 
+      let pageCount = this.$refs['appGrid'].instance.pageIndex();
+      console.log(pageCount, pageCount>0);
+      if(pageCount>0) {
+            console.log(pageCount);
+            this.pageIndex = pageCount - 1;
+      }       
+
+    },
+        nextbutton() {
+      const pageCount = this.$refs['appGrid'].instance.pageIndex();
+            this.pageIndex = pageCount + 1; 
+if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
+  return (pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)
+}
+
     },
     window(e, tck) {
       let url = `${
@@ -384,6 +393,7 @@ export default {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;
+             
     },
     saveLayout(state) {
       state.columns.forEach((element) => {
@@ -433,7 +443,9 @@ export default {
       e.cancel = true;
     },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$refs['appGrid'].instance.pageIndex(2));
+  },
 };
 </script>
 <style scoped>

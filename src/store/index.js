@@ -580,7 +580,7 @@ export default new Vuex.Store({
     },
     async actionArr(context, data) {
       let queries = query(collection(db, data.dbName),
-        where(data.İtemName, "==", data.payload), limit(10)
+        where(data.İtemName, "==", data.payload), limit(20)
       )
       let documentSnapshots = await getDocs(queries)
       console.log(documentSnapshots.docs[documentSnapshots.docs.length-1]);
@@ -591,14 +591,13 @@ export default new Vuex.Store({
 
 
     },
-    async nextButtons(context) {
+    async nextButtons(context,data) {
       return new Promise((resolve,reject)=>{
- console.log(this.state.beyanname[this.state.beyanname.length-1]);
-
-      const lastVisible = this.state.beyanname[this.state.beyanname.length-1]
-      console.log("last", this.state.beyanname);
+        console.log(data);
+      const lastVisible = this.state[data.state][this.state[data.state].length-1]
+      console.log("last", this.state[data.state]);
       //get the next 25 cities.
-      const next = query(collection(db, "Beyanname"),
+      const next = query(collection(db, data.db),
         startAfter(lastVisible),
         limit(10));
       console.log(next);
@@ -610,7 +609,7 @@ export default new Vuex.Store({
       // let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
       let nextdocumentSnapshots =  getDocs(next)
    nextdocumentSnapshots.then(res=>{
-    context.commit("setBeyanname", res.docs);
+    context.commit(data.mut, res.docs);
     resolve(res.docs)
    })
       })

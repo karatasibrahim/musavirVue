@@ -15,6 +15,7 @@
       :columns="columns"
       :prevButton="prevButton"
       :nextButton="nextButton"
+      ref="appTablee"
     />
 
     <!-- Sorgula Popup -->
@@ -163,6 +164,7 @@ import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters , mapActions} from "vuex";
 import axios from 'axios'
+var ArrayData = 0;
     let arr=[]
 export default {
   components: {
@@ -264,8 +266,8 @@ export default {
         },
       ],
       mukellefid: "",
-      userEmail: "",
-    };
+      userEmail: "",   
+      AllData:[] };
   },
   computed: {
     inquireMinDate() {
@@ -300,17 +302,34 @@ return this.rePerson.kullaniciUid;
   
   methods: {
     ...mapActions(['AddNewsBeyanSorgu','fetchBeyanname','nextButtons']),
-    nextButton(){
-this.nextButtons().then(el=>{
+   async nextitems(){
+         if(this.$refs["appTablee"].nextbutton()){
+const data={
+  state:"beyanname",
+  mut:"setBeyanname",
+  db:"Beyanname"
+}
+return await this.nextButtons(data).then(el=>{
   console.log(el);
   el.forEach(e=>{
-    console.log(e.data());
     this.items.push(e.data())
   })
+
 })
+}
     },
+nextButton(){
+    console.log(this.$refs["appTablee"].$data.CountEquil)
+    this.$refs["appTablee"].nextbutton();
+       this.nextitems();
+    
+ 
+},
     prevButton(){
 console.log("prev");
+console.log(this.$refs["appTablee"].prevbutton());
+
+
     },
   async  getQRCode(phone,msg) {
 
@@ -443,7 +462,6 @@ setTimeout(()=>{
 },
     setünvan() {
       this.beyannameData.forEach(el=>{
-        console.log(el.data());
         this.items.push(el.data())
       })
       let arrUnvan=[];
@@ -462,6 +480,7 @@ setTimeout(()=>{
 
   mounted() {
     this.fetch();
+    console.log(this.$refs["appTablee"]);
   },
 };
 </script>
