@@ -17,9 +17,11 @@ import {
   updateDoc,
   setDoc,
   deleteDoc,
-  startAfter,
   addDoc,
-  orderBy
+  orderBy,
+  startAt,
+  endAt,
+  startAfter
 } from "firebase/firestore";
 var firebase = require("firebase/app")
 import {
@@ -84,12 +86,7 @@ export default new Vuex.Store({
       return state.mukellef
     },
     reBeyanname(state) {
-      let arr = []
-
-      state.beyanname.forEach(el => {
-        arr.push(el)
-      })
-      return arr
+      return state.beyanname
     },
     rePosSorgu(state) {
       return state.posSorgu
@@ -160,8 +157,10 @@ export default new Vuex.Store({
       return state.mukellef.push(payload)
     },
     setBeyanname(state, payload) {
+      payload.forEach(el => {
 
-      return state.beyanname = payload
+        return state.beyanname.push(el.data())
+      })
     },
     setPosSorgu(state, payload) {
 
@@ -274,6 +273,7 @@ export default new Vuex.Store({
       })
     },
     setMesaj(state, payload) {
+      console.log(payload);
       state.notification.push(payload)
     }
   },
@@ -288,7 +288,6 @@ export default new Vuex.Store({
       //Firebase kullanici kolaksiyonundaki verileri çektik burda if ile localstoge'deki veriyi sınadık
       const userdata = await getDocs(q)
       console.log(userdata.parent);
-
 
       userdata.forEach((doc) => {
         console.log("kullanıcı", doc.id);
@@ -332,7 +331,23 @@ export default new Vuex.Store({
     },
     async fetchBeyanname(context, payload) {
       this.state.beyanname = []
-      console.log(JSON.parse(localStorage.getItem("userData")).userId);
+      console.clear();
+      const q = query(
+        collection(db, 'Beyanname'),
+        orderBy("donem"),
+        startAt((payload.pageSize - 1) * payload.pageNumber),
+        limit(payload.pageSize)
+      );
+
+      var beyannameData = await getDocs(q);
+
+      var responseData = [];
+      beyannameData.forEach((doc) => {
+        responseData.push(doc.data());
+      });
+
+      this.state.beyanname = responseData;
+      return responseData;
 
       // const first  = await getDocs (query( collection(db, 'Beyanname'),limit(10)))
 
@@ -345,13 +360,12 @@ export default new Vuex.Store({
 
       // let kId=  JSON.parse(localStorage.getItem("userData")).userId
 
-      context.dispatch("actionArr", {
-        dbName: "Beyanname",
-        İtemName: "Kullanici",
-        payload: JSON.parse(localStorage.getItem("userData")).userId,
-        MutName: "setBeyanname",
-        Next: payload
-      })
+      // context.dispatch("actionArr", {
+      //   dbName: "Beyanname",
+      //   İtemName: "Kullanici",
+      //   payload: payload,
+      //   MutName: "setBeyanname"
+      // })
 
     },
 
@@ -579,41 +593,23 @@ export default new Vuex.Store({
         })
     },
     async actionArr(context, data) {
-      let queries = query(collection(db, data.dbName),
-        where(data.İtemName, "==", data.payload), limit(20)
-      )
-      let documentSnapshots = await getDocs(queries)
-      console.log(documentSnapshots.docs[documentSnapshots.docs.length-1]);
-      context.commit(data.MutName, documentSnapshots.docs);
-      console.log("ifteyim");
+      let queries = [];
+      for (let i = 0; i < data.payload.length; i += 10) {
+        queries.push(query(
+          collection(db, data.dbName),
+          where(data.İtemName, "in", data.payload.slice(i, i + 10)),
 
-      // Construct a new query starting at this document,
+        ))
+      }
+      let usersDocsSnaps = [];
+      for (let i = 0; i < queries.length; i++) {
+        usersDocsSnaps.push(getDocs(queries[i]));
+      }
+      usersDocsSnaps = await Promise.all(usersDocsSnaps);
+      let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
+      console.log(usersDocs);
+      context.commit(data.MutName, usersDocs);
 
-
-    },
-    async nextButtons(context,data) {
-      return new Promise((resolve,reject)=>{
-        console.log(data);
-      const lastVisible = this.state[data.state][this.state[data.state].length-1]
-      console.log("last", this.state[data.state]);
-      //get the next 25 cities.
-      const next = query(collection(db, data.db),
-        startAfter(lastVisible),
-        limit(10));
-      console.log(next);
-      
-      // for (let i = 0; i < queries.length; i++) {
-      //   usersDocsSnaps.push(getDocs(queries[i]));
-      // }
-      // usersDocsSnaps = await Promise.all(usersDocsSnaps);
-      // let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
-      let nextdocumentSnapshots =  getDocs(next)
-   nextdocumentSnapshots.then(res=>{
-    context.commit(data.mut, res.docs);
-    resolve(res.docs)
-   })
-      })
-     
 
     },
     async addkalanıd(context, payload) {
@@ -637,6 +633,7 @@ export default new Vuex.Store({
       )
       const dat = await getDocs(q)
       dat.forEach(el => {
+        console.log(el.data());
         context.commit('setMesaj', el.data())
       })
     },

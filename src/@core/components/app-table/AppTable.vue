@@ -15,6 +15,7 @@
       @selection-changed="onSelectionChanged"
       :columns-auto-width="true"
       :data-source="items"
+      
       @exporting="onExporting"
     >
       <DxExport :enabled="true" :allow-export-selected-data="true" />
@@ -25,15 +26,15 @@
       <DxHeaderFilter :visible="true" />
       <DxSearchPanel :visible="true" />
       <DxScrolling row-rendering-mode="virtual" />
-  <DxPager
+      <DxPager
         :visible="true"
         :allowed-page-sizes="pageSizes"
         display-mode="full"
         :show-page-size-selector="true"
         :show-info="false"
+        :show-navigation-buttons="true"
       />
-      <DxPaging :page-size="10" :page-index="pageIndex"/>
-      <!-- <DxPaging :page-size="5" v-pager /> -->
+      <DxPaging :page-size="10" />
       <DxSorting mode="multiple" />
       <DxSelection
         :select-all-mode="'allPages'"
@@ -51,9 +52,9 @@
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
         <DxItem location="before" template="wpTemplate" />
-        <DxItem location="before" template="printTemplate" />
-        <DxItem location="before" template="epostaTemplate" />
         <DxItem location="before" template="smsTemplate" />
+        <DxItem location="before" template="epostaTemplate" />
+              
 
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
@@ -74,7 +75,7 @@
           icon="share"
         />
       </template> -->
-
+<!-- 
       <template #printTemplate>
         <DxDropDownButton
           width="150"
@@ -88,28 +89,29 @@
           icon="print"
           type="back"
         />
-      </template>
-      <template #wpTemplate>
+      </template> -->
+ <template #wpTemplate>
         <DxButton
           type="success"
           text="Whatsapp"
-          icon="detailslayout"
+          icon="share"
+      
           @click="sendClick(selectedRowKeys)"
         />
       </template>
-      <template #smsTemplate>
+       <template #smsTemplate>
         <DxButton
-          type="default"
+          type="warning"
           text="Sms"
-          icon="detailslayout"
+          icon="comment"
           @click="listClick"
         />
       </template>
-      <template #epostaTemplate>
+       <template #epostaTemplate>
         <DxButton
-          type=""
+          type="default"
           text="E-posta"
-          icon="detailslayout"
+          icon="email"
           @click="listClick"
         />
       </template>
@@ -119,7 +121,8 @@
           type="danger"
           text="Sorgula"
           icon="search"
-          @click="inquireClick('http://89.43.29.189:1880/test1')"
+        
+          @click="inquireClick('http://89.43.29.189:1880/test1')"  
         />
       </template>
 
@@ -135,10 +138,7 @@
 
       <template #panelColumnTemplate="{ data }">
         <div class="text-center">
-          <feather-icon
-            @click="showPanelClick(data.data.beyan_pdf)"
-            icon="BriefcaseIcon"
-          />
+                      <feather-icon  @click="showPanelClick(data.data.beyan_pdf)" icon="BriefcaseIcon"/>
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
@@ -149,12 +149,7 @@
 
       <template #mukellefColumnTemplate="{ data }">
         <div class="text-center">
-          <feather-icon
-            @click="
-              showTaxPayerInfoClick(data.data.beyan_pdf, data.data.MukellefId)
-            "
-            icon="UserIcon"
-          />
+                  <feather-icon   @click="showTaxPayerInfoClick(data.data.beyan_pdf,data.data.MukellefId)" icon="UserIcon"/>
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
@@ -167,31 +162,21 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="
-              showPdfPopupClick(
-                data.data.beyannameOid,
-                data.data.tckn,
-                'BEYANNAME'
-              )
-            "
+            @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
+          />
+          &nbsp; &nbsp; &nbsp;
+            <img
+            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+            @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
           />
         </div>
       </template>
 
-      <template #tahakkukColumnTemplate="{ data }">
+      <!-- <template #tahakkukColumnTemplate="{ data }">
         <div class="text-center">
-          <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="
-              showPdfPopupClick(
-                data.data.tahakkukOid,
-                data.data.tckn,
-                'TAHAKKUK'
-              )
-            "
-          />
+        
         </div>
-      </template>
+      </template> -->
 
       <template #sgkGosterimColumnTemplate="{ data }">
         <div class="text-left">
@@ -214,21 +199,11 @@
         </div>
       </template>
     </DxDataGrid>
-    <b-row class="navigator" align-h="end">
-      <b-col cols="1">
-        <feather-icon icon="ArrowLeftCircleIcon" size="30" @click="prevButton"/>
-      </b-col>
-      <b-col cols="1">
-        <feather-icon icon="ArrowRightCircleIcon" size="30" @click="nextButton"/>
-      </b-col>
-    </b-row>
   </b-card>
 </template>
 
 <script>
 import {
-  BRow,
-  BCol,
   BCard,
   BCardHeader,
   BCardBody,
@@ -275,8 +250,6 @@ export default {
     BCardTitle,
     BCardText,
     DxDataGrid,
-    BRow,
-    BCol,
     DxScrolling,
     DxPager,
     BCardHeader,
@@ -333,12 +306,10 @@ export default {
     deleteInsuranceClick: Function,
     showTaxPayerInfoClick: Function,
     showPanelClick: Function,
-    nextButton:Function,
-    prevButton:Function,
   },
   data() {
     return {
-      mukellefid: "",
+      mukellefid:"",
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
       downloadSettings: [
@@ -350,8 +321,7 @@ export default {
         { id: 2, name: "Tahakkuk", icon: "pdffile" },
         { id: 3, name: "Tümü", icon: "pdffile" },
       ],
-      pageIndex: 0,
-      CountEquil:true,
+  
     };
   },
   computed: {
@@ -359,41 +329,16 @@ export default {
       return this.$refs.appGrid.instance;
     },
   },
-
   methods: {
-    prevbutton() { 
-      let pageCount = this.$refs['appGrid'].instance.pageIndex();
-      console.log(pageCount, pageCount>0);
-      if(pageCount>0) {
-            console.log(pageCount);
-            this.pageIndex = pageCount - 1;
-      }       
-
-    },
-        nextbutton() {
-      const pageCount = this.$refs['appGrid'].instance.pageIndex();
-            this.pageIndex = pageCount + 1; 
-if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
-  return (pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)
-}
-
-    },
-    window(e, tck) {
-      let url = `${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-        tck +
-        "%2FTAHAKKUK%2F" +
-        e +
-        ".pdf?alt=media"
-      }`;
-      window.open(url, "_blank");
-      console.log(e);
-    },
+window(e,tck){
+  let url= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2FTAHAKKUK%2F"+ e+".pdf?alt=media"}`
+  window.open(url,'_blank')
+  console.log(e);
+},
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;
-             
     },
     saveLayout(state) {
       state.columns.forEach((element) => {
@@ -443,9 +388,6 @@ if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
       e.cancel = true;
     },
   },
-  mounted() {
-    console.log(this.$refs['appGrid'].instance.pageIndex(2));
-  },
 };
 </script>
 <style scoped>
@@ -453,8 +395,13 @@ if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
   margin-bottom: 10px;
 }
 .feather.feather-trash,
-.feather.feather-user {
-  width: 27px;
+.feather.feather-user{
+    width: 27px;
   height: 19px;
 }
+  .dx-button.dx-button-warning {
+        background-color: #ffc107;
+    }
+
 </style>
+ 

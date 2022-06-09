@@ -114,7 +114,7 @@
 
       <template #panelColumnTemplate="{ data }">
         <div class="text-center">
-         <feather-icon  @click="showPanelClick(data.data.PanelKodu,data.data.PanelSifre,data.data.MukellefId)" icon="BriefcaseIcon"/>
+         <feather-icon  @click="showPanelClick(data.data.PanelKodu,data.data.PanelSifre,data.data.musavirUid)" icon="BriefcaseIcon"/>
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
@@ -125,7 +125,7 @@
 
       <template #mukellefColumnTemplate="{ data }">
         <div class="text-center">
-                  <feather-icon   @click="showTaxPayerInfoClick(data.data.beyan_pdf,data.data.MukellefId)" icon="UserIcon"/>
+                  <feather-icon   @click="showTaxPayerInfoClick(data.data.beyan_pdf,data.data.tckn)" icon="UserIcon"/>
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"

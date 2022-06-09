@@ -130,3 +130,16 @@ export default {
   },
 };
 </script>
+
+<style>
+nav.navbar.header-navbar.navbar.navbar-shadow.align-items-center.navbar-light.navbar-expand.floating-nav {
+  background: rgb(44,79,157);
+background: linear-gradient(0deg, rgba(44,79,157,1) 0%, rgba(253,45,45,0.19681375968356096) 100%);
+}
+.b-avatar.badge-light-primary,
+ svg.text-body.feather.feather-bell,
+.header-navbar .navbar-container ul.navbar-nav li > a.nav-link {
+    color: #f6f3ff!important;
+}
+ 
+</style>

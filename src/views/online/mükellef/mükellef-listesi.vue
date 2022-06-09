@@ -906,12 +906,13 @@ return this.reFaaliyet
     //#region SAYFA ICIN
     showPanelClick(kod,sifre,id) {
       console.log(kod,sifre);
-       window.open("http://mukellef.emusavirim.com/dashboard?cid="+kod+ "&pwd="+ sifre+"&asd="+id, "_blank");
+       window.open("http://mukellef.emusavirim.com/?cid="+kod+ "&pwd="+ sifre+"&asd="+id, "_blank");
     },
     showTaxPayerInfoClicks(e, v, y) {
       this.$refs.taxPayerPopup.show();
+      this.person=[]
       this.person = this.getMukellefData.filter((el) => {
-        return el.MukellefId == v;
+        return el.tckn == v;
       });
 
   this.popup=this.person[0]

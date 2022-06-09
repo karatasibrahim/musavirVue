@@ -7,15 +7,12 @@
       :listClick="listClick"
       :printClick="printClick"
       :sendClick="sendClick"
-@selected="gelendata($event)"
+      @selected="gelendata($event)"
       :pk="id"
-      :items="items"
+      :items="beyannameData"
       :totalRows="16"
       :title="'Beyannameler'"
       :columns="columns"
-      :prevButton="prevButton"
-      :nextButton="nextButton"
-      ref="appTablee"
     />
 
     <!-- Sorgula Popup -->
@@ -80,9 +77,8 @@
       >
       </iframe>
     </b-modal>
-    
 
-    <b-modal
+    <!-- <b-modal
       ref="listPopup"
       title="Listele"
       ok-title="Listele"
@@ -146,12 +142,10 @@
           </b-form-group>
         </b-col>
       </b-row>
-    </b-modal>
+    </b-modal> -->
     <!-- <input type="text" v-model="phone">
     <input type="text" v-model="msg"> -->
-  <!-- <button @click="getQRCode">deneme</button>   -->
-           
-
+    <!-- <button @click="getQRCode">deneme</button>   -->
   </div>
 </template>
 
@@ -162,42 +156,42 @@ import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
-import { mapGetters , mapActions} from "vuex";
-import axios from 'axios'
-var ArrayData = 0;
-    let arr=[]
+import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
+import QrcodeVue from "qrcode.vue";
+let arr = [];
 export default {
   components: {
     AppTable,
+    QrcodeVue,
     BRow,
     vSelect,
     BCol,
     BFormGroup,
     BFormDatepicker,
-  }, 
-   data() {
+  },
+  data() {
     return {
-      setQRCode:null,
-      size:125,
-      phone:null,
-      msg:"",
+      setQRCode: null,
+      size: 125,
+      phone: null,
+      msg: "",
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
         startDate: {
-          title:null,
-          startDate:
-          {
-            month:"",
-            year:"",
+          title: null,
+          startDate: {
+            month: "",
+            year: "",
           },
         },
-        endDate:{
-          month:"",
-          year:"",
+        endDate: {
+          month: "",
+          year: "",
         },
       },
-      id:"",
+      id: "",
       //#endregion
       listRequest: {
         startDate: new Date(),
@@ -252,22 +246,22 @@ export default {
         },
         {
           dataField: "beyan_pdf",
-          caption: "Beyan Pdf",
+          caption: "Beyan & Tahakkuk",
           cellTemplate: "beyanColumnTemplate",
         },
-        {
-          dataField: "tahak_pdf",
-          caption: "Tahakkuk Pdf",
-          cellTemplate: "tahakkukColumnTemplate",
-        },
+        // {
+        //   dataField: "tahak_pdf",
+        //   caption: "Tahakkuk Pdf",
+        //   cellTemplate: "tahakkukColumnTemplate",
+        // },
         {
           dataField: "Toplam",
           caption: "Tutar",
         },
       ],
       mukellefid: "",
-      userEmail: "",   
-      AllData:[] };
+      userEmail: "",
+    };
   },
   computed: {
     inquireMinDate() {
@@ -284,203 +278,187 @@ export default {
     },
     ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
     beyannameData() {
-     return this.reBeyanname
+      return this.reBeyanname;
     },
     mukelefData() {
       return this.reMukellef;
     },
-    getPerson(){
-     return this.rePerson.kullaniciUid
-      
+    getPerson() {
+      return this.rePerson.kullaniciUid;
     },
-    getUserUid()
-    {
-return this.rePerson.kullaniciUid;
- 
-    }
+    getUserUid() {
+      return this.rePerson.kullaniciUid;
+    },
   },
-  
+
   methods: {
-    ...mapActions(['AddNewsBeyanSorgu','fetchBeyanname','nextButtons']),
-   async nextitems(){
-         if(this.$refs["appTablee"].nextbutton()){
-const data={
-  state:"beyanname",
-  mut:"setBeyanname",
-  db:"Beyanname"
-}
-return await this.nextButtons(data).then(el=>{
-  console.log(el);
-  el.forEach(e=>{
-    this.items.push(e.data())
-  })
-
-})
-}
+    async getQRCode(phone, msg) {
+      const res = await axios.post("http://localhost:8087/api", { phone, msg });
+      this.setQRCode = res.data;
+      console.log(res.data);
     },
-nextButton(){
-    console.log(this.$refs["appTablee"].$data.CountEquil)
-    this.$refs["appTablee"].nextbutton();
-       this.nextitems();
-    
- 
-},
-    prevButton(){
-console.log("prev");
-console.log(this.$refs["appTablee"].prevbutton());
-
-
-    },
-  async  getQRCode(phone,msg) {
-
-    const res = await axios.post("http://localhost:8087/api", { phone, msg });
-    this.setQRCode=res.data;
-    console.log(res.data);
-  },
 
     queryClick() {
       this.$refs.queryPopup.show();
     },
+    ...mapActions(["AddNewsBeyanSorgu"]),
 
-    sendClick(e)
-    {
-    var arr=[]
+    sendClick(e) {
+      var arr = [];
 
-      e.forEach(element => {
-
-     let data=this.mukelefData.find(el=>{
-      
-      return  element.tckn==el.tckn
-      })
-console.log(data,element);
-arr.push(Object.assign(element,data))
+      e.forEach((element) => {
+        let data = this.mukelefData.find((el) => {
+          return element.tckn == el.tckn;
+        });
+        console.log(data, element);
+        arr.push(Object.assign(element, data));
       });
-arr.forEach(iletim=>{
- iletim.iletisim.forEach(tel=>{
-         let phone=tel.Telefon;   
-     let msg=tel.HitapŞekli+ " "+ iletim.unvan + " " + iletim.donem + " " + "beyannameniz ektedir. "+ " Toplam Borç Tuarınız" + " " + iletim.Toplam+ " " +`${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" + iletim.tckn + "%2FTAHAKKUK%2F"+ iletim.tahakkukOid+".pdf?alt=media"}`;
- this.getQRCode(phone,msg)
-  })
-})
-
-
+      arr.forEach((iletim) => {
+        iletim.iletisim.forEach((tel) => {
+          let phone = tel.Telefon;
+          let msg =
+            tel.HitapŞekli +
+            " " +
+            iletim.unvan +
+            " " +
+            iletim.donem +
+            " " +
+            "beyannameniz ektedir. " +
+            " Toplam Borç Tuarınız" +
+            " " +
+            iletim.Toplam +
+            " " +
+            `${
+              "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+              iletim.tckn +
+              "%2FTAHAKKUK%2F" +
+              iletim.tahakkukOid +
+              ".pdf?alt=media"
+            }`;
+          this.getQRCode(phone, msg);
+        });
+      });
     },
-    inquireClick() {     
-const data={
-KullaniciUid:this.getUserUid, 
- 
- baslangic:this.inquireRequest.startDate.replace("-","").replace("-",""),
- bitis:this.inquireRequest.endDate.replace("-","").replace("-",""),
- 
-SorguDurumu:0
- 
+    inquireClick() {
+      const data = {
+        KullaniciUid: this.getUserUid,
 
-}
-console.log(data);
-//Actionu çağirip ona veri göndermemiz lazım aksi halde çalişmaz 
-this.AddNewsBeyanSorgu(data)
-//Data da ayarladiğimiz verileri vuexe gönderdik 
-      // window.open("http://mukellef.emusavirim.com/");    
+        baslangic: this.inquireRequest.startDate
+          .replace("-", "")
+          .replace("-", ""),
+        bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
 
-         this.$toast({
-                  component: ToastificationContent,
-                  position: "top-right",
-                  props: {                    
-                    icon: "SearchIcon",
-                    variant: "success",
-                    text: `Beyanname Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
-                  },
-                });
+        SorguDurumu: 0,
+      };
+      console.log(data);
+      //Actionu çağirip ona veri göndermemiz lazım aksi halde çalişmaz
+      this.AddNewsBeyanSorgu(data);
+      //Data da ayarladiğimiz verileri vuexe gönderdik
+      // window.open("http://mukellef.emusavirim.com/");
+
+      this.$toast({
+        component: ToastificationContent,
+        position: "top-right",
+        props: {
+          icon: "SearchIcon",
+          variant: "success",
+          text: `Beyanname Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+        },
+      });
     },
-    showPdfPopup(e,tck,is) {
-      this.activePdfUrl= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2F"+is+"%2F"+ e+".pdf?alt=media"}`;
+    showPdfPopup(e, tck, is) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tck +
+        "%2F" +
+        is +
+        "%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
       this.$refs.pdfPopup.show();
     },
     downloadClick(e) {},
     printClick(e) {},
-   
+
     listClick() {
       this.$refs.listPopup.show();
     },
 
-
     listRunClick() {
-      let now=new Date(this.listRequest.startDate)
-     let time2=new Date(this.listRequest.startDate)
-const fil=this.beyannameData.filter(el=>{
-      const time=new Date(el.beyan_yukleme_tarihi.slice(0,10).split(".").reverse().join("/"))
-    console.log(this.listRequest.title);
- if(this.listRequest.title.length>0){
-   console.log("1.if");
-   return this.listRequest.title.includes(el.unvan)
- }
- else if(this.listRequest.type.length>0){
-   console.log("2.if");
-      return this.listRequest.type.includes(el.beyan_turu) 
- }
-//   if(  time2.getTime()<=now.getTime()){
-//     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
-//       return time2.getTime()<time.getTime()
-//  }
- else{
-   console.log("else");
-   return el
- }
-})
-this.items=fil
-console.log(now);
+      let now = new Date(this.listRequest.startDate);
+      let time2 = new Date(this.listRequest.startDate);
+      const fil = this.beyannameData.filter((el) => {
+        const time = new Date(
+          el.beyan_yukleme_tarihi.slice(0, 10).split(".").reverse().join("/")
+        );
+        console.log(this.listRequest.title);
+        if (this.listRequest.title.length > 0) {
+          console.log("1.if");
+          return this.listRequest.title.includes(el.unvan);
+        } else if (this.listRequest.type.length > 0) {
+          console.log("2.if");
+          return this.listRequest.type.includes(el.beyan_turu);
+        }
+        //   if(  time2.getTime()<=now.getTime()){
+        //     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
+        //       return time2.getTime()<time.getTime()
+        //  }
+        else {
+          console.log("else");
+          return el;
+        }
+      });
+      this.items = fil;
+      console.log(now);
 
-// let time2=new Date(this.listRequest.startDate)
-// for (let el = 0; el < this.items.length; el++) {
-//   const element = this.items[el];
-//      const time=new Date(element.beyan_yukleme_tarihi.slice(0,10).split(".").reverse().join("/"))
-//   if(this.listRequest.title==element.unvan || this.listRequest.type==element.beyan_turu || time2.getTime()<time.getTime() ){
-//    this.items=[]
-// this.items.push(element)
-// }else{
-//   this.items=arr
-// }
-// }
-//   this.items.forEach(el=>{
+      // let time2=new Date(this.listRequest.startDate)
+      // for (let el = 0; el < this.items.length; el++) {
+      //   const element = this.items[el];
+      //      const time=new Date(element.beyan_yukleme_tarihi.slice(0,10).split(".").reverse().join("/"))
+      //   if(this.listRequest.title==element.unvan || this.listRequest.type==element.beyan_turu || time2.getTime()<time.getTime() ){
+      //    this.items=[]
+      // this.items.push(element)
+      // }else{
+      //   this.items=arr
+      // }
+      // }
+      //   this.items.forEach(el=>{
 
-// if(this.listRequest.title==el.unvan || this.listRequest.type==el.beyan_turu || time2.getTime()<time.getTime() ){
-//    this.items=[]
-// this.items.push(el)
-// }else{
-//   console.log("else");
-// }
+      // if(this.listRequest.title==el.unvan || this.listRequest.type==el.beyan_turu || time2.getTime()<time.getTime() ){
+      //    this.items=[]
+      // this.items.push(el)
+      // }else{
+      //   console.log("else");
+      // }
 
-// })
+      // })
     },
     /////////////////////////////////
-fetch(){
-console.log(this.kullaniciUid);
-this.fetchBeyanname()
-setTimeout(()=>{
-  this.setünvan()
-  },4000)
-},
-    setünvan() {
-      this.beyannameData.forEach(el=>{
-        this.items.push(el.data())
-      })
-      let arrUnvan=[];
-      let arrtype=[]
-      this.beyannameData.forEach((els) => {
-        arr.push(els)
-        arrUnvan.push(els.unvan)
-        arrtype.push(els.beyannameTuru)
-         });
-  
-     this.unvanlar=[...new Set(arrUnvan)]
-       this.turler=[...new Set(arrtype)]
+    ...mapActions(["fetchBeyanname"]),
+    fetch() {
+      console.log(this.kullaniciUid);
+      this.fetchBeyanname({pageSize:10,pageNumber:1,person:this.getPerson});
+      setTimeout(() => {
+        this.setünvan();
+      }, 800);
     },
- 
-  },
+    setünvan() {
+      let arrUnvan = [];
+      let arrtype = [];
+      this.beyannameData.forEach((els) => {
+        arr.push(els);
+        arrUnvan.push(els.unvan);
+        arrtype.push(els.beyannameTuru);
+      });
 
+      this.unvanlar = [...new Set(arrUnvan)];
+      this.turler = [...new Set(arrtype)];
+    },
+  },
   mounted() {
     this.fetch();
-    console.log(this.$refs["appTablee"]);
+    console.log(typeof this.listRequest.startDate);
   },
 };
 </script>
