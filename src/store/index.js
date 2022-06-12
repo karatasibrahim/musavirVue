@@ -6,7 +6,7 @@ import app from "./app";
 import appConfig from "./app-config";
 import verticalMenu from "./vertical-menu";
 
-import {
+import { 
   collection,
   getDocs,
   getDoc,
@@ -308,9 +308,6 @@ export default new Vuex.Store({
         where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
       mukellefdata.forEach((doc) => {
-        console.log(Object.assign(doc.data(), {
-          id: doc.id
-        }));
         context.commit("setMukkellef", Object.assign(doc.data(), {
           id: doc.id
         }))
@@ -326,18 +323,43 @@ export default new Vuex.Store({
         var docSnap = await getDoc(docRef);
         payload = Math.floor((Math.random() * 1000) + 900)
       } while (docSnap.exists());
-
       return id
     },
-    async fetchBeyanname(context, payload) {
+    async fetchBeyanname(context, payload) { 
+       console.log("-------------------------BURADA");
+ 
+       //////////////////
+      console.log(payload);
       this.state.beyanname = []
-      console.clear();
-      const q = query(
-        collection(db, 'Beyanname'),
-        orderBy("donem"),
-        startAt((payload.pageSize - 1) * payload.pageNumber),
-        limit(payload.pageSize)
-      );
+ 
+        const q =  query(
+          collection(db, "Beyanname"),
+          where("Kullanici", "==",payload)
+        ); // WITHOUT THE limit
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot.docs);
+        const total = querySnapshot.docs.length;
+        console.log(total)
+        // first.get()
+        // .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() 
+        // {
+        //       public void onSuccess(QuerySnapshot documentSnapshots) 
+        //       {           
+        //         DocumentSnapshot lastVisible = documentSnapshots.getDocuments()
+        //                 .get(documentSnapshots.size() -1);
+        //         Query next = db.collection("cities")
+        //                 .orderBy("population")
+        //                 .startAfter(lastVisible)
+        //                 .limit(25);
+        //     }
+        // });
+
+      // const q = query(
+      //   collection(db, 'Beyanname'),
+      //   orderBy("donem"),
+      //   startAt((payload.pageSize - 1) * payload.pageNumber),
+      //   limit(payload.pageSize)
+      // );
 
       var beyannameData = await getDocs(q);
 

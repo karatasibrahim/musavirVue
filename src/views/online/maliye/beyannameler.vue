@@ -438,7 +438,7 @@ export default {
     ...mapActions(["fetchBeyanname"]),
     fetch() {
       console.log(this.kullaniciUid);
-      this.fetchBeyanname({pageSize:10,pageNumber:1,person:this.getPerson});
+      this.fetchBeyanname(this.getPerson);
       setTimeout(() => {
         this.setünvan();
       }, 800);
