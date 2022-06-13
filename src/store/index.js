@@ -356,7 +356,7 @@ return ar
 
       context.dispatch("actionArr", {
         dbName: "MukellefPosSatis",
-        İtemName: "MukellefId",
+        İtemName: "musavirUid",
         payload: payload,
         MutName: "setPosSorgu"
       })
