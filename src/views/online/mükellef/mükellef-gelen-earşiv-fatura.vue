@@ -321,13 +321,14 @@ arr.push(element.MukellefId)
   
   });  
 
-  this.fecthGelenEarsivFat(arr)
+  this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid)
 this.setList()
     },
     setList(){
    let arr=[]
    this.items=this.GelenearsivDataGet
    this.GelenearsivDataGet.forEach(el=>{
+    console.log(el);
    arr.push(el.Unvan)
  })
  this.mukelellefler=[...new Set(arr)]

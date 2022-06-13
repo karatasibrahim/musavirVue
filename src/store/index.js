@@ -332,14 +332,22 @@ export default new Vuex.Store({
     async fetchBeyanname(context, payload) { 
        console.log("-------------------------BURADA");
 console.log(payload);
+let ar=[]
       context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "Kullanici",
         payload: payload.kullaniciuid,
         limit:payload.limitSize,
         MutName: "setBeyanname"
-      })
+      }).then(el=>{
+        console.log(el);
+        el.forEach(e=>{
+          console.log(e);
+          ar.push(e.data())
+        })
 
+      })
+return ar
     },
 
     async fetchPosSorgu(context, payload) {
@@ -361,7 +369,7 @@ console.log(payload);
 
       context.dispatch("actionArr", {
         dbName: "GelenFaturalar",
-        İtemName: "MukellefId",
+        İtemName: "musavirUid",
         payload: payload,
         MutName: "setGelenFatura"
       })
@@ -566,15 +574,23 @@ console.log(payload);
         })
     },
     async actionArr(context, data) {
-
-      console.log("çaliştim",data);
+      return new Promise((resolve,reject)=>{
+              console.log("çaliştim",data);
       let queries = query(collection(db, data.dbName),
       where(data.İtemName, "==", data.payload), limit(data.limit)
     )
-    let documentSnapshots = await getDocs(queries)
-    console.log(documentSnapshots.docs);
+    let datas =  getDocs(queries)
+   datas.then(documentSnapshots=>{
+
     context.commit(data.MutName, documentSnapshots.docs);
+    let arr=[]
     console.log("ifteyim");
+    arr=documentSnapshots.docs
+    resolve(arr)
+   })
+
+      })
+
     },
 
     async addkalanıd(context, payload) {
@@ -681,6 +697,12 @@ console.log(payload);
       //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
       const a = collection(db, "BeyannameSorgu")
       const son = await addDoc(a, payload)
+    },
+    async AddPosSorgu(context, payload)
+    {
+      console.log(payload);
+const veri=collection(db,"MukellefPosSorgu")
+const veriSon=await addDoc(veri,payload)
     },
     async AddNewsBildirgeSorgu(context, payload) {
       console.log(payload);

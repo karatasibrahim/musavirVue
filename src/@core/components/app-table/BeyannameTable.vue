@@ -166,19 +166,19 @@
       </template>
 
       <template #beyanColumnTemplate="{ data }">
-        <div class="text-center">
+         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="
-              showPdfPopupClick(
-                data.data.beyannameOid,
-                data.data.tckn,
-                'BEYANNAME'
-              )
-            "
+            @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
+          />
+          &nbsp; &nbsp; &nbsp;
+            <img
+            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+            @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
           />
         </div>
       </template>
+
 
       <template #tahakkukColumnTemplate="{ data }">
         <div class="text-center">
@@ -355,7 +355,7 @@ export default {
       CountEquil:true,
       pageSizeRefValue:10,
       pagedEnable:true,
-      pagesz:20
+      pagesz:10
     };
   },
   computed: {
@@ -452,8 +452,13 @@ export default {
   watch:{
 pageSizeRefValue(){
 console.log(this.pagesz,this.pageSizeRefValue);
-  this.pagesz=this.pageSizeRefValue
- 
+  
+ if(this.pageSizeRefValue>10){
+   this.pagesz=10
+ }else{
+this.pagesz=this.pageSizeRefValue
+ }
+ console.log(this.pagesz);
   this.$emit("pageSizes",this.pageSizeRefValue)
   console.log(this.pageSizeRefValue,this.pagesz);
 

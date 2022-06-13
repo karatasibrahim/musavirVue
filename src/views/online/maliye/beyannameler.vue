@@ -13,8 +13,6 @@
       :totalRows="16"
       :title="'Beyannameler'"
       :columns="columns"
-      :prevButton="prevButton"
-      :nextButton="nextButton"
       ref="appTablee"
       @pageSizes="getPageSize"
     />
@@ -305,11 +303,9 @@ getPageSize(e){
     kullaniciuid:this.getPerson,
     limitSize:e
   };
-this.fetchBeyanname(data)
-console.log(e);
- setTimeout(() => {
-        this.setünvan();
-      }, 800);
+this.fetchBeyanname(data).then(el=>{
+ this.items=el
+})
 },
     async getQRCode(phone, msg) {
       const res = await axios.post("http://localhost:8087/api", { phone, msg });
@@ -419,10 +415,6 @@ console.log(e);
           console.log("2.if");
           return this.listRequest.type.includes(el.beyan_turu);
         }
-        //   if(  time2.getTime()<=now.getTime()){
-        //     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
-        //       return time2.getTime()<time.getTime()
-        //  }
         else {
           console.log("else");
           return el;
@@ -431,48 +423,21 @@ console.log(e);
       this.items = fil;
       console.log(now);
 
-      // let time2=new Date(this.listRequest.startDate)
-      // for (let el = 0; el < this.items.length; el++) {
-      //   const element = this.items[el];
-      //      const time=new Date(element.beyan_yukleme_tarihi.slice(0,10).split(".").reverse().join("/"))
-      //   if(this.listRequest.title==element.unvan || this.listRequest.type==element.beyan_turu || time2.getTime()<time.getTime() ){
-      //    this.items=[]
-      // this.items.push(element)
-      // }else{
-      //   this.items=arr
-      // }
-      // }
-      //   this.items.forEach(el=>{
-
-      // if(this.listRequest.title==el.unvan || this.listRequest.type==el.beyan_turu || time2.getTime()<time.getTime() ){
-      //    this.items=[]
-      // this.items.push(el)
-      // }else{
-      //   console.log("else");
-      // }
-
-      // })
     },
     /////////////////////////////////
     fetch() {
       this.items=[]
+      this.fetchBeyanname(data).then(el=>{
+ this.items=el
+})
         const data={
     kullaniciuid:this.getPerson,
     limitSize:Number(10)
   }
       console.log(this.kullaniciUid);
-      this.fetchBeyanname(data);
-      setTimeout(() => {
-        this.setünvan();
-      }, 800);
-    },
-    setünvan() {
-           this.beyannameData.forEach(el=>{
-        this.items.push(el.data())
-      })
-      let arrUnvan = [];
-      let arrtype = [];
-      this.beyannameData.forEach((els) => {
+ this.fetchBeyanname(data).then(el=>{
+ this.items=el
+      el.forEach((els) => {
         arr.push(els);
         arrUnvan.push(els.unvan);
         arrtype.push(els.beyannameTuru);
@@ -480,6 +445,15 @@ console.log(e);
 
       this.unvanlar = [...new Set(arrUnvan)];
       this.turler = [...new Set(arrtype)];
+})
+    },
+    setünvan() {
+      console.log("geldim" );
+           this.beyannameData.forEach(el=>{
+        this.items.push(el.data())
+      })
+x
+
     },
   },
   mounted() {
