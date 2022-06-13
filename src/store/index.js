@@ -364,16 +364,14 @@ return ar
     },
 
 
-    async fecthGelenEarsivFat(context, payload) {
+     fecthGelenEarsivFat(context, payload) {
       this.state.GelenFatura = []
-
       context.dispatch("actionArr", {
         dbName: "GelenFaturalar",
         İtemName: "musavirUid",
         payload: payload,
         MutName: "setGelenFatura"
       })
-
     },
 
 
@@ -383,7 +381,7 @@ return ar
       console.log(payload);
       context.dispatch("actionArr", {
         dbName: "GidenFaturalar",
-        İtemName: "MukellefId",
+        İtemName: "musavirUid",
         payload: payload,
         MutName: "setGidenFatura"
       })
@@ -702,6 +700,18 @@ return ar
     {
       console.log(payload);
 const veri=collection(db,"MukellefPosSorgu")
+const veriSon=await addDoc(veri,payload)
+    },
+    async AddGelenFaturaSorgu(context, payload)
+    {
+      console.log(payload);
+const veri=collection(db,"GelenFaturaSorgu")
+const veriSon=await addDoc(veri,payload)
+    },
+    async AddGidenFaturaSorgu(context, payload)
+    {
+      console.log(payload);
+const veri=collection(db,"GidenFaturaSorgu")
 const veriSon=await addDoc(veri,payload)
     },
     async AddNewsBildirgeSorgu(context, payload) {

@@ -34,7 +34,8 @@
               v-model="listRequest.title"
               :options="mukelellefler"
               placeholder="Mükellef Seçiniz"
-              label="MükellefSeçimi"
+              label="title"
+              multiple
             />
           </b-form-group>
         </b-col>
@@ -123,7 +124,7 @@
             label-cols-md="4"
           >
             <v-select
-              v-model="listRequest.title"
+              v-model="inquireRequest.title"
               :options="mukelellefler"
               multiple
               placeholder="Mükellef Seçiniz"
@@ -212,6 +213,8 @@ export default {
           new Date().getMonth() + 1,
           new Date().getDate()
         ),
+           type: null,
+        title: [],
       },
       //#endregion
       listRequest: {
@@ -275,8 +278,26 @@ export default {
   methods: {
     queryClick() {
       this.$refs.queryPopup.show();
+    }, 
+    ...mapActions(["fecthGelenEarsivFat","AddGelenFaturaSorgu"]),
+  inquireClick() {
+      let arr=[]
+this.inquireRequest.title.forEach(el=>{
+arr.push(el.tckn)
+})
+ const data = {
+        KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
+        baslangic: this.inquireRequest.startDate
+          .replace("-", "")
+          .replace("-", ""),
+        bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
+
+tckn:arr,
+        SorguDurumu: 0,
+      };
+   
+    this.AddGelenFaturaSorgu(data);
     },
-    inquireClick() {},
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -311,25 +332,18 @@ this.items=fil
 
 
     },
-    ...mapActions(["fecthGelenEarsivFat"]),
+   
     fecthGelenFat(){
        this.items=[]
-  let arr=[]
-  this.Mukellefdataget.forEach(element => {
-this.mukelellefler.push(element.Unvan)
-arr.push(element.MukellefId)
-  
-  });  
-
   this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid)
 this.setList()
     },
     setList(){
    let arr=[]
    this.items=this.GelenearsivDataGet
-   this.GelenearsivDataGet.forEach(el=>{
+   this.Mukellefdataget.forEach(el=>{
     console.log(el);
-   arr.push(el.Unvan)
+   arr.push({title:el.unvan,tckn:el.tckn})
  })
  this.mukelellefler=[...new Set(arr)]
     }

@@ -25,12 +25,17 @@
     >
       <b-row>
         <b-col cols="12">
-          <b-form-group label="Mükellef Seçimi" label-for="h-type" label-cols-md="4">
+          <b-form-group
+            label="Mükellef Seçimi"
+            label-for="h-type"
+            label-cols-md="4"
+          >
             <v-select
-              v-model="listRequest.title"
-    
+              v-model="inquireRequest.title"
+              multiple
+              :options="unvanlar"
               placeholder="Mükellef Seçiniz"
-              label="MükellefSeçimi"
+              label="title"
             />
           </b-form-group>
         </b-col>
@@ -86,7 +91,6 @@
           <b-form-group label="Durum" label-for="h-type" label-cols-md="4">
             <v-select
               v-model="listRequest.title"
-            
               placeholder="Durum Seçiniz"
               label="DurumSeçiniz"
             />
@@ -123,7 +127,11 @@
     >
       <b-row>
         <b-col cols="12">
-          <b-form-group label="Mükellef Seçimi" label-for="h-type" label-cols-md="4">
+          <b-form-group
+            label="Mükellef Seçimi"
+            label-for="h-type"
+            label-cols-md="4"
+          >
             <v-select
               v-model="listRequest.title"
               :options="unvanlar"
@@ -201,7 +209,7 @@ import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
-import {mapGetters,mapActions} from "vuex"
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     AppTable2,
@@ -224,13 +232,13 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["reGidenArsiv","reMukellef"]),
-    getGidenArsiv(){
-      return this.reGidenArsiv
+    ...mapGetters(["reGidenArsiv", "reMukellef"]),
+    getGidenArsiv() {
+      return this.reGidenArsiv;
     },
-    getMukellef(){
-      return this.reMukellef
-    }
+    getMukellef() {
+      return this.reMukellef;
+    },
   },
   data() {
     return {
@@ -243,6 +251,8 @@ export default {
           new Date().getMonth() + 1,
           new Date().getDate()
         ),
+        type: null,
+        title: [],
       },
       //#endregion
       listRequest: {
@@ -257,10 +267,10 @@ export default {
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
-      items:[],
+      items: [],
       unvanlar: [],
-      turler: ["Onaylandı","Onaylanmadı"],
-      trash:"",
+      turler: ["Onaylandı", "Onaylanmadı"],
+      trash: "",
       columns: [
         {
           dataField: "id",
@@ -304,10 +314,28 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["fetchGidenEarsiv", "AddGidenFaturaSorgu"]),
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {},
+    inquireClick() {
+      let arr = [];
+      this.inquireRequest.title.forEach((el) => {
+        arr.push(el.value);
+      });
+      const data = {
+        KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
+        baslangic: this.inquireRequest.startDate
+          .replace("-", "")
+          .replace("-", ""),
+        bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
+
+        tckn: arr,
+        SorguDurumu: 0,
+      };
+
+      this.AddGidenFaturaSorgu(data);
+    },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -319,74 +347,68 @@ export default {
       this.$refs.listPopup.show();
     },
     listRunClick() {
-        console.log(this.listRequest);
+      console.log(this.listRequest);
 
-      let now=new Date(this.listRequest.startDate)
-     let time2=new Date(this.listRequest.startDate)
-const fil=this.getGidenArsiv.filter(el=>{
-      const time=new Date(el.BelgeTarihi.slice(0,10).split(".").reverse().join("/"))
-    console.log(this.listRequest.title);
- if(this.listRequest.title!=null){
-   console.log("1.if");
-   return this.listRequest.title==el.AliciUnvan
- }
- if(this.listRequest.type!=null){
-   console.log("1.if");
-   return this.listRequest.type==el.OnayDurumu
- }
-//   if(  time2.getTime()<=now.getTime()){
-//     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
-//       return time2.getTime()<time.getTime()
-//  }
- else{
-   console.log("else");
-   return el
- }
-})
-this.items=fil
+      let now = new Date(this.listRequest.startDate);
+      let time2 = new Date(this.listRequest.startDate);
+      const fil = this.getGidenArsiv.filter((el) => {
+        const time = new Date(
+          el.BelgeTarihi.slice(0, 10).split(".").reverse().join("/")
+        );
+        console.log(this.listRequest.title);
+        if (this.listRequest.title != null) {
+          console.log("1.if");
+          return this.listRequest.title == el.AliciUnvan;
+        }
+        if (this.listRequest.type != null) {
+          console.log("1.if");
+          return this.listRequest.type == el.OnayDurumu;
+        }
+        //   if(  time2.getTime()<=now.getTime()){
+        //     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
+        //       return time2.getTime()<time.getTime()
+        //  }
+        else {
+          console.log("else");
+          return el;
+        }
+      });
+      this.items = fil;
 
-
-
-// let time2=new Date(this.listRequest.startDate)
-// for (let index = 0; index < this.items.length; index++) {
-//   const el = this.items[index];
-//       const time=new Date(el.Tarih.split("-").join("/"))
-// console.log(this.listRequest.title==el.Unvan);
-// if(this.listRequest.title==el.Unvan || time2.getTime()<time.getTime() || listRequest.type==el.OnayDurumu){
-//   this.items=[]
-// this.items.push(el)
-// console.log("if");
-// }
-// else{
-//   console.log("else");
-//   this.items=this.getGidenArsiv
-// }
+      // let time2=new Date(this.listRequest.startDate)
+      // for (let index = 0; index < this.items.length; index++) {
+      //   const el = this.items[index];
+      //       const time=new Date(el.Tarih.split("-").join("/"))
+      // console.log(this.listRequest.title==el.Unvan);
+      // if(this.listRequest.title==el.Unvan || time2.getTime()<time.getTime() || listRequest.type==el.OnayDurumu){
+      //   this.items=[]
+      // this.items.push(el)
+      // console.log("if");
+      // }
+      // else{
+      //   console.log("else");
+      //   this.items=this.getGidenArsiv
+      // }
     },
-    ...mapActions(["fetchGidenEarsiv"]),
-    fetchGidenars(){
-      let mainarr=[];
-this.getMukellef.forEach(el => {
- mainarr.push(el.MukellefId)
-});  
-    this.fetchGidenEarsiv(mainarr);
-    this.setArr();
-    },
-    setArr(){ 
-      let arr=[];
-      let durumarr=[] 
-      this.items=this.getGidenArsiv;
-this.getGidenArsiv.forEach(data=>{
-  durumarr.push(data.OnayDurumu)
-  arr.push(data.AliciUnvan)
-})
-console.log(arr,durumarr);
-this.unvanlar=[...new Set(arr)]
 
-    }
+    fetchGidenars() {
+      this.fetchGidenEarsiv(this.getMukellef[0].musavirUid);
+      this.setArr();
+    },
+    setArr() {
+      let arr = [];
+      let durumarr = [];
+      this.items = this.getGidenArsiv;
+      this.getMukellef.forEach((data) => {
+        arr.push({ title: data.unvan, value: data.tckn });
+      });
+      console.log(arr, durumarr);
+      this.unvanlar = [...new Set(arr)];
+    },
   },
-  mounted(){
-    this.fetchGidenars()
-  }
+  mounted() {
+    this.fetchGidenars();
+  },
 };
 </script>
 

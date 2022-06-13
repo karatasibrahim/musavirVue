@@ -161,7 +161,6 @@ import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
-
 import {mapGetters,mapActions} from 'vuex'
 import objectAssign from "object-assign";
 export default {
@@ -264,7 +263,6 @@ arr.push(el.value)
 })
  const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-
         baslangic: this.inquireRequest.startDate.getMonth().length<10? "0"+this.inquireRequest.startDate.getMonth().toString():this.inquireRequest.startDate.getMonth()+this.inquireRequest.startDate.getFullYear().toString(), //Ay bilgisi
           
 tckn:arr,
@@ -272,7 +270,6 @@ tckn:arr,
       };
    
     this.AddPosSorgu(data);
-
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
@@ -290,8 +287,6 @@ tckn:arr,
         };
       });
     },
-
-
     listClick() {
       this.$refs.listPopup.show();
     },
@@ -333,7 +328,6 @@ console.log(this.Mukellefdataget[0]);
   setTimeout(()=>{
   this.setOption()
   },600)
-
 },
 setOption(){
   let bankarr=[];
@@ -374,7 +368,6 @@ PosSorguDataGet(){
   },
   mounted(){
 this.postDataGet();
-
   }
 };
 </script>
