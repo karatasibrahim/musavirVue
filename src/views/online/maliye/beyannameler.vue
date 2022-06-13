@@ -1,18 +1,22 @@
 <template>
   <div>
     <app-table
-      :showPdfPopupClick="showPdfPopup"
+   :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
       :downloadClick="downloadClick"
       :listClick="listClick"
       :printClick="printClick"
       :sendClick="sendClick"
-      @selected="gelendata($event)"
+@selected="gelendata($event)"
       :pk="id"
-      :items="beyannameData"
+      :items="items"
       :totalRows="16"
       :title="'Beyannameler'"
       :columns="columns"
+      :prevButton="prevButton"
+      :nextButton="nextButton"
+      ref="appTablee"
+      @pageSizes="getPageSize"
     />
 
     <!-- Sorgula Popup -->
@@ -150,7 +154,7 @@
 </template>
 
 <script>
-import AppTable from "@core/components/app-table/AppTable.vue";
+import AppTable from "@core/components/app-table/BeyannameTable.vue";
 import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
@@ -158,12 +162,10 @@ import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
-import QrcodeVue from "qrcode.vue";
 let arr = [];
 export default {
   components: {
     AppTable,
-    QrcodeVue,
     BRow,
     vSelect,
     BCol,
@@ -276,22 +278,39 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
+  ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
     beyannameData() {
-      return this.reBeyanname;
+     return this.reBeyanname
     },
     mukelefData() {
       return this.reMukellef;
     },
-    getPerson() {
-      return this.rePerson.kullaniciUid;
+    getPerson(){
+     return this.rePerson.kullaniciUid
+      
     },
-    getUserUid() {
-      return this.rePerson.kullaniciUid;
-    },
+    getUserUid()
+    {
+return this.rePerson.kullaniciUid;
+ 
+    }
   },
 
-  methods: {
+  methods:{
+    ...mapActions(['AddNewsBeyanSorgu','fetchBeyanname','nextButtons','prevButtonVuex']),
+
+getPageSize(e){
+  this.items=[]
+  const data={
+    kullaniciuid:this.getPerson,
+    limitSize:e
+  };
+this.fetchBeyanname(data)
+console.log(e);
+ setTimeout(() => {
+        this.setünvan();
+      }, 800);
+},
     async getQRCode(phone, msg) {
       const res = await axios.post("http://localhost:8087/api", { phone, msg });
       this.setQRCode = res.data;
@@ -435,15 +454,22 @@ export default {
       // })
     },
     /////////////////////////////////
-    ...mapActions(["fetchBeyanname"]),
     fetch() {
+      this.items=[]
+        const data={
+    kullaniciuid:this.getPerson,
+    limitSize:Number(10)
+  }
       console.log(this.kullaniciUid);
-      this.fetchBeyanname(this.getPerson);
+      this.fetchBeyanname(data);
       setTimeout(() => {
         this.setünvan();
       }, 800);
     },
     setünvan() {
+           this.beyannameData.forEach(el=>{
+        this.items.push(el.data())
+      })
       let arrUnvan = [];
       let arrtype = [];
       this.beyannameData.forEach((els) => {

@@ -20,6 +20,8 @@ import {
   addDoc,
   orderBy,
   startAt,
+  limitToLast,
+  endBefore,
   endAt,
   startAfter
 } from "firebase/firestore";
@@ -86,7 +88,12 @@ export default new Vuex.Store({
       return state.mukellef
     },
     reBeyanname(state) {
-      return state.beyanname
+      let arr = []
+
+      state.beyanname.forEach(el => {
+        arr.push(el)
+      })
+      return arr
     },
     rePosSorgu(state) {
       return state.posSorgu
@@ -157,10 +164,7 @@ export default new Vuex.Store({
       return state.mukellef.push(payload)
     },
     setBeyanname(state, payload) {
-      payload.forEach(el => {
-
-        return state.beyanname.push(el.data())
-      })
+      return state.beyanname = payload
     },
     setPosSorgu(state, payload) {
 
@@ -327,67 +331,14 @@ export default new Vuex.Store({
     },
     async fetchBeyanname(context, payload) { 
        console.log("-------------------------BURADA");
- 
-       //////////////////
-      console.log(payload);
-      this.state.beyanname = []
- 
-        const q =  query(
-          collection(db, "Beyanname"),
-          where("Kullanici", "==",payload)
-        ); // WITHOUT THE limit
-        const querySnapshot = await getDocs(q);
-        console.log(querySnapshot.docs);
-        const total = querySnapshot.docs.length;
-        console.log(total)
-        // first.get()
-        // .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() 
-        // {
-        //       public void onSuccess(QuerySnapshot documentSnapshots) 
-        //       {           
-        //         DocumentSnapshot lastVisible = documentSnapshots.getDocuments()
-        //                 .get(documentSnapshots.size() -1);
-        //         Query next = db.collection("cities")
-        //                 .orderBy("population")
-        //                 .startAfter(lastVisible)
-        //                 .limit(25);
-        //     }
-        // });
-
-      // const q = query(
-      //   collection(db, 'Beyanname'),
-      //   orderBy("donem"),
-      //   startAt((payload.pageSize - 1) * payload.pageNumber),
-      //   limit(payload.pageSize)
-      // );
-
-      var beyannameData = await getDocs(q);
-
-      var responseData = [];
-      beyannameData.forEach((doc) => {
-        responseData.push(doc.data());
-      });
-
-      this.state.beyanname = responseData;
-      return responseData;
-
-      // const first  = await getDocs (query( collection(db, 'Beyanname'),limit(10)))
-
-      //   //const snapshot = await first;
-      // console.log("GELDİ 3 Data-------------------------");
-      // console.log(first);
-
-      // Get the last document
-      //const last = first.docs[first.docs.length - 1];
-
-      // let kId=  JSON.parse(localStorage.getItem("userData")).userId
-
-      // context.dispatch("actionArr", {
-      //   dbName: "Beyanname",
-      //   İtemName: "Kullanici",
-      //   payload: payload,
-      //   MutName: "setBeyanname"
-      // })
+console.log(payload);
+      context.dispatch("actionArr", {
+        dbName: "Beyanname",
+        İtemName: "Kullanici",
+        payload: payload.kullaniciuid,
+        limit:payload.limitSize,
+        MutName: "setBeyanname"
+      })
 
     },
 
@@ -615,25 +566,17 @@ export default new Vuex.Store({
         })
     },
     async actionArr(context, data) {
-      let queries = [];
-      for (let i = 0; i < data.payload.length; i += 10) {
-        queries.push(query(
-          collection(db, data.dbName),
-          where(data.İtemName, "in", data.payload.slice(i, i + 10)),
 
-        ))
-      }
-      let usersDocsSnaps = [];
-      for (let i = 0; i < queries.length; i++) {
-        usersDocsSnaps.push(getDocs(queries[i]));
-      }
-      usersDocsSnaps = await Promise.all(usersDocsSnaps);
-      let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
-      console.log(usersDocs);
-      context.commit(data.MutName, usersDocs);
-
-
+      console.log("çaliştim",data);
+      let queries = query(collection(db, data.dbName),
+      where(data.İtemName, "==", data.payload), limit(data.limit)
+    )
+    let documentSnapshots = await getDocs(queries)
+    console.log(documentSnapshots.docs);
+    context.commit(data.MutName, documentSnapshots.docs);
+    console.log("ifteyim");
     },
+
     async addkalanıd(context, payload) {
       let id = Math.floor((Math.random() * 1000) + 900)
       do {

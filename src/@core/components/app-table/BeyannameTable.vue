@@ -5,6 +5,7 @@
       :key-expr="pk"
       :columns="columns"
       :show-borders="true"
+      :mukellefid="mukellefid"
       ref="appGrid"
       :allow-column-reordering="true"
       :allow-column-resizing="true"
@@ -15,6 +16,7 @@
       :columns-auto-width="true"
       :data-source="items"
       @exporting="onExporting"
+
     >
       <DxExport :enabled="true" :allow-export-selected-data="true" />
       <DxLoadPanel :enabled="true" />
@@ -24,15 +26,16 @@
       <DxHeaderFilter :visible="true" />
       <DxSearchPanel :visible="true" />
       <DxScrolling row-rendering-mode="virtual" />
-      <DxPager
+  <DxPager
         :visible="true"
         :allowed-page-sizes="pageSizes"
         display-mode="full"
         :show-page-size-selector="true"
         :show-info="false"
-        :show-navigation-buttons="true"
+        
       />
-      <DxPaging :page-size="10" />
+       <DxPaging :page-size="pagesz" :enabled="pagedEnable" :page-index="pageIndex"/> 
+      <!-- <DxPaging :page-size="5" v-pager /> -->
       <DxSorting mode="multiple" />
       <DxSelection
         :select-all-mode="'allPages'"
@@ -48,10 +51,79 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
+        <DxItem location="before" template="inquireTemplate" />
+        <DxItem location="before" template="wpTemplate" />
+        <DxItem location="before" template="printTemplate" />
+        <DxItem location="before" template="epostaTemplate" />
+        <DxItem location="before" template="smsTemplate" />
+
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
       </DxToolbar>
+
+      <!-- <template #sendTemplate>
+        <DxDropDownButton
+          width="150"
+          ref="sendDrop"
+          :split-button="false"
+          :use-select-mode="false"
+          :items="sendSettings"
+          @click="sendClick(data)"
+          display-expr="name"
+          key-expr="id"
+          text="Gönder"
+          icon="share"
+        />
+      </template> -->
+
+      <template #printTemplate>
+        <DxDropDownButton
+          width="150"
+          :split-button="false"
+          :use-select-mode="false"
+          :items="printSettings"
+          @itemClick="printClick"
+          display-expr="name"
+          key-expr="id"
+          text="Yazdır"
+          icon="print"
+          type="back"
+        />
+      </template>
+      <template #wpTemplate>
+        <DxButton
+          type="success"
+          text="Whatsapp"
+          icon="detailslayout"
+          @click="sendClick(selectedRowKeys)"
+        />
+      </template>
+      <template #smsTemplate>
+        <DxButton
+          type="default"
+          text="Sms"
+          icon="detailslayout"
+          @click="listClick"
+        />
+      </template>
+      <template #epostaTemplate>
+        <DxButton
+          type=""
+          text="E-posta"
+          icon="detailslayout"
+          @click="listClick"
+        />
+      </template>
+
+      <template #inquireTemplate>
+        <DxButton
+          type="danger"
+          text="Sorgula"
+          icon="search"
+          @click="inquireClick('http://89.43.29.189:1880/test1')"
+        />
+      </template>
 
       <template #headerTemplate>
         <div class="text-center" style="margin-right: 20px">
@@ -65,19 +137,31 @@
 
       <template #panelColumnTemplate="{ data }">
         <div class="text-center">
-          <img
-            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
+          <feather-icon
             @click="showPanelClick(data.data.beyan_pdf)"
+            icon="BriefcaseIcon"
           />
+
+          <!-- <img
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
+           
+          /> -->
         </div>
       </template>
 
       <template #mukellefColumnTemplate="{ data }">
         <div class="text-center">
-          <img
-            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
-            @click="showTaxPayerInfoClick(data.data.beyan_pdf)"
+          <feather-icon
+            @click="
+              showTaxPayerInfoClick(data.data.beyan_pdf, data.data.MukellefId)
+            "
+            icon="UserIcon"
           />
+
+          <!-- <img
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
+          
+          /> -->
         </div>
       </template>
 
@@ -85,7 +169,13 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.beyan_pdf)"
+            @click="
+              showPdfPopupClick(
+                data.data.beyannameOid,
+                data.data.tckn,
+                'BEYANNAME'
+              )
+            "
           />
         </div>
       </template>
@@ -94,7 +184,13 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
+            @click="
+              showPdfPopupClick(
+                data.data.tahakkukOid,
+                data.data.tckn,
+                'TAHAKKUK'
+              )
+            "
           />
         </div>
       </template>
@@ -108,7 +204,7 @@
           <span> &nbsp; &nbsp; &nbsp;</span>
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
+            @click="showPdfPopupTahClick(data.data.tahak_pdf)"
           />
 
           <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
@@ -120,18 +216,28 @@
         </div>
       </template>
     </DxDataGrid>
+   
+    <!-- <b-row class="navigator" align-h="end">
+      <b-col cols="1">
+        <feather-icon icon="ArrowLeftCircleIcon" size="30" @click="prevButton"/>
+      </b-col>
+      <b-col cols="1">
+        <feather-icon icon="ArrowRightCircleIcon" size="30" @click="nextButton"/>
+      </b-col>
+    </b-row> -->
   </b-card>
 </template>
 
 <script>
 import {
+  BRow,
+  BCol,
   BCard,
   BCardHeader,
   BCardBody,
   BCardTitle,
   BCardText,
 } from "bootstrap-vue";
-
 import {
   DxDataGrid,
   DxScrolling,
@@ -162,7 +268,6 @@ import { exportDataGrid as exportDataGridToPdf } from "devextreme/pdf_exporter";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver-es";
-
 export default {
   name: "AppTable",
   components: {
@@ -171,6 +276,8 @@ export default {
     BCardTitle,
     BCardText,
     DxDataGrid,
+    BRow,
+    BCol,
     DxScrolling,
     DxPager,
     BCardHeader,
@@ -195,8 +302,8 @@ export default {
   },
   directives: {
     Ripple,
-  },
 
+  },
   props: {
     pk: {
       type: String,
@@ -227,9 +334,12 @@ export default {
     deleteInsuranceClick: Function,
     showTaxPayerInfoClick: Function,
     showPanelClick: Function,
+    nextButton:Function,
+    prevButton:Function,
   },
   data() {
     return {
+      mukellefid: "",
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
       downloadSettings: [
@@ -241,23 +351,56 @@ export default {
         { id: 2, name: "Tahakkuk", icon: "pdffile" },
         { id: 3, name: "Tümü", icon: "pdffile" },
       ],
-      sendSettings: [
-        { id: 1, name: "Sms", icon: "rename" },
-        { id: 2, name: "E-Posta", icon: "email" },
-        { id: 3, name: "Whatsapp", icon: "attach" },
-      ],
+      pageIndex: 0,
+      CountEquil:true,
+      pageSizeRefValue:10,
+      pagedEnable:true,
+      pagesz:20
     };
   },
   computed: {
     dataGrid() {
       return this.$refs.appGrid.instance;
     },
+// pageSizeRef(){
+//   this.pageSizeRefValue=
+//   return  this.pageSizeRefValue
+    
+// }
   },
   methods: {
+//     prevbutton() { 
+//       let pageCount = this.$refs['appGrid'].instance.pageIndex();
+//       console.log(pageCount, pageCount>0);
+//       if(pageCount>0) {
+//             console.log(pageCount);
+//             this.pageIndex = pageCount - 1;
+//       }       
+//     },
+//         nextbutton() {
+//       const pageCount = this.$refs['appGrid'].instance.pageIndex();
+//             this.pageIndex = pageCount + 1; 
+// // if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
+// //   return (pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)
+// // }
+//     },
+    
+    window(e, tck) {
+      let url = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tck +
+        "%2FTAHAKKUK%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
+      window.open(url, "_blank");
+      console.log(e);
+    },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
-      this.selectionChangedBySelectBox = false;
+      this.selectionChangedBySelectBox = false;   
+      console.log(this.pageSizeRef,this.$refs["appGrid"].instance);
     },
     saveLayout(state) {
       state.columns.forEach((element) => {
@@ -291,7 +434,6 @@ export default {
     onExporting(e) {
       const workbook = new Workbook();
       const worksheet = workbook.addWorksheet(this.title);
-
       exportDataGrid({
         component: e.component,
         worksheet,
@@ -307,10 +449,39 @@ export default {
       e.cancel = true;
     },
   },
+  watch:{
+pageSizeRefValue(){
+console.log(this.pagesz,this.pageSizeRefValue);
+  this.pagesz=this.pageSizeRefValue
+ 
+  this.$emit("pageSizes",this.pageSizeRefValue)
+  console.log(this.pageSizeRefValue,this.pagesz);
+
+}
+  },
+mounted(){
+console.log(this.pageSizeRefValue);
+const ela= document.getElementsByClassName("dx-page-size")
+for (let i = 0; i < ela.length; i++) {
+  const element = ela[i];
+  console.log(element);
+element.addEventListener('click',()=>{
+  this.pageSizeRefValue=element.innerHTML=="Tümü"?3000:Number(element.innerHTML);
+  console.log(element.innerHTML=="Tümü"?3000:Number(element.innerHTML));
+})
+
+}
+},
+
 };
 </script>
 <style scoped>
 #exportButton {
   margin-bottom: 10px;
+}
+.feather.feather-trash,
+.feather.feather-user {
+  width: 27px;
+  height: 19px;
 }
 </style>
