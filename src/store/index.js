@@ -348,7 +348,7 @@ console.log(payload);
 
       context.dispatch("actionArr", {
         dbName: "MukellefPosSatis",
-        İtemName: "MukellefId",
+        İtemName: "musavirUid",
         payload: payload,
         MutName: "setPosSorgu"
       })
@@ -681,6 +681,12 @@ console.log(payload);
       //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
       const a = collection(db, "BeyannameSorgu")
       const son = await addDoc(a, payload)
+    },
+    async AddPosSorgu(context, payload)
+    {
+      console.log(payload);
+const veri=collection(db,"MukellefPosSorgu")
+const veriSon=await addDoc(veri,payload)
     },
     async AddNewsBildirgeSorgu(context, payload) {
       console.log(payload);

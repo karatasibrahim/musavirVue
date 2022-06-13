@@ -27,14 +27,16 @@
         <b-col cols="12">
           <b-form-group label="Mükellef Seçimi" label-for="h-type" label-cols-md="4">
             <v-select
-              v-model="listRequest.title"
-             :options="mukelellefler"
+              v-model="inquireRequest.title"
+              :options="mukelellefler"
               placeholder="Mükellef Seçiniz"
-              label="MükellefSeçimi"
+              multiple
+              label="title"
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12">
+        {{inquireRequest.title}}
+        <!-- <b-col cols="12">
           <b-form-group label="Pos Bilgisi" label-for="h-type" label-cols-md="4">
             <v-select
               v-model="listRequest.type"
@@ -43,7 +45,7 @@
               label="PosBilgisi"
             />
           </b-form-group>
-        </b-col>
+        </b-col> -->
         <b-col cols="12">
           <b-form-group
             label="Tarih Seçiniz"
@@ -60,7 +62,7 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12">
+        <!-- <b-col cols="12">
           <b-form-group label="Detay" label-for="h-type" label-cols-md="4">
             <v-select
               v-model="listRequest.type"
@@ -69,7 +71,7 @@
               label="DetayBilgisi"
             />
           </b-form-group>
-        </b-col>
+        </b-col> -->
       </b-row>
     </b-modal>
 
@@ -161,6 +163,7 @@ import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 
 import {mapGetters,mapActions} from 'vuex'
+import objectAssign from "object-assign";
 export default {
   components: {
     PosTable,
@@ -183,6 +186,8 @@ export default {
           new Date().getMonth() + 1,
           new Date().getDate()
         ),
+           type: null,
+        title: [],
       },
       focusdate:false,
       //#endregion
@@ -210,6 +215,10 @@ export default {
           caption: "Id",
           visible: false,
           showInColumnChooser: false,
+        },
+         {
+          dataField: "unvan",
+          caption: "Unvan",
         },
         {
           dataField: "BankaAdi",
@@ -247,7 +256,24 @@ this.focusdate=true
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {},
+    ...mapActions(["AddPosSorgu"]),
+    inquireClick() {
+      let arr=[]
+this.inquireRequest.title.forEach(el=>{
+arr.push(el.value)
+})
+ const data = {
+        KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
+
+        baslangic: this.inquireRequest.startDate.getMonth().length<10? "0"+this.inquireRequest.startDate.getMonth().toString():this.inquireRequest.startDate.getMonth()+this.inquireRequest.startDate.getFullYear().toString(), //Ay bilgisi
+          
+tckn:arr,
+        SorguDurumu: 0,
+      };
+   
+    this.AddPosSorgu(data);
+
+    },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -255,6 +281,17 @@ this.focusdate=true
     downloadClick(e) {},
     printClick(e) {},
     sendClick(e) {},
+ 
+      fetchunvan() {
+      this.items = this.getmükelef.map((el) => {
+        return {
+          Unvan: el.Unvan,
+          mukellefid: el.MukellefId,
+        };
+      });
+    },
+
+
     listClick() {
       this.$refs.listPopup.show();
     },
@@ -287,25 +324,30 @@ this.items=fil
 postDataGet(){  
   let arr=[]
   this.Mukellefdataget.forEach(element => {
-    console.log("pos",element.MukellefId);
+    console.log("pos");
 arr.push(element.MukellefId)
   
   });  
-
-  this.fetchPosSorgu(arr)
+console.log(this.Mukellefdataget[0]);
+  this.fetchPosSorgu(this.Mukellefdataget[0].musavirUid)
+  setTimeout(()=>{
   this.setOption()
+  },600)
+
 },
 setOption(){
   let bankarr=[];
   let pos=[];
   let detayArr=[]
 console.log(this.PosSorguDataGet);
-this.items=this.PosSorguDataGet;
-this.PosSorguDataGet.forEach(el=>{
-  bankarr.push(el.BankaAdi);
+var expected = this.PosSorguDataGet.map(a => Object.assign(a,this.Mukellefdataget.find(b => b.musavirUid == a.musavirUid)));
+console.log(expected);
+this.items=expected
+this.Mukellefdataget.forEach(el=>{
+  bankarr.push({title:el.unvan,value:el.tckn});
   detayArr.push(el.BankaAdi);
-this.mukelellefler=[...new Set(bankarr)]
 })
+this.mukelellefler=[...new Set(bankarr)]
 }
   }, 
   computed: {
@@ -325,6 +367,7 @@ this.mukelellefler=[...new Set(bankarr)]
     Mukellefdataget(){
       return this.reMukellef
     },
+    
 PosSorguDataGet(){
   return this.rePosSorgu
 }
