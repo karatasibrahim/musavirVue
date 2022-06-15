@@ -17,7 +17,7 @@
     <!-- Sorgula Popup -->
     <b-modal
       ref="queryPopup"
-      title="Beyanname Sorgula"
+      title="Mükellef Pos Sorgulama"
       ok-title="Sorgula"
       cancel-title="İptal"
       cancel-variant="outline-secondary"
@@ -35,7 +35,7 @@
             />
           </b-form-group>
         </b-col>
-        {{inquireRequest.title}}
+      
         <!-- <b-col cols="12">
           <b-form-group label="Pos Bilgisi" label-for="h-type" label-cols-md="4">
             <v-select
@@ -178,26 +178,25 @@ export default {
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       id:"",
-      inquireRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
-           type: null,
-        title: [],
+        inquireRequest: {
+        startDate: {
+          title: null,
+          startDate: {
+            month: "",
+            year: "",
+          },
+        },
+        endDate: {
+          month: "",
+          year: "",
+        },
       },
       focusdate:false,
       //#endregion
-      listRequest: {
+     listRequest: {
         startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
-        type: null,
+        endDate: new Date(),
+        type: [],
         title: [],
       },
       activePdfUrl:
@@ -265,12 +264,14 @@ this.focusdate=true
     ...mapActions(["AddPosSorgu","fetchPosSorgu"]),
     inquireClick() {
       let arr=[]
-this.inquireRequest.title.forEach(el=>{
-arr.push(el.value)
-})
+// this.inquireRequest.title.forEach(el=>{
+// arr.push(el.value)
+// })
  const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: this.inquireRequest.startDate.getMonth().length<10? "0"+this.inquireRequest.startDate.getMonth().toString():this.inquireRequest.startDate.getMonth()+this.inquireRequest.startDate.getFullYear().toString(), //Ay bilgisi
+        baslangic: this.listRequest.startDate
+        .replace("-","")
+        .substr(0,6), //Ay bilgisi
           
 tckn:arr,
         SorguDurumu: 0,
