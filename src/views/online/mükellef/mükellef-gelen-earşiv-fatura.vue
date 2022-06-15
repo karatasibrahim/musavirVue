@@ -9,6 +9,7 @@
       :printClick="printClick"
       :sendClick="sendClick"
       :pk="'id'"
+      ref="AppTable"
       :items="items"
       :totalRows="16"
       :title="'Gelen E-Arşiv Sorgulama'"
@@ -207,6 +208,7 @@ export default {
   data() {
     return {
       //#region Sorgulama Popup
+      id:"",
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
         startDate: new Date(),
@@ -243,39 +245,44 @@ export default {
           showInColumnChooser: false,
         },
         {
-          dataField: "Unvan",
+          dataField: "veri.unvan",
           caption: "Gelen Unvan",
         },
         {
-          dataField: "FaturaNo",
+          dataField: "veri.faturaNo",
           caption: "Fatura No",
         },
         {
-          dataField: "Vergiler",
+          dataField: "veri.vergi",
           caption: "Vergiler",
         },
         {
-          dataField: "VergiNo",
+          dataField: "veri.mukVkn",
           caption: "Vergi No",
         },
         {
-          dataField: "Tarih",
+          dataField: "veri.tarih",
           caption: "Tarih",
         },
         {
-          dataField: "Odenecek",
+          dataField: "veri.odenecek",
           caption: "Ödenecek",
         },
         {
-          dataField: "Doviz",
+          dataField: "veri.paraBirimi",
           caption: "Döviz",
+        },
+         {
+          dataField: "veri.gonderimSekli",
+          caption: "Gönderim Şekli",
         },
         {
           dataField: "Aciklama",
           caption: "Açıklama",
         },
       ],
-      SearchBar:""
+      SearchBar:"",
+      RefData:this.$refs["AppTable"]
     };
   },
   methods: {
@@ -345,9 +352,9 @@ this.setList()
    let arr=[]
    this.items=this.GelenearsivDataGet
    this.Mukellefdataget.forEach(el=>{
-
    arr.push({title:el.unvan,tckn:el.tckn})
  })
+ console.log(this.RefData,this.$refs["AppTable"].instance);
  this.mukelellefler=[...new Set(arr)]
     }
   }, 
@@ -370,7 +377,8 @@ this.setList()
     },
 GelenearsivDataGet(){
   return this.reGelenArsiv
-}
+},
+
   },
   watch:{
     SearchBar(){
@@ -391,7 +399,6 @@ GelenearsivDataGet(){
     }
   },
   mounted(){
-    console.log(this.items);
     this.fecthGelenFat();
   }
 };

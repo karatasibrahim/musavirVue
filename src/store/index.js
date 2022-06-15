@@ -386,7 +386,7 @@ return ar
       this.state.GelenFatura = []
       context.dispatch("actionArr", {
         dbName: "GelenFaturalar",
-        İtemName: "musavirUid",
+        İtemName: "KullaniciUid",
         payload: payload,
         MutName: "setGelenFatura"
       })

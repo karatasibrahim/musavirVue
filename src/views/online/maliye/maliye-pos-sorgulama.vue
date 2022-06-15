@@ -162,7 +162,6 @@ import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import {mapGetters,mapActions} from 'vuex'
-import objectAssign from "object-assign";
 export default {
   components: {
     PosTable,
