@@ -465,8 +465,8 @@ this.pagesz=this.pageSizeRefValue
 }
   },
 mounted(){
-console.log(this.pageSizeRefValue);
-const ela= document.getElementsByClassName("dx-page-size")
+  const ela= document.getElementsByClassName("dx-page-size")
+console.log(ela);
 for (let i = 0; i < ela.length; i++) {
   const element = ela[i];
   console.log(element);

@@ -339,6 +339,7 @@ window(e,tck){
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;
+        console.log(this.$refs["appGrid"].instance);
     },
     saveLayout(state) {
       state.columns.forEach((element) => {
@@ -388,7 +389,15 @@ window(e,tck){
       e.cancel = true;
     },
   },
-};
+//   updated(){
+//     console.log(this.$refs["appGrid"].instance);
+//   let eleman= document.getElementsByClassName("dx-texteditor-input")
+//    for (let index = 0; index < eleman.length; index++) {
+//     const el = eleman[index];
+//     el.addEventListener('keypress')
+//    }
+//  }
+ };
 </script>
 <style scoped>
 #exportButton {

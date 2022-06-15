@@ -202,6 +202,7 @@ import {
   DxItem,
   DxLoadPanel,
   DxExport,
+  DxGrouping, DxGroupPanel,
 } from "devextreme-vue/data-grid";
 import { BButton } from "bootstrap-vue";
 import DxButton from "devextreme-vue/button";
@@ -238,6 +239,7 @@ export default {
     DxColumnFixing,
     DxStateStoring,
     DxToolbar,
+    DxGrouping, DxGroupPanel,
     DxItem,
     DxLoadPanel,
     BButton,
@@ -311,6 +313,7 @@ export default {
       this.selectionChangedBySelectBox = false;
     },
     saveLayout(state) {
+      console.log(state);
       state.columns.forEach((element) => {
         var column_custom_ref = this.columns.filter(
           (x) => x.dataField == element.dataField
@@ -325,6 +328,10 @@ export default {
           element.maxWidth = column_custom_ref.maxWidth;
         if (column_custom_ref.caption != null)
           element.caption = column_custom_ref.caption;
+           if (column_custom_ref.groupIndex != null)
+          element.groupIndex = column_custom_ref.groupIndex;
+            if (column_custom_ref.dataType != null)
+          element.dataType = column_custom_ref.dataType;
       });
       //state.columns burada kayda gönderilecek.
     },

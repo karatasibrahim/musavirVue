@@ -1,5 +1,6 @@
 <template>
   <div>
+    <input type="text" v-model="SearchBar" placeholder="FaturaNo Ara..." class="searchbar">
     <app-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -192,6 +193,7 @@ import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import {mapGetters,mapActions} from 'vuex'
+let KullaniciUid = JSON.parse(localStorage.getItem("userData")).userId
 export default {
   components: {
     AppTable,
@@ -273,13 +275,14 @@ export default {
           caption: "Açıklama",
         },
       ],
+      SearchBar:""
     };
   },
   methods: {
     queryClick() {
       this.$refs.queryPopup.show();
     }, 
-    ...mapActions(["fecthGelenEarsivFat","AddGelenFaturaSorgu"]),
+    ...mapActions(["fecthGelenEarsivFat","AddGelenFaturaSorgu","fetchOneWatch"]),
   inquireClick() {
       let arr=[]
 this.inquireRequest.title.forEach(el=>{
@@ -342,7 +345,7 @@ this.setList()
    let arr=[]
    this.items=this.GelenearsivDataGet
    this.Mukellefdataget.forEach(el=>{
-    console.log(el);
+
    arr.push({title:el.unvan,tckn:el.tckn})
  })
  this.mukelellefler=[...new Set(arr)]
@@ -369,6 +372,24 @@ GelenearsivDataGet(){
   return this.reGelenArsiv
 }
   },
+  watch:{
+    SearchBar(){
+      console.log(this.SearchBar);
+      if (this.SearchBar.length<3) {
+        this.items=this.GelenearsivDataGet
+      }else{
+              this.items=[]
+              
+      this.fetchOneWatch({no:this.SearchBar,uid:KullaniciUid}).then(res=>{
+        console.log(res);
+
+        this.items=res
+      })
+      }
+
+
+    }
+  },
   mounted(){
     console.log(this.items);
     this.fecthGelenFat();
@@ -376,4 +397,11 @@ GelenearsivDataGet(){
 };
 </script>
 
-<style></style>
+<style>
+.searchbar{
+  border-radius: 5px;
+border: 1px solid #d7cbcb;
+padding: 5px 10px 5px 10px;
+margin-bottom: 5px;
+}
+</style>

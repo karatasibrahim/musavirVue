@@ -320,6 +320,24 @@ export default new Vuex.Store({
 
       return mukellefdata
     },
+    fetchOneWatch(context, payload) {
+      let arr=[]
+      return new Promise((resolve,reject)=>{
+      console.log(payload);
+      this.state.mukellef = []
+      const q = query(collection(db, "GelenFaturalar"),
+      where("musavirUid", "==", payload.uid),
+        where("FaturaNo", "==", payload.no));
+      const mukellefdata =  getDocs(q);
+      mukellefdata.then(res=>{
+        
+        res.forEach(el=>{
+arr.push(el.data())
+        })
+        resolve(arr)
+      })
+    })
+      },
     async addMükellefid(context, payload) {
       let id = Math.floor((Math.random() * 1000) + 900)
       do {
@@ -356,7 +374,7 @@ return ar
 
       context.dispatch("actionArr", {
         dbName: "MukellefPosSatis",
-        İtemName: "musavirUid",
+        İtemName: "KullaniciUid",
         payload: payload,
         MutName: "setPosSorgu"
       })

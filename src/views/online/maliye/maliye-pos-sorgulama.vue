@@ -202,7 +202,10 @@ export default {
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
-      items: [],
+      items: [{
+          aaa:"lolo",
+          unvan:"aaa"
+        }],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
       detaylar:[],
@@ -218,31 +221,35 @@ export default {
          {
           dataField: "unvan",
           caption: "Unvan",
+          groupIndex:0
         },
         {
-          dataField: "BankaAdi",
+          dataField: "pos_banka_adi",
           caption: "Banka Adı",
         },
         {
-          dataField: "VergiNo",
+          dataField: "pos_banka_vkn",
           caption: "Vergi No",
         },
         {
-          dataField: "Tarih",
-          caption: "Tarih",
+          dataField: "toplam",
+          caption: "toplam",
         },
         {
-          dataField: "VergiKimlikNo",
-          caption: "Vergi Kimlik No",
+          dataField: "pos_uye_isy",
+          caption: "pos_uye_isy",
         },
-        {
-          dataField: "Tutar",
-          caption: "Tutar",
+         {
+           dataField: "tckn",
+          caption: "tckn",
+          
         },
-        {
-          dataField: "SorguTarihi",
-          caption: "Sorgu Tarihi",
-        },
+           {
+             dataField: "genelToplam",
+             caption: "Genel Toplam",
+                       groupIndex:1
+
+           },
       ],
     };
   },
@@ -255,7 +262,7 @@ this.focusdate=true
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(["AddPosSorgu"]),
+    ...mapActions(["AddPosSorgu","fetchPosSorgu"]),
     inquireClick() {
       let arr=[]
 this.inquireRequest.title.forEach(el=>{
@@ -315,7 +322,6 @@ return time2.getTime()<time.getTime()
 })
 this.items=fil
     },
-...mapActions(["fetchPosSorgu"]),
 postDataGet(){  
   let arr=[]
   this.Mukellefdataget.forEach(element => {
@@ -327,16 +333,23 @@ console.log(this.Mukellefdataget[0]);
   this.fetchPosSorgu(this.Mukellefdataget[0].musavirUid)
   setTimeout(()=>{
   this.setOption()
-  },600)
+  },1000)
 },
 setOption(){
   let bankarr=[];
   let pos=[];
   let detayArr=[]
 console.log(this.PosSorguDataGet);
-var expected = this.PosSorguDataGet.map(a => Object.assign(a,this.Mukellefdataget.find(b => b.musavirUid == a.musavirUid)));
+var expected = this.PosSorguDataGet.map(a => Object.assign(a,this.Mukellefdataget.find(b => b.musavirUid == a.KullaniciUid)));
 console.log(expected);
-this.items=expected
+let expected_alt=[]
+expected.forEach(ex=>{
+  ex.veri.posBilgileriTable.map(ve=>{
+expected_alt.push(Object.assign(ve,{unvan:ex.unvan,tckn:ex.tckn,genelToplam:ex.veri.toplam_genel}))
+  })
+})
+console.log(expected_alt);
+this.items=expected_alt
 this.Mukellefdataget.forEach(el=>{
   bankarr.push({title:el.unvan,value:el.tckn});
   detayArr.push(el.BankaAdi);
