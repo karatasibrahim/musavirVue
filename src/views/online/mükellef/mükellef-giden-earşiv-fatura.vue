@@ -7,7 +7,7 @@
       :printClick="printClick"
       :sendClick="sendClick"
       :trash="trash"
-      :pk="'id'"
+       :pk="id"
       :items="items"
       :totalRows="16"
       :title="'Giden E-Arşiv Sorgulama'"
@@ -243,6 +243,7 @@ export default {
   data() {
     return {
       //#region Sorgulama Popup
+      id:"",
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
         startDate: new Date(),
@@ -270,7 +271,7 @@ export default {
       items: [],
       unvanlar: [],
       turler: ["Onaylandı", "Onaylanmadı"],
-      trash: "",
+      
       columns: [
         {
           dataField: "id",
@@ -279,31 +280,31 @@ export default {
           showInColumnChooser: false,
         },
         {
-          dataField: "BelgeNumarasi",
+          dataField: "fatura.belgeNumarasi",
           caption: "Belge Numarası",
         },
         {
-          dataField: "AliciVknTckn",
+          dataField: "fatura.aliciVknTckn",
           caption: "Alıcı VKN/TC",
         },
         {
-          dataField: "AliciUnvan",
+          dataField: "fatura.aliciUnvanAdSoyad",
           caption: "Alıcı Ünvan",
         },
         {
-          dataField: "BelgeTarihi",
+          dataField: "fatura.belgeTarihi",
           caption: "Belge Tarihi",
         },
         {
-          dataField: "BelgeTuru",
+          dataField: "veri.tip",
           caption: "Belge Türü",
         },
         {
-          dataField: "OnayDurumu",
+          dataField: "fatura.onayDurumu",
           caption: "Onay Durumu",
         },
         {
-          dataField: "Tutar",
+          dataField: "veri.odenecek",
           caption: "Tutar",
         },
         {

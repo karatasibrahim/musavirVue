@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <app-table
       :showPdfPopupClick="showPdfPopup"
       :deleteInsuranceClick="deleteInsuranceClick"
@@ -9,7 +10,7 @@
       :printClick="printClick"
       :sendClick="sendClick"
       :pk="'SubeId'"
-      :items="items"
+      :items="getSgkBildirgeData"
       :totalRows="16"
       :title="'Sgk Bildirge Listesi'"
       :columns="columns"
@@ -273,7 +274,7 @@ export default {
           caption: "Gönderim",
         },
         {
-          dataField: "Unvan",
+          dataField: "unvan",
           caption: "Ünvan",
         },
         {
@@ -412,62 +413,23 @@ console.log(datanDonem);
 
     //#region SAYFA ICIN
     deleteInsuranceClick() {},
-    showPdfPopup(pdfUrl) {
-      //this.activePdfUrl=pdfUrl;
+   showPdfPopup(e, tck, is) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" + tck +
+        "%2F" +
+        is +
+        "%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
       this.$refs.pdfPopup.show();
     },
     //#endregion
     ...mapActions(["fetchSgkBildirge"]),
     fetchVergi() {
-      let arr = [];
-      let mukellfIdarr = [];
-      for (let i = 0; i < this.getFirmadata.length; i++) {
-        const element = this.getFirmadata[i];
-        arr.push(element.SubeId);
-        mukellfIdarr.push({
-          sube: element.SubeId,
-          mukID: element.MukellefId,
-          sicil: element.SicilNo,
-        });
-      }
-      this.fetchSgkBildirge(arr);
-      setTimeout(() => {
-        this.setUnvan(mukellfIdarr);
-      }, 2000);
+      this.fetchSgkBildirge(JSON.parse(localStorage.getItem("userData")).userId);
     },
-    setUnvan(arr, arrsubeid) {
-      let dataunvan = [];
-      let maindata = [];
-      for (let i = 0; i < this.getMukellefdata.length; i++) {
-        const element = this.getMukellefdata[i];
-dataunvan.push(element.Unvan)
-        arr.forEach((id) => {
-          console.log(id);
 
-          if (id.mukID == element.MukellefId) {
-            maindata.push({
-              sube: id.sube,
-              unvan: element.Unvan,
-              sicilno: id.sicil,
-            });
-          }
-        });
-      }
-      console.log(maindata);
-      for (let index = 0; index < this.getSgkBildirgeData.length; index++) {
-        const fin = this.getSgkBildirgeData[index];
-
-        maindata.forEach((main) => {
-          if (main.sube == fin.SubeId) {
-            fin.Unvan = main.unvan;
-            fin.SicilNo = main.sicilno;
-          }
-        });
-      }
-      this.items = this.getSgkBildirgeData;
-      this.unvanlar=[...new Set(dataunvan)]
-      console.log(this.getSgkBildirgeData, maindata);
-    },
   },
   mounted() {
     this.fetchVergi();

@@ -174,27 +174,40 @@
 
       <!-- <template #tahakkukColumnTemplate="{ data }">
         <div class="text-center">
-        
+        // Fatma
         </div>
       </template> -->
 
       <template #sgkGosterimColumnTemplate="{ data }">
         <div class="text-left">
-          <img
+              <img  v-if="data.data.hasOwnProperty('tahakkukOid')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
+             @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'SGK')"
           />
           <span> &nbsp; &nbsp; &nbsp;</span>
-          <img
+          <img  v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme2')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupTahClick(data.data.tahak_pdf)"
+             @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme2.thkoid,data.data.tckn,'SGK')"
+          />
+          <span> &nbsp; &nbsp; &nbsp;</span>
+          <img  v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme3')"
+            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+           @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme3.thkoid,data.data.tckn,'SGK')"
           />
 
           <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
           <img
+           v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme4')"
             class="text-right"
-            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
-            @click="deleteInsuranceClick(data.data)"
+           src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+             @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme4.thkoid,data.data.tckn,'SGK')"
+          />
+            <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
+          <img
+           v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme5')"
+            class="text-right"
+           src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+             @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme5.thkoid,data.data.tckn,'SGK')"
           />
         </div>
       </template>
@@ -309,6 +322,7 @@ export default {
   },
   data() {
     return {
+ 
       mukellefid:"",
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
@@ -328,6 +342,7 @@ export default {
     dataGrid() {
       return this.$refs.appGrid.instance;
     },
+ 
   },
   methods: {
 window(e,tck){

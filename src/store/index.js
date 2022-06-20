@@ -399,7 +399,7 @@ return ar
       console.log(payload);
       context.dispatch("actionArr", {
         dbName: "GidenFaturalar",
-        İtemName: "musavirUid",
+        İtemName: "KullaniciUid",
         payload: payload,
         MutName: "setGidenFatura"
       })
@@ -485,7 +485,7 @@ return ar
       console.log(payload);
       context.dispatch("actionArr", {
         dbName: "Bildirgeler",
-        İtemName: "SubeId",
+        İtemName: "Kullanici",
         payload: payload,
         MutName: "SetSgkBildirge"
       })

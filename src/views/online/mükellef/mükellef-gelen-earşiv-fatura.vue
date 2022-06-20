@@ -1,6 +1,11 @@
 <template>
   <div>
-    <input type="text" v-model="SearchBar" placeholder="FaturaNo Ara..." class="searchbar">
+    <input
+      type="text"
+      v-model="SearchBar"
+      placeholder="FaturaNo Ara..."
+      class="searchbar"
+    />
     <app-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -33,7 +38,7 @@
             label-cols-md="4"
           >
             <v-select
-              v-model="listRequest.title"
+              v-model="inquireRequest.title"
               :options="mukelellefler"
               placeholder="Mükellef Seçiniz"
               label="title"
@@ -193,8 +198,8 @@ import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
-import {mapGetters,mapActions} from 'vuex'
-let KullaniciUid = JSON.parse(localStorage.getItem("userData")).userId
+import { mapGetters, mapActions } from "vuex";
+let KullaniciUid = JSON.parse(localStorage.getItem("userData")).userId;
 export default {
   components: {
     AppTable,
@@ -204,11 +209,11 @@ export default {
     BFormGroup,
     BFormDatepicker,
   },
- 
+
   data() {
     return {
       //#region Sorgulama Popup
-      id:"",
+      id: "",
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
         startDate: new Date(),
@@ -217,7 +222,7 @@ export default {
           new Date().getMonth() + 1,
           new Date().getDate()
         ),
-           type: null,
+        type: null,
         title: [],
       },
       //#endregion
@@ -233,10 +238,10 @@ export default {
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
-      items:[],
+      items: [],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
-      mukelellefler:[],
+      mukelellefler: [],
       columns: [
         {
           dataField: "id",
@@ -272,7 +277,7 @@ export default {
           dataField: "veri.paraBirimi",
           caption: "Döviz",
         },
-         {
+        {
           dataField: "veri.gonderimSekli",
           caption: "Gönderim Şekli",
         },
@@ -281,32 +286,38 @@ export default {
           caption: "Açıklama",
         },
       ],
-      SearchBar:"",
-      RefData:this.$refs["AppTable"]
+      SearchBar: "",
+      RefData: this.$refs["AppTable"],
     };
   },
   methods: {
     queryClick() {
       this.$refs.queryPopup.show();
-    }, 
-    ...mapActions(["fecthGelenEarsivFat","AddGelenFaturaSorgu","fetchOneWatch"]),
-  inquireClick() {
-      let arr=[]
-this.inquireRequest.title.forEach(el=>{
-arr.push(el.tckn)
-})
- const data = {
+    },
+    ...mapActions([
+      "fecthGelenEarsivFat",
+      "AddGelenFaturaSorgu",
+      "fetchOneWatch",
+    ]),
+    inquireClick() {
+      let arr = [];
+      console.log(this.inquireRequest);
+      this.inquireRequest.title.forEach((el) => {
+
+        arr.push(el.tckn);
+      });
+      const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
         baslangic: this.inquireRequest.startDate
           .replace("-", "")
           .replace("-", ""),
         bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
 
-tckn:arr,
+        tckn: arr,
         SorguDurumu: 0,
       };
-   
-    this.AddGelenFaturaSorgu(data);
+
+        this.AddGelenFaturaSorgu(data);
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
@@ -318,46 +329,47 @@ tckn:arr,
     listClick() {
       this.$refs.listPopup.show();
     },
-     listRunClick() {
-      let now=new Date(this.listRequest.startDate)
-     let time2=new Date(this.listRequest.startDate)
-const fil=this.GelenearsivDataGet.filter(el=>{
-      const time=new Date(el.Tarih.slice(0,10).split(".").reverse().join("/"))
-    console.log(this.listRequest.title);
- if(this.listRequest.title.length>0){
-   console.log("1.if");
-   return this.listRequest.title.includes(el.Unvan)
- }
+    listRunClick() {
+      let now = new Date(this.listRequest.startDate);
+      let time2 = new Date(this.listRequest.startDate);
+      const fil = this.GelenearsivDataGet.filter((el) => {
+        const time = new Date(
+          el.Tarih.slice(0, 10).split(".").reverse().join("/")
+        );
+        console.log(this.listRequest.title);
+        if (this.listRequest.title.length > 0) {
+          console.log("1.if");
+          return this.listRequest.title.includes(el.Unvan);
+        }
 
-//   if(  time2.getTime()<=now.getTime()){
-//     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
-//       return time2.getTime()<time.getTime()
-//  }
- else{
-   console.log("else");
-   return el
- }
-})
-this.items=fil
-
-
+        //   if(  time2.getTime()<=now.getTime()){
+        //     console.log("3.if",this.listRequest.startDate!=this.listRequest.endDate, this.listRequest.startDate,this.listRequest.endDate);
+        //       return time2.getTime()<time.getTime()
+        //  }
+        else {
+          console.log("else");
+          return el;
+        }
+      });
+      this.items = fil;
     },
-   
-    fecthGelenFat(){
-       this.items=[]
-  this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid)
-this.setList()
+
+    fecthGelenFat() {
+      this.items = [];
+      this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid);
+      this.setList();
     },
-    setList(){
-   let arr=[]
-   this.items=this.GelenearsivDataGet
-   this.Mukellefdataget.forEach(el=>{
-   arr.push({title:el.unvan,tckn:el.tckn})
- })
- console.log(this.RefData,this.$refs["AppTable"].instance);
- this.mukelellefler=[...new Set(arr)]
-    }
-  }, 
+    setList() {
+      let arr = [];
+      this.items = this.GelenearsivDataGet;
+      this.Mukellefdataget.forEach((el) => {
+        arr.push({ title: el.unvan, tckn: el.tckn });
+      });
+      console.log(this.RefData, this.$refs["AppTable"].instance);
+      this.mukelellefler = [...new Set(arr)];
+        console.log(this.mukelellefler);
+    },
+  },
   computed: {
     inquireMinDate() {
       return this.inquireRequest.startDate;
@@ -371,44 +383,43 @@ this.setList()
     listMaxDate() {
       return this.listRequest.endDate;
     },
-        ...mapGetters(['reMukellef',"reGelenArsiv"]),
-    Mukellefdataget(){
-      return this.reMukellef
+    ...mapGetters(["reMukellef", "reGelenArsiv"]),
+    Mukellefdataget() {
+      return this.reMukellef;
     },
-GelenearsivDataGet(){
-  return this.reGelenArsiv
-},
-
+    GelenearsivDataGet() {
+      return this.reGelenArsiv;
+    },
   },
-  watch:{
-    SearchBar(){
+  watch: {
+    SearchBar() {
       console.log(this.SearchBar);
-      if (this.SearchBar.length<3) {
-        this.items=this.GelenearsivDataGet
-      }else{
-              this.items=[]
-              
-      this.fetchOneWatch({no:this.SearchBar,uid:KullaniciUid}).then(res=>{
-        console.log(res);
+      if (this.SearchBar.length < 3) {
+        this.items = this.GelenearsivDataGet;
+      } else {
+        this.items = [];
 
-        this.items=res
-      })
+        this.fetchOneWatch({ no: this.SearchBar, uid: KullaniciUid }).then(
+          (res) => {
+            console.log(res);
+
+            this.items = res;
+          }
+        );
       }
-
-
-    }
+    },
   },
-  mounted(){
+  mounted() {
     this.fecthGelenFat();
-  }
+  },
 };
 </script>
 
 <style>
-.searchbar{
+.searchbar {
   border-radius: 5px;
-border: 1px solid #d7cbcb;
-padding: 5px 10px 5px 10px;
-margin-bottom: 5px;
+  border: 1px solid #d7cbcb;
+  padding: 5px 10px 5px 10px;
+  margin-bottom: 5px;
 }
 </style>

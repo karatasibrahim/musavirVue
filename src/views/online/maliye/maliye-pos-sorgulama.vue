@@ -25,7 +25,11 @@
     >
       <b-row>
         <b-col cols="12">
-          <b-form-group label="Mükellef Seçimi" label-for="h-type" label-cols-md="4">
+          <b-form-group
+            label="Mükellef Seçimi"
+            label-for="h-type"
+            label-cols-md="4"
+          >
             <v-select
               v-model="inquireRequest.title"
               :options="mukelellefler"
@@ -35,7 +39,7 @@
             />
           </b-form-group>
         </b-col>
-      
+
         <!-- <b-col cols="12">
           <b-form-group label="Pos Bilgisi" label-for="h-type" label-cols-md="4">
             <v-select
@@ -103,7 +107,11 @@
     >
       <b-row>
         <b-col cols="12">
-          <b-form-group label="Mükellef Seçimi" label-for="h-type" label-cols-md="4">
+          <b-form-group
+            label="Mükellef Seçimi"
+            label-for="h-type"
+            label-cols-md="4"
+          >
             <v-select
               v-model="listRequest.title"
               :options="mukelellefler"
@@ -114,10 +122,14 @@
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group label="Pos Bilgisi" label-for="h-type" label-cols-md="4">
+          <b-form-group
+            label="Pos Bilgisi"
+            label-for="h-type"
+            label-cols-md="4"
+          >
             <v-select
               v-model="listRequest.type"
-            :options="poslar"
+              :options="poslar"
               placeholder="Pos Bilgisi Seçiniz"
               label="PosBilgisi"
             />
@@ -127,7 +139,7 @@
           <b-form-group
             label="Tarih Seçiniz"
             label-for="h-start-date"
-            label-cols-md="4" 
+            label-cols-md="4"
           >
             <b-form-datepicker
               id="h-start-date"
@@ -136,7 +148,6 @@
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
-             
             />
           </b-form-group>
         </b-col>
@@ -144,7 +155,7 @@
           <b-form-group label="Detay" label-for="h-type" label-cols-md="4">
             <v-select
               v-model="listRequest.type"
-             :options="detaylar"
+              :options="detaylar"
               placeholder="Detay Seçiniz"
               label="DetayBilgisi"
             />
@@ -161,7 +172,7 @@ import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
-import {mapGetters,mapActions} from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     PosTable,
@@ -171,13 +182,13 @@ export default {
     BFormGroup,
     BFormDatepicker,
   },
- 
+
   data() {
     return {
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
-      id:"",
-        inquireRequest: {
+      id: "",
+      inquireRequest: {
         startDate: {
           title: null,
           startDate: {
@@ -190,9 +201,9 @@ export default {
           year: "",
         },
       },
-      focusdate:false,
+      focusdate: false,
       //#endregion
-     listRequest: {
+      listRequest: {
         startDate: new Date(),
         endDate: new Date(),
         type: [],
@@ -200,26 +211,25 @@ export default {
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
-      items: [{
-          aaa:"lolo",
-          unvan:"aaa"
-        }],
+      items: [
+    
+      ],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
-      detaylar:[],
-      poslar:["Pos Tutarı olanlar","Pos Tutarı Olmayanlar"],
-      mukelellefler:[],
+      detaylar: [],
+      poslar: ["Pos Tutarı olanlar", "Pos Tutarı Olmayanlar"],
+      mukelellefler: [],
       columns: [
         {
-          dataField:"PosId",
+          dataField: "PosId",
           caption: "Id",
           visible: false,
           showInColumnChooser: false,
         },
-         {
+        {
           dataField: "unvan",
           caption: "Unvan",
-          groupIndex:0
+          groupIndex: 0,
         },
         {
           dataField: "pos_banka_adi",
@@ -237,46 +247,42 @@ export default {
           dataField: "pos_uye_isy",
           caption: "pos_uye_isy",
         },
-         {
-           dataField: "tckn",
+        {
+          dataField: "tckn",
           caption: "tckn",
-          
         },
-           {
-             dataField: "genelToplam",
-             caption: "Genel Toplam",
-                       groupIndex:1
-
-           },
+        {
+          dataField: "genelToplam",
+          caption: "Genel Toplam",
+          groupIndex: 1,
+        },
       ],
     };
   },
-  watch:{
-    'listRequest.startDate'(){
-this.focusdate=true
-    }
+  watch: {
+    "listRequest.startDate"() {
+      this.focusdate = true;
+    },
   },
   methods: {
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(["AddPosSorgu","fetchPosSorgu"]),
+    ...mapActions(["AddPosSorgu", "fetchPosSorgu"]),
     inquireClick() {
-      let arr=[]
-// this.inquireRequest.title.forEach(el=>{
-// arr.push(el.value)
-// })
- const data = {
+      let arr = [];
+        this.inquireRequest.title.forEach(el=>{
+        arr.push(el.tckn)
+        })
+      const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: this.listRequest.startDate
-        .replace("-","")
-        .substr(0,6), //Ay bilgisi
-          
-tckn:arr,
+        baslangic: this.listRequest.startDate.replace("-", "").substr(0, 6), //Ay bilgisi
+
+        tckn: arr,
         SorguDurumu: 0,
       };
-   
-    this.AddPosSorgu(data);
+
+      this.AddPosSorgu(data);
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
@@ -285,8 +291,8 @@ tckn:arr,
     downloadClick(e) {},
     printClick(e) {},
     sendClick(e) {},
- 
-      fetchunvan() {
+
+    fetchunvan() {
       this.items = this.getmükelef.map((el) => {
         return {
           Unvan: el.Unvan,
@@ -299,64 +305,74 @@ tckn:arr,
     },
     listRunClick() {
       console.log(this.focusdate);
-      let copytime=this.listRequest.startDate
+      let copytime = this.listRequest.startDate;
       console.log(this.listRequest.startDate);
-     let time2=new Date(this.listRequest.startDate)
-const fil=this.PosSorguDataGet.filter(el=>{
-    const time=new Date(el.SorguTarihi)
-    console.log(time);
- if(this.listRequest.title.length>0){
-   return this.listRequest.title.includes(el.BankaAdi)
- }
- else if(this.listRequest.type !="Pos Tutarı olanlar" ){
-      return el.Tutar==""
- }
- else if(this.focusdate){
-   console.log(time2.getTime()<time.getTime());
-return time2.getTime()<time.getTime()
- }
-  else{
-   console.log("else");
-   return el
- }
-})
-this.items=fil
+      let time2 = new Date(this.listRequest.startDate);
+      const fil = this.PosSorguDataGet.filter((el) => {
+        const time = new Date(el.SorguTarihi);
+        console.log(time);
+        if (this.listRequest.title.length > 0) {
+          return this.listRequest.title.includes(el.BankaAdi);
+        } else if (this.listRequest.type != "Pos Tutarı olanlar") {
+          return el.Tutar == "";
+        } else if (this.focusdate) {
+          console.log(time2.getTime() < time.getTime());
+          return time2.getTime() < time.getTime();
+        } else {
+          console.log("else");
+          return el;
+        }
+      });
+      this.items = fil;
     },
-postDataGet(){  
-  let arr=[]
-  this.Mukellefdataget.forEach(element => {
-    console.log("pos");
-arr.push(element.MukellefId)
-  
-  });  
-console.log(this.Mukellefdataget[0]);
-  this.fetchPosSorgu(this.Mukellefdataget[0].musavirUid)
-  setTimeout(()=>{
-  this.setOption()
-  },1000)
-},
-setOption(){
-  let bankarr=[];
-  let pos=[];
-  let detayArr=[]
-console.log(this.PosSorguDataGet);
-var expected = this.PosSorguDataGet.map(a => Object.assign(a,this.Mukellefdataget.find(b => b.musavirUid == a.KullaniciUid)));
-console.log(expected);
-let expected_alt=[]
-expected.forEach(ex=>{
-  ex.veri.posBilgileriTable.map(ve=>{
-expected_alt.push(Object.assign(ve,{unvan:ex.unvan,tckn:ex.tckn,genelToplam:ex.veri.toplam_genel}))
-  })
-})
-console.log(expected_alt);
-this.items=expected_alt
-this.Mukellefdataget.forEach(el=>{
-  bankarr.push({title:el.unvan,value:el.tckn});
-  detayArr.push(el.BankaAdi);
-})
-this.mukelellefler=[...new Set(bankarr)]
-}
-  }, 
+    postDataGet() {
+      let arr = [];
+      // this.Mukellefdataget.forEach((element) => {
+      //   console.log("pos");
+      //   arr.push(element.MukellefId);
+      // });
+      console.log(this.Mukellefdataget[0]);
+      this.fetchPosSorgu(this.Mukellefdataget[0].musavirUid);
+      setTimeout(() => {
+        this.setOption();
+      }, 1000);
+    },
+    setOption() {
+      let bankarr = [];
+      let pos = [];
+      let detayArr = [];
+      console.log(this.PosSorguDataGet); 
+          this.Mukellefdataget.forEach((el) => {
+        bankarr.push({ title: el.unvan, tckn: el.tckn });
+        detayArr.push(el.BankaAdi);
+      });
+      this.mukelellefler = [...new Set(bankarr)];
+      var expected = this.PosSorguDataGet.map((a) =>
+        Object.assign(
+          a,
+          this.Mukellefdataget.find((b) => b.tckn == a.tckn)
+        )
+      );
+      console.log(expected);
+      let expected_alt = [];
+      expected.forEach((ex) => {
+        console.log(ex.veri);
+        ex.veri.posBilgileriTable.map((ve) => {
+          expected_alt.push(
+            Object.assign(ve, {
+              unvan: ex.unvan,
+              tckn: ex.tckn,
+              genelToplam: ex.veri.toplam_genel,
+            })
+          );
+        });
+      });
+      console.log(expected_alt);
+      this.items = expected_alt;
+
+      console.log(this.mukelellefler);
+    },
+  },
   computed: {
     inquireMinDate() {
       return this.inquireRequest.startDate;
@@ -370,18 +386,18 @@ this.mukelellefler=[...new Set(bankarr)]
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(['reMukellef',"rePosSorgu"]),
-    Mukellefdataget(){
-      return this.reMukellef
+    ...mapGetters(["reMukellef", "rePosSorgu"]),
+    Mukellefdataget() {
+      return this.reMukellef;
     },
-    
-PosSorguDataGet(){
-  return this.rePosSorgu
-}
+
+    PosSorguDataGet() {
+      return this.rePosSorgu;
+    },
   },
-  mounted(){
-this.postDataGet();
-  }
+  mounted() {
+    this.postDataGet();
+  },
 };
 </script>
 

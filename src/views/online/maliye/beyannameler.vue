@@ -319,18 +319,22 @@ this.fetchBeyanname(data).then(el=>{
     ...mapActions(["AddNewsBeyanSorgu"]),
 
     sendClick(e) {
+
       var arr = [];
 
-      e.forEach((element) => {
+     e.forEach((element) => {
         let data = this.mukelefData.find((el) => {
           return element.tckn == el.tckn;
         });
         console.log(data, element);
         arr.push(Object.assign(element, data));
       });
-      arr.forEach((iletim) => {
-        iletim.iletisim.forEach((tel) => {
-          let phone = tel.Telefon;
+      arr.forEach((iletim) => {  
+         iletim.iletisim.forEach((tel) => {
+         
+
+       
+        //   let phone = tel.Telefon;
           let msg =
             tel.HitapŞekli +
             " " +
@@ -350,9 +354,10 @@ this.fetchBeyanname(data).then(el=>{
               iletim.tahakkukOid +
               ".pdf?alt=media"
             }`;
-          this.getQRCode(phone, msg);
-        });
-      });
+               window.open(`${"https://wa.me/90"+tel.Telefon+"?text="+msg}`,"_blank")
+        //   this.getQRCode(phone, msg);
+       });
+     });
     },
     inquireClick() {
       const data = {
@@ -464,3 +469,6 @@ x
 </script>
 
 <style></style>
+
+
+ 
