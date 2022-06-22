@@ -112,7 +112,7 @@
           type=""
           text="E-posta"
           icon="detailslayout"
-          @click="listClick"
+          @click="clickposta"
         />
       </template>
 
@@ -336,6 +336,7 @@ export default {
     showPanelClick: Function,
     nextButton:Function,
     prevButton:Function,
+    clickposta:Function
   },
   data() {
     return {
@@ -400,6 +401,7 @@ export default {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;   
+      this.$emit("onSelectionChanged",selectedRowsData)
       console.log(this.pageSizeRef,this.$refs["appGrid"].instance);
     },
     saveLayout(state) {

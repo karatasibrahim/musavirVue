@@ -88,12 +88,8 @@ export default new Vuex.Store({
       return state.mukellef
     },
     reBeyanname(state) {
-      let arr = []
 
-      state.beyanname.forEach(el => {
-        arr.push(el)
-      })
-      return arr
+      return state.beyanname
     },
     rePosSorgu(state) {
       return state.posSorgu
@@ -358,10 +354,8 @@ let ar=[]
         limit:payload.limitSize,
         MutName: "setBeyanname"
       }).then(el=>{
-        console.log(el);
         el.forEach(e=>{
-          console.log(e);
-          ar.push(e.data())
+          ar.push(Object.assign(e.data(),{id:e.id}) )
         })
 
       })
@@ -712,6 +706,13 @@ return ar
       console.log(payload);
       //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
       const a = collection(db, "BeyannameSorgu")
+      const son = await addDoc(a, payload)
+    },
+    async AddNewsEpostaSorgu(contex, payload) {
+      //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
+      console.log(payload);
+      //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
+      const a = collection(db, "EpostaGonder")
       const son = await addDoc(a, payload)
     },
     async AddPosSorgu(context, payload)

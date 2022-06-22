@@ -7,11 +7,12 @@
       :listClick="listClick"
       :printClick="printClick"
       :sendClick="sendClick"
-@selected="gelendata($event)"
+@onSelectionChanged="gelendata"
       :pk="id"
       :items="items"
       :totalRows="16"
       :title="'Beyannameler'"
+      :clickposta="clickposta"
       :columns="columns"
       ref="appTablee"
       @pageSizes="getPageSize"
@@ -261,6 +262,7 @@ export default {
       ],
       mukellefid: "",
       userEmail: "",
+      selectredrow:[]
     };
   },
   computed: {
@@ -312,11 +314,13 @@ this.fetchBeyanname(data).then(el=>{
       this.setQRCode = res.data;
       console.log(res.data);
     },
-
+gelendata(value){
+this.selectredrow= value
+},
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(["AddNewsBeyanSorgu"]),
+    ...mapActions(["AddNewsBeyanSorgu","AddNewsEpostaSorgu"]),
 
     sendClick(e) {
 
@@ -400,56 +404,55 @@ this.fetchBeyanname(data).then(el=>{
     },
     downloadClick(e) {},
     printClick(e) {},
+clickposta(){
+console.log(this.selectredrow);
+let newarr=[]
+this.selectredrow.forEach(a=>{
+newarr.push({tckn:a.tckn,id:a.id})
 
+})
+console.log(newarr);
+this.AddNewsEpostaSorgu({data:newarr})
+
+},
     listClick() {
       this.$refs.listPopup.show();
     },
 
     listRunClick() {
-      let now = new Date(this.listRequest.startDate);
-      let time2 = new Date(this.listRequest.startDate);
-      const fil = this.beyannameData.filter((el) => {
-        const time = new Date(
-          el.beyan_yukleme_tarihi.slice(0, 10).split(".").reverse().join("/")
-        );
-        console.log(this.listRequest.title);
-        if (this.listRequest.title.length > 0) {
-          console.log("1.if");
-          return this.listRequest.title.includes(el.unvan);
-        } else if (this.listRequest.type.length > 0) {
-          console.log("2.if");
-          return this.listRequest.type.includes(el.beyan_turu);
-        }
-        else {
-          console.log("else");
-          return el;
-        }
-      });
-      this.items = fil;
-      console.log(now);
+      // let now = new Date(this.listRequest.startDate);
+      // let time2 = new Date(this.listRequest.startDate);
+      // const fil = this.beyannameData.filter((el) => {
+      //   const time = new Date(
+      //     el.beyan_yukleme_tarihi.slice(0, 10).split(".").reverse().join("/")
+      //   );
+      //   console.log(this.listRequest.title);
+      //   if (this.listRequest.title.length > 0) {
+      //     console.log("1.if");
+      //     return this.listRequest.title.includes(el.unvan);
+      //   } else if (this.listRequest.type.length > 0) {
+      //     console.log("2.if");
+      //     return this.listRequest.type.includes(el.beyan_turu);
+      //   }
+      //   else {
+      //     console.log("else");
+      //     return el;
+      //   }
+      // });
+      // this.items = fil;
+      // console.log(now);
 
     },
     /////////////////////////////////
     fetch() {
       this.items=[]
-      this.fetchBeyanname(data).then(el=>{
- this.items=el
-})
         const data={
-    kullaniciuid:this.getPerson,
+    kullaniciuid:JSON.parse(localStorage.getItem("userData")).userId,
     limitSize:Number(10)
   }
       console.log(this.kullaniciUid);
  this.fetchBeyanname(data).then(el=>{
  this.items=el
-      el.forEach((els) => {
-        arr.push(els);
-        arrUnvan.push(els.unvan);
-        arrtype.push(els.beyannameTuru);
-      });
-
-      this.unvanlar = [...new Set(arrUnvan)];
-      this.turler = [...new Set(arrtype)];
 })
     },
     setünvan() {
