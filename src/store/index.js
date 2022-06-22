@@ -322,7 +322,7 @@ export default new Vuex.Store({
       console.log(payload);
       this.state.mukellef = []
       const q = query(collection(db, "GelenFaturalar"),
-      where("musavirUid", "==", payload.uid),
+      where("KullaniciUid", "==", payload.uid),
         where("FaturaNo", "==", payload.no));
       const mukellefdata =  getDocs(q);
       mukellefdata.then(res=>{
@@ -635,7 +635,11 @@ return ar
       const profile = doc(db, "Kullanici", documentıd)
       const gProfile = await updateDoc(profile, paylod);
     },
-
+    async updateProfileSettings(context, paylod) {
+      console.log(paylod);
+      const profile = doc(db, "KullaniciAyarlar", paylod.kullaniciUid)
+      const gProfile = await setDoc(profile, paylod);
+    },
     async updatePersonData(context, payload) {
 
       console.log(documentıd);

@@ -309,11 +309,11 @@ this.fetchBeyanname(data).then(el=>{
  this.items=el
 })
 },
-    async getQRCode(phone, msg) {
-      const res = await axios.post("http://localhost:8087/api", { phone, msg });
-      this.setQRCode = res.data;
-      console.log(res.data);
-    },
+    // async getQRCode(phone, msg) {
+    //   const res = await axios.post("http://localhost:8087/api", { phone, msg });
+    //   this.setQRCode = res.data;
+    //   console.log(res.data);
+    // },
 gelendata(value){
 this.selectredrow= value
 },
@@ -407,8 +407,9 @@ this.selectredrow= value
 clickposta(){
 console.log(this.selectredrow);
 let newarr=[]
+  
 this.selectredrow.forEach(a=>{
-newarr.push({tckn:a.tckn,id:a.id})
+newarr.push({kullaniciuid:a.KullaniciUid,tckn:a.tckn,id:a.id, beyannameOid:a.beyannameOid, tahakkukOid:a.tahakkukOid})
 
 })
 console.log(newarr);

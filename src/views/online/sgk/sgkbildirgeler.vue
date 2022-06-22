@@ -269,7 +269,7 @@ export default {
           caption: "id",
           visible: false,
           showInColumnChooser: false,
-          columnSize:20
+           
         },
 
         {
