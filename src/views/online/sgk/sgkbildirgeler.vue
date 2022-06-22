@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <app-table
       :showPdfPopupClick="showPdfPopup"
       :deleteInsuranceClick="deleteInsuranceClick"
@@ -8,8 +7,8 @@
       :downloadClick="downloadClick"
       :listClick="listClick"
       :printClick="printClick"
+      :pk="id"
       :sendClick="sendClick"
-      :pk="'SubeId'"
       :items="getSgkBildirgeData"
       :totalRows="16"
       :title="'Sgk Bildirge Listesi'"
@@ -213,8 +212,10 @@ export default {
     BFormCheckboxGroup,
     BFormSelect,
   },
+
   data() {
     return {
+      id:"",
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
@@ -258,61 +259,63 @@ export default {
         { value: "11", text: "Kasım" },
         { value: "12", text: "Aralık" },
       ],
-      years: ["","2018", "2019", "2020", "2021", "2022"],
+      years: ["", "2018", "2019", "2020", "2021", "2022"],
       items: [],
       unvanlar: [],
       turler: mockData.turler,
       columns: [
         {
-          dataField: "SubeId",
-          caption: "Id",
+          dataField: "",
+          caption: "id",
           visible: false,
           showInColumnChooser: false,
+          columnSize:20
         },
+
         {
           dataField: "Gonderim",
-          caption: "Gönderim",
+          caption: "Gönderim Durumu",
         },
         {
           dataField: "unvan",
           caption: "Ünvan",
         },
+        // {
+        //   dataField: "SubeAdi",
+        //   caption: "Şube",
+        // },
         {
-          dataField: "SubeAdi",
-          caption: "Şube",
-        },
-        {
-          dataField: "Donem",
+          dataField: "donem",
           caption: "Dönem",
         },
         {
-          dataField: "SicilNo",
+          dataField: "sicilNo",
           caption: "Sicil No",
         },
+        // {
+        //   dataField: "BelgeCesidi",
+        //   caption: "Belge Çeşidi",
+        // },
         {
-          dataField: "BelgeCesidi",
-          caption: "Belge Çeşidi",
-        },
-        {
-          dataField: "Kanun",
+          dataField: "payload.data.thkhaberlesme2.aciklama",
           caption: "Kanun",
         },
+        // {
+        //   dataField: "Durum",
+        //   caption: "Durum",
+        // },
+        // {
+        //   dataField: "Vade",
+        //   dataType: "date",
+        //   caption: "Vade",
+        // },
         {
-          dataField: "Durum",
-          caption: "Durum",
-        },
-        {
-          dataField: "Vade",
-          dataType: "date",
-          caption: "Vade",
-        },
-        {
-          dataField: "Tutar",
+          dataField: "Toplam",
           caption: "Tutar",
         },
         {
           dataField: "Goster",
-          caption: "Goster",
+          caption: "Tahahkuk Fişi & Hizmet",
           cellTemplate: "sgkGosterimColumnTemplate",
         },
       ],
@@ -331,7 +334,7 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["reSgkBildirge", "reSgkFirmalar", "reMukellef","rePerson"]),
+    ...mapGetters(["reSgkBildirge", "reSgkFirmalar", "reMukellef", "rePerson"]),
     getFirmadata() {
       return this.reSgkFirmalar;
     },
@@ -341,14 +344,12 @@ export default {
     getMukellefdata() {
       return this.reMukellef;
     },
-    getPerson()
-    {
+    getPerson() {
       return this.rePerson.kullaniciUid;
     },
-    getUserUid()
-    {
+    getUserUid() {
       return this.rePerson.kullaniciUid;
-    }
+    },
   },
 
   methods: {
@@ -356,16 +357,18 @@ export default {
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(['AddNewsBildirgeSorgu']),
+    ...mapActions(["AddNewsBildirgeSorgu"]),
     inquireClick() {
-const data={
-KullaniciUid:this.getUserUid,
-baslangic:this.inquireRequest.startDate.toString().replace("-","").replace("-",""),
-bitis:this.inquireRequest.endDate.replace("-","").replace("-",""),
-SorguDurumu:0
-}
-this.AddNewsBildirgeSorgu(data)
-
+      const data = {
+        KullaniciUid: this.getUserUid,
+        baslangic: this.inquireRequest.startDate
+          .toString()
+          .replace("-", "")
+          .replace("-", ""),
+        bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
+        SorguDurumu: 0,
+      };
+      this.AddNewsBildirgeSorgu(data);
     },
     downloadClick(e) {},
     printClick(e) {},
@@ -382,7 +385,7 @@ this.AddNewsBildirgeSorgu(data)
         "/" +
         " " +
         this.listRequest.startDate.year;
-console.log(datanDonem);
+      console.log(datanDonem);
       const filters = this.getSgkBildirgeData.filter((el) => {
         if (this.listRequest.title.length > 0) {
           console.log("1.if");
@@ -392,13 +395,16 @@ console.log(datanDonem);
           console.log("2.if");
           return this.listRequest.selected.includes(el.Durum);
         }
-        if(this.listRequest.startDate.month != "" && this.listRequest.startDate.year != "") {
+        if (
+          this.listRequest.startDate.month != "" &&
+          this.listRequest.startDate.year != ""
+        ) {
           console.log("3.if");
           console.log(el.Donem == datanDonem, el.Donem, datanDonem);
           return el.Donem.match(datanDonem);
         } else {
           console.log("else");
-          return el
+          return el;
         }
       });
 
@@ -413,9 +419,10 @@ console.log(datanDonem);
 
     //#region SAYFA ICIN
     deleteInsuranceClick() {},
-   showPdfPopup(e, tck, is) {
+    showPdfPopup(e, tck, is) {
       this.activePdfUrl = `${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" + tck +
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tck +
         "%2F" +
         is +
         "%2F" +
@@ -427,9 +434,10 @@ console.log(datanDonem);
     //#endregion
     ...mapActions(["fetchSgkBildirge"]),
     fetchVergi() {
-      this.fetchSgkBildirge(JSON.parse(localStorage.getItem("userData")).userId);
+      this.fetchSgkBildirge(
+        JSON.parse(localStorage.getItem("userData")).userId
+      );
     },
-
   },
   mounted() {
     this.fetchVergi();

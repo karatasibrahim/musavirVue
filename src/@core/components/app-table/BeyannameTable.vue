@@ -121,7 +121,7 @@
           type="danger"
           text="Sorgula"
           icon="search"
-          @click="inquireClick('http://89.43.29.189:1880/test1')"
+          @click="inquireClick('http://')"
         />
       </template>
 
