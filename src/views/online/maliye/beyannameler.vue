@@ -1,13 +1,13 @@
 <template>
   <div>
     <app-table
-   :showPdfPopupClick="showPdfPopup"
+      :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
       :downloadClick="downloadClick"
       :listClick="listClick"
       :printClick="printClick"
       :sendClick="sendClick"
-@onSelectionChanged="gelendata"
+      @onSelectionChanged="gelendata"
       :pk="id"
       :items="items"
       :totalRows="16"
@@ -81,7 +81,7 @@
       </iframe>
     </b-modal>
 
-    <!-- <b-modal
+      <b-modal
       ref="listPopup"
       title="Listele"
       ok-title="Listele"
@@ -145,7 +145,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-    </b-modal> -->
+    </b-modal>  
     <!-- <input type="text" v-model="phone">
     <input type="text" v-model="msg"> -->
     <!-- <button @click="getQRCode">deneme</button>   -->
@@ -213,12 +213,16 @@ export default {
           visible: false,
           showInColumnChooser: false,
         },
+          {
+          dataField: "Gonderim",
+          caption: "Gönderim Durumu",
+        },
         {
           dataField: "unvan",
           caption: "Ünvan",
         },
         {
-          dataField: "beyannameTuru",
+          dataField: "beyannameKodu",
           caption: "Kodu",
         },
         {
@@ -262,7 +266,7 @@ export default {
       ],
       mukellefid: "",
       userEmail: "",
-      selectredrow:[]
+      selectredrow: [],
     };
   },
   computed: {
@@ -278,67 +282,65 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-  ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
+    ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
     beyannameData() {
-     return this.reBeyanname
+      return this.reBeyanname;
     },
     mukelefData() {
       return this.reMukellef;
     },
-    getPerson(){
-     return this.rePerson.kullaniciUid
-      
+    getPerson() {
+      return this.rePerson.kullaniciUid;
     },
-    getUserUid()
-    {
-return this.rePerson.kullaniciUid;
- 
-    }
+    getUserUid() {
+      return this.rePerson.kullaniciUid;
+    },
   },
 
-  methods:{
-    ...mapActions(['AddNewsBeyanSorgu','fetchBeyanname','nextButtons','prevButtonVuex']),
+  methods: {
+    ...mapActions([
+      "AddNewsBeyanSorgu",
+      "fetchBeyanname",
+      "nextButtons",
+      "prevButtonVuex",
+    ]),
 
-getPageSize(e){
-  this.items=[]
-  const data={
-    kullaniciuid:this.getPerson,
-    limitSize:e
-  };
-this.fetchBeyanname(data).then(el=>{
- this.items=el
-})
-},
+    getPageSize(e) {
+      this.items = [];
+      const data = {
+        kullaniciuid: this.getPerson,
+        limitSize: e,
+      };
+      this.fetchBeyanname(data).then((el) => {
+        this.items = el;
+      });
+    },
     // async getQRCode(phone, msg) {
     //   const res = await axios.post("http://localhost:8087/api", { phone, msg });
     //   this.setQRCode = res.data;
     //   console.log(res.data);
     // },
-gelendata(value){
-this.selectredrow= value
-},
+    gelendata(value) {
+      this.selectredrow = value;
+    },
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(["AddNewsBeyanSorgu","AddNewsEpostaSorgu"]),
+    ...mapActions(["AddNewsBeyanSorgu", "AddNewsEpostaSorgu"]),
 
     sendClick(e) {
-
       var arr = [];
 
-     e.forEach((element) => {
+      e.forEach((element) => {
         let data = this.mukelefData.find((el) => {
           return element.tckn == el.tckn;
         });
         console.log(data, element);
         arr.push(Object.assign(element, data));
       });
-      arr.forEach((iletim) => {  
-         iletim.iletisim.forEach((tel) => {
-         
-
-       
-        //   let phone = tel.Telefon;
+      arr.forEach((iletim) => {
+        iletim.iletisim.forEach((tel) => {
+          //   let phone = tel.Telefon;
           let msg =
             tel.HitapŞekli +
             " " +
@@ -358,10 +360,13 @@ this.selectredrow= value
               iletim.tahakkukOid +
               ".pdf?alt=media"
             }`;
-               window.open(`${"https://wa.me/90"+tel.Telefon+"?text="+msg}`,"_blank")
-        //   this.getQRCode(phone, msg);
-       });
-     });
+          window.open(
+            `${"https://wa.me/90" + tel.Telefon + "?text=" + msg}`,
+            "_blank"
+          );
+          //   this.getQRCode(phone, msg);
+        });
+      });
     },
     inquireClick() {
       const data = {
@@ -404,65 +409,67 @@ this.selectredrow= value
     },
     downloadClick(e) {},
     printClick(e) {},
-clickposta(){
-console.log(this.selectredrow);
-let newarr=[]
-  
-this.selectredrow.forEach(a=>{
-newarr.push({kullaniciuid:a.KullaniciUid,tckn:a.tckn,id:a.id, beyannameOid:a.beyannameOid, tahakkukOid:a.tahakkukOid})
+    clickposta() {
+      console.log(this.selectredrow);
+      let newarr = [];
 
-})
-console.log(newarr);
-this.AddNewsEpostaSorgu({data:newarr})
-
-},
+      this.selectredrow.forEach((a) => {
+        newarr.push({
+          kullaniciuid: a.KullaniciUid,
+          tckn: a.tckn,
+          id: a.id,
+          beyannameOid: a.beyannameOid,
+          tahakkukOid: a.tahakkukOid,
+        });
+      });
+      console.log(newarr);
+      this.AddNewsEpostaSorgu({ data: newarr });
+    },
     listClick() {
       this.$refs.listPopup.show();
     },
 
     listRunClick() {
-      // let now = new Date(this.listRequest.startDate);
-      // let time2 = new Date(this.listRequest.startDate);
-      // const fil = this.beyannameData.filter((el) => {
-      //   const time = new Date(
-      //     el.beyan_yukleme_tarihi.slice(0, 10).split(".").reverse().join("/")
-      //   );
-      //   console.log(this.listRequest.title);
-      //   if (this.listRequest.title.length > 0) {
-      //     console.log("1.if");
-      //     return this.listRequest.title.includes(el.unvan);
-      //   } else if (this.listRequest.type.length > 0) {
-      //     console.log("2.if");
-      //     return this.listRequest.type.includes(el.beyan_turu);
-      //   }
-      //   else {
-      //     console.log("else");
-      //     return el;
-      //   }
-      // });
-      // this.items = fil;
-      // console.log(now);
-
+      let now = new Date(this.listRequest.startDate);
+      let time2 = new Date(this.listRequest.startDate);
+      const fil = this.beyannameData.filter((el) => {
+        const time = new Date(
+          el.beyan_yukleme_tarihi.slice(0, 10).split(".").reverse().join("/")
+        );
+        console.log(this.listRequest.title);
+        if (this.listRequest.title.length > 0) {
+          console.log("1.if");
+          return this.listRequest.title.includes(el.unvan);
+        } else if (this.listRequest.type.length > 0) {
+          console.log("2.if");
+          return this.listRequest.type.includes(el.beyan_turu);
+        }
+        else {
+          console.log("else");
+          return el;
+        }
+      });
+      this.items = fil;
+      console.log(now);
     },
     /////////////////////////////////
     fetch() {
-      this.items=[]
-        const data={
-    kullaniciuid:JSON.parse(localStorage.getItem("userData")).userId,
-    limitSize:Number(10)
-  }
+      this.items = [];
+      const data = {
+        kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
+        limitSize: Number(10),
+      };
       console.log(this.kullaniciUid);
- this.fetchBeyanname(data).then(el=>{
- this.items=el
-})
+      this.fetchBeyanname(data).then((el) => {
+        this.items = el;
+      });
     },
     setünvan() {
-      console.log("geldim" );
-           this.beyannameData.forEach(el=>{
-        this.items.push(el.data())
-      })
-x
-
+      console.log("geldim");
+      this.beyannameData.forEach((el) => {
+        this.items.push(el.data());
+      });
+      x;
     },
   },
   mounted() {

@@ -182,33 +182,33 @@
         <div class="text-left">
               <img  v-if="data.data.hasOwnProperty('tahakkukOid')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-             @click="showPdfPopupClick(data.data.tahakkukOid,data.data .tckn,'SGK')"
+             @click="showPdfPopupClick(data.data.beyannameOid,data.data .tckn,'SGK')"
           />
           <span> &nbsp; &nbsp; &nbsp;</span>
           <img  v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme2')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-             @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme2.thkoid,data.data.tckn,'SGK')"
+             @click="showPdfPopupClick(data.data.thkoid,data.data.tckn,'SGK')"
           />
-          <span> &nbsp; &nbsp; &nbsp;</span>
+<!--           
           <img  v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme3')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
            @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme3.thkoid,data.data.tckn,'SGK')"
-          />
+          /> -->
 
-          <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
+<!--        
           <img
            v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme4')"
             class="text-right"
            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
              @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme4.thkoid,data.data.tckn,'SGK')"
-          />
-            <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
-          <img
+          /> -->
+          
+          <!-- <img
            v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme5')"
             class="text-right"
            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
              @click="showPdfPopupClick(data.data.payload.data.thkhaberlesme5.thkoid,data.data.tckn,'SGK')"
-          />
+          /> -->
         </div>
       </template>
     </DxDataGrid>

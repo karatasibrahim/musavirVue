@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section>
+    <!-- <section>
       <article class="card">
         <div class="title" style="background-color: #0073b7">
           <users-icon size="35" class="icon"></users-icon>
@@ -292,7 +292,7 @@
           <arrow-right-circle-icon size="20"> </arrow-right-circle-icon>
         </div>
       </article>
-    </section>
+    </section> -->
   </div>
 </template>
 
