@@ -77,10 +77,13 @@ export default new Vuex.Store({
     Sifre: {},
     calisan: [],
     sgkVizite: [],
-    notification: []
-
+    notification: [],
+vergiDairesi:[]
   },
   getters: {
+    reVergiDaire(state){
+return state.vergiDairesi
+    },
     rePerson(state) {
       return state.person
     },
@@ -153,6 +156,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setVD(state, payload) {
+      return state.vergiDairesi.push(payload)
+    },
     setperson(state, payload) {
       return state.person = payload
     },
@@ -361,7 +367,29 @@ let ar=[]
       })
 return ar
     },
+async fetchvergiDairesi(contex,data){
+  console.log(data);
+  let queries = [];
+   for (let i = 0; i < data.length; i += 10) {
+    queries.push(query(
+      collection(db, "VergiDairesi"),
+      where("VergiDaireKod", "in", data.slice(i, i + 10)), ))
+  }
+  let usersDocsSnaps = [];
+  for (let i = 0; i < queries.length; i++) {
+    usersDocsSnaps.push(getDocs(queries[i]));
+  }
+  usersDocsSnaps = await Promise.all(usersDocsSnaps);
+ 
+  let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
+  usersDocs.forEach(el=>{
 
+    contex.commit("setVD",el.data())
+    // this.state.vergiDairesi.push(el.data())
+  })
+
+ 
+},
     async fetchPosSorgu(context, payload) {
       console.log(payload);
       this.state.posSorgu = []

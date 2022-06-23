@@ -226,7 +226,7 @@ export default {
           caption: "Kodu",
         },
         {
-          dataField: "vergiDairesi",
+          dataField: "VergiDaire",
           caption: "Vergi Dairesi",
         },
         {
@@ -282,9 +282,14 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["rePerson", "reMukellef", "reBeyanname"]),
+    ...mapGetters(["rePerson", "reMukellef", "reBeyanname","reVergiDaire"]),
     beyannameData() {
-      return this.reBeyanname;
+      let arr=[]
+
+       this.reBeyanname.forEach(el=>{
+        arr.push(el.data())
+       })
+       return arr
     },
     mukelefData() {
       return this.reMukellef;
@@ -295,9 +300,15 @@ export default {
     getUserUid() {
       return this.rePerson.kullaniciUid;
     },
+    getVDairesi(){
+      return this.reVergiDaire
+    }
   },
 
   methods: {
+    sendmail(){
+
+    },
     ...mapActions([
       "AddNewsBeyanSorgu",
       "fetchBeyanname",
@@ -306,13 +317,24 @@ export default {
     ]),
 
     getPageSize(e) {
-      this.items = [];
+      let beyan = [];
       const data = {
-        kullaniciuid: this.getPerson,
+        kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: e,
       };
-      this.fetchBeyanname(data).then((el) => {
-        this.items = el;
+          this.fetchBeyanname(data).then((el) => {
+       beyan = el;
+        let ar=[]
+     
+this.beyannameData.forEach(eld=>{
+ ar.push( eld.vergiDairesi)
+})
+setTimeout(()=>{
+ this.fetchvergiDairesi(ar).then(res=>{
+       this.items= beyan.map(a=>Object.assign(a,this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi)))
+        })
+},500)
+       
       });
     },
     // async getQRCode(phone, msg) {
@@ -321,12 +343,15 @@ export default {
     //   console.log(res.data);
     // },
     gelendata(value) {
-      this.selectredrow = value;
+      let aa=[{tckn:3410272497}]
+     let arr= value.map(a=>Object.assign(this.mukelefData.find(b=>b.tckn==a.tckn)))
+     console.log(arr);
+      this.selectredrow = arr;
     },
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(["AddNewsBeyanSorgu", "AddNewsEpostaSorgu"]),
+    ...mapActions(["AddNewsBeyanSorgu", "AddNewsEpostaSorgu","fetchvergiDairesi"]),
 
     sendClick(e) {
       var arr = [];
@@ -412,18 +437,32 @@ export default {
     clickposta() {
       console.log(this.selectredrow);
       let newarr = [];
-
+let mail=[]
       this.selectredrow.forEach((a) => {
-        newarr.push({
-          kullaniciuid: a.KullaniciUid,
-          tckn: a.tckn,
-          id: a.id,
-          beyannameOid: a.beyannameOid,
-          tahakkukOid: a.tahakkukOid,
-        });
+        a.iletisim.forEach(il=>{
+          console.log(il.Mail);
+    
+     
+        // newarr.push({
+          //   kullaniciuid: a.KullaniciUid,
+        //   tckn: a.tckn,
+        //   id: a.id,
+        //   beyannameOid: a.beyannameOid,
+        //   tahakkukOid: a.tahakkukOid,
+        // });
+      axios.post(" https://api.sendgrid.com/v3/mail/send",
+{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": "melikeats0561@gmail.com"},"subject": "Sending with SendGrid is Fun",
+"content": [{"type": "text/plain", "value": "and easy to do anywhere, even with cURL"}]}
+,{headers:{
+"Authorization": "Bearer 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" ,
+'Content-Type': 'application/json'
+}}).then(res=>{
+console.log(res);
+})        })       
       });
-      console.log(newarr);
-      this.AddNewsEpostaSorgu({ data: newarr });
+      // console.log(newarr);
+      // this.AddNewsEpostaSorgu({ data: newarr });
+
     },
     listClick() {
       this.$refs.listPopup.show();
@@ -454,14 +493,28 @@ export default {
     },
     /////////////////////////////////
     fetch() {
-      this.items = [];
+      let beyan = [];
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: Number(10),
       };
       console.log(this.kullaniciUid);
       this.fetchBeyanname(data).then((el) => {
-        this.items = el;
+        beyan = el;
+        let ar=[]
+     
+this.beyannameData.forEach(eld=>{
+ ar.push( eld.vergiDairesi)
+})
+setTimeout(()=>{
+ this.fetchvergiDairesi(ar).then(res=>{
+  setTimeout(()=>{
+  },500)
+
+       this.items=  beyan.map(a=>Object.assign(a,this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi)))
+        })
+},2000)
+       
       });
     },
     setünvan() {
