@@ -52,7 +52,7 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" tempalte="listTemplate"/>
+        <DxItem location="before" template="listTemplate"/>
         <DxItem location="before" template="wpTemplate" />
         <!-- <DxItem location="before" template="printTemplate" /> -->
           <DxItem location="before" template="smsTemplate" />
@@ -79,7 +79,7 @@
         />
       </template> -->
 
-     <!-- <template #printTemplate>
+     <template #printTemplate>
          <DxDropDownButton
           width="150"
           :split-button="false"
@@ -92,7 +92,7 @@
           icon="print"
           type="back"
         /> 
-      </template>-->
+      </template>
       <template #wpTemplate>
         <DxButton
           type="success"
@@ -117,14 +117,16 @@
           @click="clickposta"
         />
       </template>
+
 <template #listTemplate>
 <DxButton
-type=""
+type="list"
 text="Listele"
-icon="list"
+icon="bulletlist"
 @click="listClick"
 />
 </template>
+
       <template #inquireTemplate>
         <DxButton
           type="danger"
@@ -509,5 +511,8 @@ element.addEventListener('click',()=>{
 }
   .dx-button.dx-button-warning {
         background-color: #ffc107;
+    }
+    .dx-button.dx-button-list {
+        background-color: #9DD6DF;
     }
 </style>

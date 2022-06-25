@@ -62,6 +62,7 @@
         </b-col>
       </b-row>
     </b-modal>
+
    <b-modal
       ref="listPopup"
       title="Listele"
@@ -395,6 +396,7 @@ export default {
 
     getPageSize(e) {
       let beyan = [];
+         let unvanlaar=[]
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: e,
@@ -405,8 +407,14 @@ export default {
      
 this.beyannameData.forEach(eld=>{
  ar.push( eld.vergiDairesi)
+ 
+})
+this.mukelefData.forEach(esl=>{
+ unvanlaar.push(esl.unvan)
 })
 setTimeout(()=>{
+    this.unvanlar=[...new Set(unvanlaar)]
+
  this.fetchvergiDairesi(ar).then(res=>{
        this.items= beyan.map(a=>Object.assign(a,this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi)))
         })
@@ -571,6 +579,7 @@ console.log(res);
     /////////////////////////////////
     fetch() {
       let beyan = [];
+     
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: Number(10),
@@ -578,12 +587,21 @@ console.log(res);
       console.log(this.kullaniciUid);
       this.fetchBeyanname(data).then((el) => {
         beyan = el;
+       
         let ar=[]
-     
+      let unvanlaar=[]
+      console.log(this.beyannameData);
 this.beyannameData.forEach(eld=>{
  ar.push( eld.vergiDairesi)
+ console.log(eld);
+
+})
+this.mukelefData.forEach(esl=>{
+ unvanlaar.push(esl.unvan)
 })
 setTimeout(()=>{
+  console.log(unvanlaar);
+  this.unvanlar=[...new Set(unvanlaar)]
  this.fetchvergiDairesi(ar).then(res=>{
   setTimeout(()=>{
   },500)
@@ -594,13 +612,7 @@ setTimeout(()=>{
        
       });
     },
-    setünvan() {
-      console.log("geldim");
-      this.beyannameData.forEach((el) => {
-        this.items.push(el.data());
-      });
-      x;
-    },
+
   },
   mounted() {
     this.fetch();
