@@ -6,7 +6,7 @@ import app from "./app";
 import appConfig from "./app-config";
 import verticalMenu from "./vertical-menu";
 
-import { 
+import {
   collection,
   getDocs,
   getDoc,
@@ -78,11 +78,11 @@ export default new Vuex.Store({
     calisan: [],
     sgkVizite: [],
     notification: [],
-vergiDairesi:[]
+    vergiDairesi: []
   },
   getters: {
-    reVergiDaire(state){
-return state.vergiDairesi
+    reVergiDaire(state) {
+      return state.vergiDairesi
     },
     rePerson(state) {
       return state.person
@@ -323,23 +323,23 @@ return state.vergiDairesi
       return mukellefdata
     },
     fetchOneWatch(context, payload) {
-      let arr=[]
-      return new Promise((resolve,reject)=>{
-      console.log(payload);
-      this.state.mukellef = []
-      const q = query(collection(db, "GelenFaturalar"),
-      where("KullaniciUid", "==", payload.uid),
-        where("FaturaNo", "==", payload.no));
-      const mukellefdata =  getDocs(q);
-      mukellefdata.then(res=>{
-        
-        res.forEach(el=>{
-arr.push(el.data())
+      let arr = []
+      return new Promise((resolve, reject) => {
+        console.log(payload);
+        this.state.mukellef = []
+        const q = query(collection(db, "GelenFaturalar"),
+          where("KullaniciUid", "==", payload.uid),
+          where("FaturaNo", "==", payload.no));
+        const mukellefdata = getDocs(q);
+        mukellefdata.then(res => {
+
+          res.forEach(el => {
+            arr.push(el.data())
+          })
+          resolve(arr)
         })
-        resolve(arr)
       })
-    })
-      },
+    },
     async addMükellefid(context, payload) {
       let id = Math.floor((Math.random() * 1000) + 900)
       do {
@@ -349,47 +349,49 @@ arr.push(el.data())
       } while (docSnap.exists());
       return id
     },
-    async fetchBeyanname(context, payload) { 
-       console.log("-------------------------BURADA");
-console.log(payload);
-let ar=[]
+    async fetchBeyanname(context, payload) {
+      console.log("-------------------------BURADA");
+      console.log(payload);
+      let ar = []
       context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "Kullanici",
         payload: payload.kullaniciuid,
-        limit:payload.limitSize,
+        limit: payload.limitSize,
         MutName: "setBeyanname"
-      }).then(el=>{
-        el.forEach(e=>{
-          ar.push(Object.assign(e.data(),{id:e.id}) )
+      }).then(el => {
+        el.forEach(e => {
+          ar.push(Object.assign(e.data(), {
+            id: e.id
+          }))
         })
 
       })
-return ar
+      return ar
     },
-async fetchvergiDairesi(contex,data){
-  console.log(data);
-  let queries = [];
-   for (let i = 0; i < data.length; i += 10) {
-    queries.push(query(
-      collection(db, "VergiDairesi"),
-      where("VergiDaireKod", "in", data.slice(i, i + 10)), ))
-  }
-  let usersDocsSnaps = [];
-  for (let i = 0; i < queries.length; i++) {
-    usersDocsSnaps.push(getDocs(queries[i]));
-  }
-  usersDocsSnaps = await Promise.all(usersDocsSnaps);
- 
-  let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
-  usersDocs.forEach(el=>{
+    async fetchvergiDairesi(contex, data) {
+      console.log(data);
+      let queries = [];
+      for (let i = 0; i < data.length; i += 10) {
+        queries.push(query(
+          collection(db, "VergiDairesi"),
+          where("VergiDaireKod", "in", data.slice(i, i + 10)), ))
+      }
+      let usersDocsSnaps = [];
+      for (let i = 0; i < queries.length; i++) {
+        usersDocsSnaps.push(getDocs(queries[i]));
+      }
+      usersDocsSnaps = await Promise.all(usersDocsSnaps);
 
-    contex.commit("setVD",el.data())
-    // this.state.vergiDairesi.push(el.data())
-  })
+      let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
+      usersDocs.forEach(el => {
 
- 
-},
+        contex.commit("setVD", el.data())
+        // this.state.vergiDairesi.push(el.data())
+      })
+
+
+    },
     async fetchPosSorgu(context, payload) {
       console.log(payload);
       this.state.posSorgu = []
@@ -404,7 +406,7 @@ async fetchvergiDairesi(contex,data){
     },
 
 
-     fecthGelenEarsivFat(context, payload) {
+    fecthGelenEarsivFat(context, payload) {
       this.state.GelenFatura = []
       context.dispatch("actionArr", {
         dbName: "GelenFaturalar",
@@ -435,7 +437,7 @@ async fetchvergiDairesi(contex,data){
 
       context.dispatch("actionArr", {
         dbName: "GibTebligat",
-        İtemName: "MukellefID",
+        İtemName: "KullaniciUid",
         payload: payload,
         MutName: "setGibTebligat"
       })
@@ -612,20 +614,20 @@ async fetchvergiDairesi(contex,data){
         })
     },
     async actionArr(context, data) {
-      return new Promise((resolve,reject)=>{
-              console.log("çaliştim",data);
-      let queries = query(collection(db, data.dbName),
-      where(data.İtemName, "==", data.payload), limit(data.limit)
-    )
-    let datas =  getDocs(queries)
-   datas.then(documentSnapshots=>{
+      return new Promise((resolve, reject) => {
+        console.log("çaliştim", data);
+        let queries = query(collection(db, data.dbName),
+          where(data.İtemName, "==", data.payload), limit(data.limit)
+        )
+        let datas = getDocs(queries)
+        datas.then(documentSnapshots => {
 
-    context.commit(data.MutName, documentSnapshots.docs);
-    let arr=[]
-    console.log("ifteyim");
-    arr=documentSnapshots.docs
-    resolve(arr)
-   })
+          context.commit(data.MutName, documentSnapshots.docs);
+          let arr = []
+          console.log("ifteyim");
+          arr = documentSnapshots.docs
+          resolve(arr)
+        })
 
       })
 
@@ -740,6 +742,12 @@ async fetchvergiDairesi(contex,data){
       const a = collection(db, "BeyannameSorgu")
       const son = await addDoc(a, payload)
     },
+    async AddNewsTebligatSorgu(context, payload) {
+      console.log(payload);
+      const a = collection(db, "TebligatSorgu")
+      const sonn = await addDoc(a, payload)
+    },
+
     async AddNewsEpostaSorgu(contex, payload) {
       //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
       console.log(payload);
@@ -747,23 +755,20 @@ async fetchvergiDairesi(contex,data){
       const a = collection(db, "EpostaGonder")
       const son = await addDoc(a, payload)
     },
-    async AddPosSorgu(context, payload)
-    {
+    async AddPosSorgu(context, payload) {
       console.log(payload);
-const veri=collection(db,"MukellefPosSorgu")
-const veriSon=await addDoc(veri,payload)
+      const veri = collection(db, "MukellefPosSorgu")
+      const veriSon = await addDoc(veri, payload)
     },
-    async AddGelenFaturaSorgu(context, payload)
-    {
+    async AddGelenFaturaSorgu(context, payload) {
       console.log(payload);
-const veri=collection(db,"GelenFaturaSorgu")
-const veriSon=await addDoc(veri,payload)
+      const veri = collection(db, "GelenFaturaSorgu")
+      const veriSon = await addDoc(veri, payload)
     },
-    async AddGidenFaturaSorgu(context, payload)
-    {
+    async AddGidenFaturaSorgu(context, payload) {
       console.log(payload);
-const veri=collection(db,"GidenFaturaSorgu")
-const veriSon=await addDoc(veri,payload)
+      const veri = collection(db, "GidenFaturaSorgu")
+      const veriSon = await addDoc(veri, payload)
     },
     async AddNewsBildirgeSorgu(context, payload) {
       console.log(payload);

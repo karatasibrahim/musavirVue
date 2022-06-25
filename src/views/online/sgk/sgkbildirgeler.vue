@@ -80,7 +80,7 @@
     </b-modal>
 
     <!-- Listele Popup -->
-    <b-modal
+    <!-- <b-modal
       ref="listPopup"
       title="Listele"
       no-close-on-backdrop
@@ -180,7 +180,7 @@
         </b-row>
       </b-form-checkbox-group>
       {{ listRequest.selected }}
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 
@@ -275,6 +275,7 @@ export default {
         {
           dataField: "Gonderim",
           caption: "Gönderim Durumu",
+            width:"90"
         },
         {
           dataField: "unvan",
@@ -287,10 +288,12 @@ export default {
         {
           dataField: "donem",
           caption: "Dönem",
+            width:"130"
         },
         {
           dataField: "sicilNo",
           caption: "Sicil No",
+            width:"230"
         },
         // {
         //   dataField: "BelgeCesidi",
@@ -312,11 +315,15 @@ export default {
         {
           dataField: "Toplam",
           caption: "Tutar",
+              alignment:"right",
+               width:"100"
+             
         },
         {
           dataField: "Goster",
           caption: "Tahahkuk Fişi & Hizmet",
           cellTemplate: "sgkGosterimColumnTemplate",
+            width:"100"
         },
       ],
     };

@@ -62,32 +62,13 @@
         </b-col>
       </b-row>
     </b-modal>
-
-    <b-modal
-      ref="pdfPopup"
-      title="Beyanname Görüntüle"
-      size="xl"
-      scrollable
-      ok-only
-      ok-title="Kapat"
-      no-stacking
-    >
-      <iframe
-        :src="this.activePdfUrl"
-        width="100%"
-        height="700"
-        frameborder="0"
-      >
-      </iframe>
-    </b-modal>
-
-      <b-modal
+   <b-modal
       ref="listPopup"
       title="Listele"
       ok-title="Listele"
       cancel-title="İptal"
       cancel-variant="outline-secondary"
-      @ok="listRunClick"
+      @ok="listClick"
     >
       <b-row>
         <b-col cols="12">
@@ -145,7 +126,90 @@
           </b-form-group>
         </b-col>
       </b-row>
-    </b-modal>  
+    </b-modal> 
+    <b-modal
+      ref="pdfPopup"
+      title="Beyanname Görüntüle"
+      size="xl"
+      scrollable
+      ok-only
+      ok-title="Kapat"
+      no-stacking
+    >
+      <iframe
+        :src="this.activePdfUrl"
+        width="100%"
+        height="700"
+        frameborder="0"
+      >
+      </iframe>
+    </b-modal>
+
+      <!-- <b-modal
+      ref="listPopup"
+      title="Listele"
+      ok-title="Listele"
+      cancel-title="İptal"
+      cancel-variant="outline-secondary"
+      @ok="listClick"
+    >
+      <b-row>
+        <b-col cols="12">
+          <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4">
+            <v-select
+              v-model="listRequest.title"
+              :options="unvanlar"
+              multiple
+              placeholder="Ünvan Seçiniz"
+              label="Unvan"
+            />
+          </b-form-group>
+        </b-col>
+        <b-col cols="12">
+          <b-form-group label="Tür" label-for="h-type" label-cols-md="4">
+            <v-select
+              v-model="listRequest.type"
+              :options="turler"
+              multiple
+              placeholder="Tür Seçiniz"
+              label="BeyanTuru"
+            />
+          </b-form-group>
+        </b-col>
+        <b-col cols="12">
+          <b-form-group
+            label="Başlangıç Tarihi"
+            label-for="h-start-date"
+            label-cols-md="4"
+          >
+            <b-form-datepicker
+              id="h-start-date"
+              v-model="listRequest.startDate"
+              :max="listMaxDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
+              :locale="dateTimeLanguage.locale"
+              class="mb-1"
+            />
+          </b-form-group>
+        </b-col>
+        <b-col cols="12">
+          <b-form-group
+            label="Bitiş Tarihi"
+            label-for="h-end-date"
+            label-cols-md="4"
+          >
+            <b-form-datepicker
+              id="h-end-date"
+              v-model="listRequest.endDate"
+              :min="listMinDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
+              :locale="dateTimeLanguage.locale"
+              class="mb-1"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+    </b-modal>   -->
     <!-- <input type="text" v-model="phone">
     <input type="text" v-model="msg"> -->
     <!-- <button @click="getQRCode">deneme</button>   -->
@@ -216,6 +280,7 @@ export default {
           {
           dataField: "Gonderim",
           caption: "Gönderim Durumu",
+          width:"90"
         },
         {
           dataField: "unvan",
@@ -224,45 +289,57 @@ export default {
         {
           dataField: "beyannameKodu",
           caption: "Kodu",
+          width:"100"
         },
         {
           dataField: "VergiDaire",
           caption: "Vergi Dairesi",
+          width:"150"
         },
         {
           dataField: "tckn",
           caption: "T.C. Kimlik No",
+           width:"110"
         },
         {
           dataField: "yuklemezamani",
           caption: "Tarih",
+           width:"140"
+          
         },
         {
           dataField: "beyannameTuru",
           caption: "Türü",
+           width:"120"
         },
         {
           dataField: "donem",
           caption: "Dönem",
+          width:"140"
         },
         {
           dataField: "FisNo",
           caption: "Fiş No",
+          width:"180"
+        },
+           {
+          dataField: "Toplam",
+          caption: "Tutar",
+           alignment:"right",
+            width:"90"
         },
         {
           dataField: "beyan_pdf",
           caption: "Beyan & Tahakkuk",
           cellTemplate: "beyanColumnTemplate",
+           width:"100"
         },
         // {
         //   dataField: "tahak_pdf",
         //   caption: "Tahakkuk Pdf",
         //   cellTemplate: "tahakkukColumnTemplate",
         // },
-        {
-          dataField: "Toplam",
-          caption: "Tutar",
-        },
+     
       ],
       mukellefid: "",
       userEmail: "",

@@ -193,7 +193,7 @@
 </template>
 
 <script>
-import AppTable from "@core/components/app-table/AppTable.vue";
+import AppTable from "@core/components/app-table/gelenFaturaTable.vue";
 import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
@@ -375,7 +375,7 @@ export default {
       return this.inquireRequest.startDate;
     },
     inquireMaxDate() {
-      return this.inquireRequest.endDate;
+      return this.inqurireRequest.endDate;
     },
     listMinDate() {
       return this.listRequest.startDate;

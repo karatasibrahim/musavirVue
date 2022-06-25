@@ -52,10 +52,12 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
+        <DxItem location="before" tempalte="listTemplate"/>
         <DxItem location="before" template="wpTemplate" />
-        <DxItem location="before" template="printTemplate" />
+        <!-- <DxItem location="before" template="printTemplate" /> -->
+          <DxItem location="before" template="smsTemplate" />
         <DxItem location="before" template="epostaTemplate" />
-        <DxItem location="before" template="smsTemplate" />
+      
 
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
@@ -77,8 +79,8 @@
         />
       </template> -->
 
-      <template #printTemplate>
-        <DxDropDownButton
+     <!-- <template #printTemplate>
+         <DxDropDownButton
           width="150"
           :split-button="false"
           :use-select-mode="false"
@@ -89,33 +91,40 @@
           text="Yazdır"
           icon="print"
           type="back"
-        />
-      </template>
+        /> 
+      </template>-->
       <template #wpTemplate>
         <DxButton
           type="success"
           text="Whatsapp"
-          icon="detailslayout"
+          icon="share"
           @click="sendClick(selectedRowKeys)"
         />
       </template>
       <template #smsTemplate>
         <DxButton
-          type="default"
+          type="warning"
           text="Sms"
-          icon="detailslayout"
-          @click="listClick"
+          icon="comment"
+          @click="sndSmsClick"
         />
       </template>
       <template #epostaTemplate>
         <DxButton
-          type=""
+          type="default"
           text="E-posta"
-          icon="detailslayout"
+          icon="email"
           @click="clickposta"
         />
       </template>
-
+<template #listTemplate>
+<DxButton
+type=""
+text="Listele"
+icon="list"
+@click="listClick"
+/>
+</template>
       <template #inquireTemplate>
         <DxButton
           type="danger"
@@ -171,10 +180,15 @@
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
             @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
           />
-          &nbsp; &nbsp; &nbsp;
+          &nbsp; 
             <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
             @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
+          />&nbsp; 
+            <img
+            class="text-right" height="14px"
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
+            @click="deleteInsuranceClick(data.data)"
           />
         </div>
       </template>
@@ -201,15 +215,15 @@
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
             @click="showPdfPopupClick(data.data.tahak_pdf)"
           />
-          <span> &nbsp; &nbsp; &nbsp;</span>
+          <span> &nbsp;</span>
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
             @click="showPdfPopupTahClick(data.data.tahak_pdf)"
           />
 
-          <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
-          <img
-            class="text-right"
+          <span> &nbsp; </span>
+            <img
+            class="text-right" height="14px"
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
             @click="deleteInsuranceClick(data.data)"
           />
@@ -490,5 +504,10 @@ element.addEventListener('click',()=>{
 .feather.feather-user {
   width: 27px;
   height: 19px;
+
+ 
 }
+  .dx-button.dx-button-warning {
+        background-color: #ffc107;
+    }
 </style>

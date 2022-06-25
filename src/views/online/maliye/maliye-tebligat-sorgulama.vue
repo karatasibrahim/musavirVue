@@ -75,10 +75,11 @@
         <b-col cols="12">
           <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4">
             <v-select
-              v-model="listRequest.title"
+               v-model="inquireRequest.title"
+              multiple
               :options="unvanlar"
               placeholder="Ünvan Seçiniz"
-              label="Unvan"
+              label="title"
             />
           </b-form-group>
         </b-col>
@@ -142,7 +143,8 @@
 import TebligatTable from "@core/components/app-table/TebligatTable.vue";
 import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
-import mockData from "../../../services/online/finance/service";
+//import mockData from "../../../services/online/finance/service";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import vSelect from "vue-select";
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -157,6 +159,7 @@ export default {
   data() {
     return {
       selected2: [],
+      unvanlar:[],
       books: [
         {
           title: "Database",
@@ -177,30 +180,30 @@ export default {
       ],
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
-      inquireRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
+    inquireRequest: {
+        startDate: {
+          title: null,
+          startDate: {
+            month: "",
+            year: "",
+          },
+        },
+        endDate: {
+          month: "",
+          year: "",
+        },
       },
       //#endregion
-      listRequest: {
+       listRequest: {
         startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
-        type: null,
-        title: null,
+        endDate: new Date(),
+        type: [],
+        title: [],
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
       items: [],
-      unvanlar: mockData.unvanlar,
-      turler: mockData.turler,
+     
       columns: [
         {
           dataField: "MukellefID",
@@ -349,13 +352,52 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["AddNewsTebligatSorgu"]),
         queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {},
+    inquireClick() {
+        let arr = [];     
+        this.inquireRequest.title.forEach((el)=>{
+        arr.push(el.value)
+        })
+const data={
+  KullaniciUid:JSON.parse(localStorage.getItem("userData")).userId,
+  baslangic:this.inquireRequest.startDate
+  .replace("-", "")
+          .replace("-", ""),
+        bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
+ tckn: arr,
+        SorguDurumu: 0,
+};
+console.log(data);
+this.AddNewsTebligatSorgu(data);
+//  this.$toast({
+//         component: ToastificationContent,
+//         position: "top-right",
+//         props: {
+//           icon: "SearchIcon",
+//           variant: "success",
+//           text: `Tebligat Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+//         },
+//       });
+
+
+    },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
+    },
+    setLisst()
+    {
+  let arr = [];
+      let durumarr = [];
+      this.items = this.GetTebligat;
+      this.getMukellef.forEach((data) => {
+        arr.push({ title: data.unvan, value: data.tckn });
+      });
+      console.log(arr, durumarr);
+      this.unvanlar = [...new Set(arr)];
     },
     downloadClick(e) {},
     printClick(e) {},
@@ -387,21 +429,18 @@ export default {
       this.Vergi=true;
       this.fetchVergi();
     },
-    ...mapActions(["fecthGibTebligat","gibtebligatEk","fecthTibTebligat","fetchTibTebligatEk","fetchVergiTebligat"]),
+    ...mapActions(["fecthGibTebligat","fetchMukellef","gibtebligatEk","fecthTibTebligat","fetchTibTebligatEk","fetchVergiTebligat"]),
     fecthtebligat() {
   
-      this.GetmukellefData.forEach((el) => {
-        this.mukellefData.push(el.MukellefId);
-      });   
-  
-      this.fecthGibTebligat( this.mukellefData);
-     setTimeout(()=>{
-       this.SetData()
-     },5000) 
+  this.fecthGibTebligat(this.getMukellef[0].musavirUid);
+       this.setLisst();  
+ 
+    
     },
     SetData() {
       console.log("çlaiştim setdata");
       this.items=[]; 
+     
      let ekarr=[];
      this.GetTebligat.forEach(el=>
      {ekarr.push(el.TebligatId) }
@@ -411,6 +450,7 @@ export default {
    this.SetEkdata()
  },2000)  
     },
+  
     SetEkdata(){ 
       let orjinal=[];
       let Ek=[]
@@ -528,8 +568,9 @@ SetVibData(){
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["reMukellef", "reGibTeblig","reGibTebligEk", "reTibTEbligat","reTibTebligatEk","reVergiTebligat"]),
-    GetmukellefData() {
+   
+    ...mapGetters(["reMukellef","rePerson", "reGibTeblig","reGibTebligEk", "reTibTEbligat","reTibTebligatEk","reVergiTebligat"]),
+    getMukellef() {
       return this.reMukellef;
     },
     GetTebligat() {
@@ -541,12 +582,17 @@ SetVibData(){
     GetTibTebligat(){
 return this.reTibTEbligat
     },
+    
     GetTibTebligatEk(){
       return this.reTibTebligatEk
     },
     GetVergiTebligat(){
       return this.reVergiTebligat
-    }
+    },
+    getUserUid(){
+      return this.rePerson.kullaniciUid;
+    },
+   
   },
 
   mounted() {

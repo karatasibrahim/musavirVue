@@ -50,7 +50,7 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
-        <DxItem location="before" template="inquireTemplate" />
+        <!-- <DxItem location="before" template="inquireTemplate" /> -->
         <DxItem location="before" template="wpTemplate" />
         <DxItem location="before" template="smsTemplate" />
         <DxItem location="before" template="epostaTemplate" />
@@ -116,7 +116,7 @@
         />
       </template>
 
-      <template #inquireTemplate>
+      <!-- <template #inquireTemplate>
         <DxButton
           type="danger"
           text="Sorgula"
@@ -124,7 +124,7 @@
         
           @click="inquireClick('http://89.43.29.189:1880/test1')"  
         />
-      </template>
+      </template> -->
 
       <template #headerTemplate>
         <div class="text-center" style="margin-right: 20px">
@@ -164,10 +164,15 @@
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
             @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
           />
-          &nbsp; &nbsp; &nbsp;
+          &nbsp; 
             <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
             @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
+          /> &nbsp; 
+             <img
+            class="text-right" height="14px"
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
+            @click="deleteInsuranceClick(data.data)"
           />
         </div>
       </template>
@@ -180,14 +185,20 @@
 
       <template #sgkGosterimColumnTemplate="{ data }">
         <div class="text-left">
+         <span> &nbsp; &nbsp;</span>
               <img  v-if="data.data.hasOwnProperty('tahakkukOid')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-             @click="showPdfPopupClick(data.data.beyannameOid,data.data .tckn,'SGK')"
+             @click="showPdfPopupClick(data.data.bynthkoid,data.data .tckn,'SGK')"
           />
-          <span> &nbsp; &nbsp; &nbsp;</span>
+          <span> &nbsp;</span>
           <img  v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme2')"
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
              @click="showPdfPopupClick(data.data.thkoid,data.data.tckn,'SGK')"
+          />     <span> &nbsp;</span>
+             <img
+            class="text-right" height="14px"
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
+            @click="deleteInsuranceClick(data.data)"
           />
 <!--           
           <img  v-if="data.data.payload.data.hasOwnProperty('thkhaberlesme3')"
