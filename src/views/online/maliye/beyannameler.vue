@@ -8,6 +8,7 @@
       :printClick="printClick"
       :sendClick="sendClick"
       @onSelectionChanged="gelendata"
+      :deleteInsuranceClick="deleteInsuranceClick"
       :pk="id"
       :items="items"
       :totalRows="16"
@@ -69,7 +70,7 @@
       ok-title="Listele"
       cancel-title="İptal"
       cancel-variant="outline-secondary"
-      @ok="listClick"
+      @ok="listRunClick"
     >
       <b-row>
         <b-col cols="12">
@@ -293,7 +294,7 @@ export default {
           width:"100"
         },
         {
-          dataField: "VergiDaire",
+          dataField: "vergiDairesi",
           caption: "Vergi Dairesi",
           width:"150"
         },
@@ -365,7 +366,7 @@ export default {
       let arr=[]
 
        this.reBeyanname.forEach(el=>{
-        arr.push(el.data())
+        arr.push(Object.assign(el.data(),{id:el.id}))
        })
        return arr
     },
@@ -392,8 +393,16 @@ export default {
       "fetchBeyanname",
       "nextButtons",
       "prevButtonVuex",
+      "DeleteBeyanData"
     ]),
-
+deleteInsuranceClick(e){
+console.log(e);
+this.DeleteBeyanData(e)
+let fin = this.items.findIndex(el=>{
+  return el.id==e
+})
+this.items.splice(fin,1)
+},
     getPageSize(e) {
       let beyan = [];
          let unvanlaar=[]
@@ -555,18 +564,19 @@ console.log(res);
 
     listRunClick() {
       let now = new Date(this.listRequest.startDate);
-      let time2 = new Date(this.listRequest.startDate);
+      let time2 = new Date(this.listRequest.endDate);
       const fil = this.beyannameData.filter((el) => {
         const time = new Date(
-          el.beyan_yukleme_tarihi.slice(0, 10).split(".").reverse().join("/")
+          el.yuklemezamani.slice(0, 10).split(".").reverse().join("/")
         );
-        console.log(this.listRequest.title);
-        if (this.listRequest.title.length > 0) {
+        console.log(Object.values( this.listRequest));
+        if (this.listRequest.title.length > 0 || this.listRequest.type.length > 0) {
           console.log("1.if");
-          return this.listRequest.title.includes(el.unvan);
+          return this.listRequest.title.includes(el.unvan) && this.listRequest.type.includes(el.beyannameKodu) && (now.getTime()>=time)<=time2.getTime()
+  
         } else if (this.listRequest.type.length > 0) {
           console.log("2.if");
-          return this.listRequest.type.includes(el.beyan_turu);
+          return ;
         }
         else {
           console.log("else");
@@ -574,7 +584,7 @@ console.log(res);
         }
       });
       this.items = fil;
-      console.log(now);
+      console.log(fil);
     },
     /////////////////////////////////
     fetch() {
@@ -586,27 +596,31 @@ console.log(res);
       };
       console.log(this.kullaniciUid);
       this.fetchBeyanname(data).then((el) => {
-        beyan = el;
+        
        
         let ar=[]
-      let unvanlaar=[]
+      let unvanlaar=[];
+      let beyantype=[]
       console.log(this.beyannameData);
 this.beyannameData.forEach(eld=>{
  ar.push( eld.vergiDairesi)
+ beyantype.push(eld.beyannameKodu)
  console.log(eld);
-
+beyan = el;
 })
 this.mukelefData.forEach(esl=>{
  unvanlaar.push(esl.unvan)
 })
 setTimeout(()=>{
   console.log(unvanlaar);
+  this.turler=[...new Set(beyantype)]
   this.unvanlar=[...new Set(unvanlaar)]
  this.fetchvergiDairesi(ar).then(res=>{
   setTimeout(()=>{
   },500)
 
-       this.items=  beyan.map(a=>Object.assign(a,this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi)))
+       this.items=  beyan.map(a=>Object.assign(a,{vergiDairesi:this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi).VergiDaire}))
+        console.log(  this.items);
         })
 },2000)
        

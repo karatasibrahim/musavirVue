@@ -106,7 +106,6 @@
           type="warning"
           text="Sms"
           icon="comment"
-          @click="sndSmsClick"
         />
       </template>
       <template #epostaTemplate>
@@ -190,7 +189,7 @@ icon="bulletlist"
             <img
             class="text-right" height="14px"
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
-            @click="deleteInsuranceClick(data.data)"
+            @click="deleteInsuranceClick(data.data.id)"
           />
         </div>
       </template>

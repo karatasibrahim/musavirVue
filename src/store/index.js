@@ -794,6 +794,11 @@ export default new Vuex.Store({
       console.log(payload);
       await deleteDoc(doc(db, "Firma", payload.toString()))
 
+    },
+    async DeleteBeyanData(context, payload) {
+      console.log(payload);
+      await deleteDoc(doc(db, "Beyanname", payload))
+
     }
   },
   strict: process.env.DEV,
