@@ -227,6 +227,7 @@ import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
+
 let arr = [];
 export default {
   components: {
@@ -386,6 +387,7 @@ export default {
 
   methods: {
     sendmail(){
+
 
     },
     ...mapActions([
@@ -631,6 +633,7 @@ setTimeout(()=>{
   mounted() {
     this.fetch();
     console.log(typeof this.listRequest.startDate);
+
   },
 };
 </script>

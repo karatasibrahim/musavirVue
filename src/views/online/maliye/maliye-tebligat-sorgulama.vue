@@ -16,7 +16,6 @@
         Vergi Denetim Kurulu Başkanı
       </button>
     </div>
-
     <tebligat-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -384,19 +383,26 @@ this.AddNewsTebligatSorgu(data);
 
 
     },
-    showPdfPopup(pdfUrl) {
+        showPdfPopup(e, tck, is) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tck +
+        "%2F" +
+        is +
+        "%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
     },
-    setLisst()
-    {
+    setLisst(){
   let arr = [];
       let durumarr = [];
       this.items = this.GetTebligat;
       this.getMukellef.forEach((data) => {
         arr.push({ title: data.unvan, value: data.tckn });
       });
-      console.log(arr, durumarr);
       this.unvanlar = [...new Set(arr)];
     },
     downloadClick(e) {},
@@ -431,129 +437,68 @@ this.AddNewsTebligatSorgu(data);
     },
     ...mapActions(["fecthGibTebligat","fetchMukellef","gibtebligatEk","fecthTibTebligat","fetchTibTebligatEk","fetchVergiTebligat"]),
     fecthtebligat() {
-  
-  this.fecthGibTebligat(this.getMukellef[0].musavirUid);
+  this.items=[]; 
+  this.fecthGibTebligat(JSON.parse(localStorage.getItem("userData")).userId).then(()=>{
+     
+     let ekarr=[];
+     console.log( this.GetTebligat);
+     this.GetTebligat.forEach(el=>{
+      console.log(el);
+      ekarr.push(el.TebligatId) })
+      setTimeout(() => {
+          this.gibtebligatEk(ekarr).then(()=>{
+            let join_part_one= this.GetTebligat.map(a=>Object.assign(a,this.GetTebligatek.find(b=>b.TebligatId==a.TebligatId)))
+          let join_part_two=join_part_one.map(a=>Object.assign(a,{unvan:this.getMukellef.find(b=>b.tckn==a.tckn).unvan}))
+          console.log(join_part_two);
+          this.items=join_part_two
+          })
+      }, 400);
+  })
        this.setLisst();  
  
     
     },
-    SetData() {
-      console.log("çlaiştim setdata");
-      this.items=[]; 
-     
-     let ekarr=[];
-     this.GetTebligat.forEach(el=>
-     {ekarr.push(el.TebligatId) }
-      )
-   this.gibtebligatEk(ekarr);
- setTimeout(()=>{
-   this.SetEkdata()
- },2000)  
-    },
-  
-    SetEkdata(){ 
-      let orjinal=[];
-      let Ek=[]
-//? Ek tebligatıd alındı
-      this.GetTebligatek.forEach(ek=>{
-    Ek.push(ek.TebligatId)
-  })
-//? Orginal tebligatid alindi
-this.GetTebligat.forEach(orj=>{
-orjinal.push(orj.TebligatId)
-})
-//? Uyumlu olan ek bulundu
-let sorc=this.GetTebligatek.filter(el=>{
-  return orjinal.includes(el.TebligatId)
-})
-
-console.log(orjinal,sorc);
-//? orginal ile karşilaştirilarak items aekleme yapılacak 
-for (let i = 0; i < sorc.length; i++) {
-  const element = sorc[i];
- var as= this.GetTebligat.forEach(el=>{
-  if(el.TebligatId == element.TebligatId){
-    let arr=[]
-    arr.push(element)
- el.ek=[{...element}]
- el.ekdat=arr.length
-    console.log(el);
-  }
- 
-})
-}
-this.items = this.GetTebligat;
-
-console.log(sorc,this.items);
-    },
 
 //! Ticaret Bakanlığı
     fecthticaret(){  
-      this.fecthTibTebligat(this.mukellefData);
-     setTimeout(()=>{
-       this.SetTibData()
-     },5000) 
-    },
-    SetTibData(){
-      console.log("çaliştim Ticaret");
       this.items=[]; 
-     let ekarr=[];
-     this.GetTibTebligat.forEach(el=>
-     {ekarr.push(el.TicaretTebtId) }
-      )
-   this.fetchTibTebligatEk(ekarr);
- 
- setTimeout(()=>{
-   this.SetTibEkdata()
- },5000) 
+      this.fecthTibTebligat(JSON.parse(localStorage.getItem("userData")).userId).then(()=>{
+            let ekarr=[];
+     console.log( this.GetTibTebligat);
+     this.GetTibTebligat.forEach(el=>{
+      console.log(el);
+      ekarr.push(el.TebligatId) })
+      setTimeout(() => {
+          this.fetchTibTebligatEk(ekarr).then(()=>{
+            let join_part_one= this.GetTibTebligat.map(a=>Object.assign(a,this.GetTibTebligatEk.find(b=>b.TebligatId==a.TebligatId)))
+          let join_part_two=join_part_one.map(a=>Object.assign(a,{unvan:this.getMukellef.find(b=>b.tckn==a.tckn).unvan}))
+          console.log(join_part_two);
+          this.items=join_part_two
+          })
+      }, 400);
+      })
     },
-    SetTibEkdata(){
-      let Tiborjinal=[];
-      let TibEk=[]
-//? Ek tebligatıd alındı
-      this.GetTibTebligatEk.forEach(ek=>{
-    TibEk.push(ek.TebligatId)
-  })
-//? Orginal tebligatid alindi
-this.GetTibTebligat.forEach(orj=>{
-Tiborjinal.push(orj.TicaretTebtId)
-})
-//? Uyumlu olan ek bulundu
-let Tibsorc=this.GetTibTebligatEk.filter(el=>{
-  return Tiborjinal.includes(el.TicaretTebtId)
-})
-
-console.log(Tiborjinal,Tibsorc,this.GetTibTebligatEk);
-//? orginal ile karşilaştirilarak items aekleme yapılacak 
-for (let i = 0; i < Tibsorc.length; i++) {
-  const element = Tibsorc[i];
-  this.GetTibTebligat.forEach(el=>{
-  if(el.TicaretTebtId == element.TicaretTebtId){
-    let Tibarr=[]
-    Tibarr.push(element)
- el.ek=[{...element}]
- el.ekdat=Tibarr.length
-    console.log(el);
-  }
- 
-})
-}
-this.items = this.GetTibTebligat;
-console.log(Tibsorc,this.items);
-    },
-
 //! Vergi Denetim Kurulu
 fetchVergi(){
-      this.fetchVergiTebligat(this.mukellefData);
-        setTimeout(()=>{
-       this.SetVibData()
-     },5000)
+  this.items=[]; 
+      this.fetchVergiTebligat(JSON.parse(localStorage.getItem("userData")).userId).then(()=>{
+                   let ekarr=[];
+     console.log( this.GetVergiTebligat);
+     this.GetVergiTebligat.forEach(el=>{
+      console.log(el);
+      ekarr.push(el.TebligatId) })
+      setTimeout(() => {
+          this.gibtebligatEk(ekarr).then(()=>{
+          let join_part_two=GetVergiTebligat.map(a=>Object.assign(a,{unvan:this.getMukellef.find(b=>b.tckn==a.tckn).unvan}))
+          console.log(join_part_two);
+          this.items=join_part_two
+          })
+      }, 400); 
+      })
+
+
 },
-SetVibData(){
-      console.log("çlaiştim Vergi");
-      this.items=[]; 
-     this.items=this.GetVergiTebligat
-}
+
   },
   computed: {
     inquireMinDate() {

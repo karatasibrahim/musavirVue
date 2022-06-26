@@ -189,6 +189,7 @@ export default new Vuex.Store({
       })
     },
     setGibTebligat(state, payload) {
+      console.log(payload);
       payload.forEach(el => {
         return state.GibTebligat.push(el.data())
       })
@@ -442,19 +443,27 @@ export default new Vuex.Store({
         MutName: "setGibTebligat"
       })
     },
-    async gibtebligatEk(context, payload) {
+    async gibtebligatEk(context, data) {
       this.state.GibTebligatEk = []
+      let queries = [];
+      for (let i = 0; i < data.length; i += 10) {
+        queries.push(query(
+          collection(db, "GibTebligatEk"),
+          where("TebligatId", "in", data.slice(i, i + 10)), ))
+      }
+      let usersDocsSnaps = [];
+      for (let i = 0; i < queries.length; i++) {
+        usersDocsSnaps.push(getDocs(queries[i]));
+      }
+      usersDocsSnaps = await Promise.all(usersDocsSnaps);
 
-      console.log(payload);
-      context.dispatch("actionArr", {
-        dbName: "GibTebligatEk",
-        İtemName: "TebligatId",
-        payload: payload,
-        MutName: "setGibTebligatEk"
-      })
+      let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
+      usersDocs.forEach(el => {
+console.log(el.data());
+        context.commit("setGibTebligatEk", el.data())
 
-    },
-
+    })
+  },
     async fecthTibTebligat(context, payload) {
       this.state.TibTebligat = []
 
@@ -467,16 +476,25 @@ export default new Vuex.Store({
       })
 
     },
-    async fetchTibTebligatEk(context, payload) {
+    async fetchTibTebligatEk(context, data) {
       this.state.TibTebligatEk = []
+      let queries = [];
+      for (let i = 0; i < data.length; i += 10) {
+        queries.push(query(
+          collection(db, "TicaretTebligatEk"),
+          where("TicaretTebtId", "in", data.slice(i, i + 10)), ))
+      }
+      let usersDocsSnaps = [];
+      for (let i = 0; i < queries.length; i++) {
+        usersDocsSnaps.push(getDocs(queries[i]));
+      }
+      usersDocsSnaps = await Promise.all(usersDocsSnaps);
 
-      context.dispatch("actionArr", {
-        dbName: "TicaretTebligatEk",
-        İtemName: "TicaretTebtId",
-        payload: payload,
-        MutName: "setTibTebligatEk"
+      let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
+      usersDocs.forEach(el => {
+console.log(el.data());
+        context.commit("setTibTebligatEk", el.data())
       })
-
     },
 
     async fetchVergiTebligat(context, payload) {
