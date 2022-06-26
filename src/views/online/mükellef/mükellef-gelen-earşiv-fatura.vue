@@ -216,23 +216,27 @@ export default {
       id: "",
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
+               startDate: {
+            month: "",
+            year: "",
+          },
+        endDate: {
+          month: "",
+          year: "",
+        },
         type: null,
         title: [],
       },
       //#endregion
       listRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
+             startDate: {
+            month: "",
+            year: "",
+          },
+        endDate:  {
+          month: "",
+          year: "",
+        },
         type: null,
         title: [],
       },
@@ -371,18 +375,18 @@ export default {
     },
   },
   computed: {
-    inquireMinDate() {
-      return this.inquireRequest.startDate;
-    },
-    inquireMaxDate() {
-      return this.inqurireRequest.endDate;
-    },
-    listMinDate() {
-      return this.listRequest.startDate;
-    },
-    listMaxDate() {
-      return this.listRequest.endDate;
-    },
+    // inquireMinDate() {
+    //   return this.inquireRequest.startDate;
+    // },
+    // inquireMaxDate() {
+    //   return this.inqurireRequest.endDate;
+    // },
+    // listMinDate() {
+    //   return this.listRequest.startDate;
+    // },
+    // listMaxDate() {
+    //   return this.listRequest.endDate;
+    // },
     ...mapGetters(["reMukellef", "reGelenArsiv"]),
     Mukellefdataget() {
       return this.reMukellef;

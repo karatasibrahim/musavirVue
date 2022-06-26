@@ -215,23 +215,23 @@ export default {
           caption: "Ünvan",
         },
         {
-          dataField: "ZarfKonu",
+          dataField: "veri.birimAdi",
           caption: "Vergi Dairesi",
         },
         {
-          dataField: "VergiNo",
+          dataField: "tckn",
           caption: "Vergi No",
         },
         {
-          dataField: "BirimAdi",
+          dataField: "veri.zarfKonu",
           caption: "Konu",
         },
         {
-          dataField: "ZarfAciklama",
+          dataField: "veri.zarfAciklama",
           caption: "Açıklama",
         },
         {
-          dataField: "TebellugTarihi",
+          dataField: "veri.vdGondermeTarihi",
           caption: "Tarih",
         },
         {
@@ -447,8 +447,14 @@ this.AddNewsTebligatSorgu(data);
       ekarr.push(el.TebligatId) })
       setTimeout(() => {
           this.gibtebligatEk(ekarr).then(()=>{
-            let join_part_one= this.GetTebligat.map(a=>Object.assign(a,this.GetTebligatek.find(b=>b.TebligatId==a.TebligatId)))
+            let join_part_one= this.GetTebligat.map(a=>Object.assign(a,this.GetTebligatek.find(b=>b.zarfOid==a.zarfOid))) //NODERED tarafında ticaret Tebligat dosyaları zarfOid Firebase alanında ki zarfOid ye göre yazdırıalacak
           let join_part_two=join_part_one.map(a=>Object.assign(a,{unvan:this.getMukellef.find(b=>b.tckn==a.tckn).unvan}))
+//           let arr=[]
+//    join_part_two.forEach(x=>{
+// let date=x.vdGondermeTarihi.slice(8,1)
+// let slice=date.split("")
+// console.log(slice);
+//    })
           console.log(join_part_two);
           this.items=join_part_two
           })

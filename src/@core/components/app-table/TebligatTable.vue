@@ -168,7 +168,7 @@
         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.veri.belgeOid,data.data.tckn,'GIBTEBLIGAT')"
+            @click="showPdfPopupClick(data.data.veri.zarfOid,data.data.tckn,'GIBTEBLIGAT')"
           />
         </div>
       </template>

@@ -282,8 +282,8 @@ export default {
         },
           {
           dataField: "Gonderim",
-          caption: "Gönderim Durumu",
-          width:"90"
+          caption: "Gönderim",
+          width:"110"
         },
         {
           dataField: "unvan",
@@ -329,7 +329,8 @@ export default {
           dataField: "Toplam",
           caption: "Tutar",
            alignment:"right",
-            width:"90"
+            width:"90",
+          customize_text:"priceColumn_customizeText"
         },
         {
           dataField: "beyan_pdf",
@@ -390,6 +391,9 @@ export default {
 
 
     },
+    priceColumn_customizeText(cellInfo) {
+            return cellInfo.value + '$';
+        },
     ...mapActions([
       "AddNewsBeyanSorgu",
       "fetchBeyanname",
@@ -638,7 +642,14 @@ setTimeout(()=>{
 };
 </script>
 
-<style></style>
+<style>
+.dx-datagrid-text-content{
+ font-weight: bold;
+ color:black;
+}
+   
+
+</style>
 
 
  
