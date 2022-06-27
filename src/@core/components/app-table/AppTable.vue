@@ -112,7 +112,7 @@
           type="default"
           text="E-posta"
           icon="email"
-          @click="listClick"
+         @click="clickposta"
         />
       </template>
 
@@ -327,6 +327,7 @@ export default {
     listClick: Function,
     printClick: Function,
     sendClick: Function,
+    clickposta:Function,
     deleteInsuranceClick: Function,
     showTaxPayerInfoClick: Function,
     showPanelClick: Function,
@@ -365,6 +366,8 @@ window(e,tck){
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;
+            this.$emit("onSelectionChanged",selectedRowsData)
+
         console.log(this.$refs["appGrid"].instance);
     },
     saveLayout(state) {

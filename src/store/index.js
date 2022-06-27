@@ -191,7 +191,7 @@ export default new Vuex.Store({
     setGibTebligat(state, payload) {
       console.log(payload);
       payload.forEach(el => {
-        return state.GibTebligat.push(el.data())
+        return state.GibTebligat.push({...el.data(),id:el.id})
       })
     },
     setGibTebligatEk(state, payload) {
@@ -354,7 +354,7 @@ export default new Vuex.Store({
       console.log("-------------------------BURADA");
       console.log(payload);
       let ar = []
-      context.dispatch("actionArr", {
+     context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "Kullanici",
         payload: payload.kullaniciuid,
@@ -362,6 +362,7 @@ export default new Vuex.Store({
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
+          console.log(e.data());
           ar.push(Object.assign(e.data(), {
             id: e.id
           }))
