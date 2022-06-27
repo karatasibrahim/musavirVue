@@ -569,8 +569,9 @@ let mail=""
               console.log(textBuffered);
               mail=textBuffered
               })  
+              let sender_mail=JSON.parse(localStorage.getItem("userData")).email
       axios.post("https://api.sendgrid.com/v3/mail/send",
-{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": "melikeats0561@gmail.com"},"subject": "Emusavirim EBeyanname Bilgilendirme Epostasi",
+{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": sender_mail},"subject": "Emusavirim EBeyanname Bilgilendirme Epostasi",
 "content": [{"type": "text/html","value": `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"` }],
 "attachments": [{"content": newarr.toString('base64'),
           "filename": "attachment.pdf",
