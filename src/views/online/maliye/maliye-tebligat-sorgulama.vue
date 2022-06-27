@@ -445,16 +445,23 @@ this.AddNewsTebligatSorgu(data);
      this.GetTebligat.forEach(el=>{
       console.log(el);
       ekarr.push(el.TebligatId) })
+      String.prototype.insert = function(index, string) {
+  if (index > 0) {
+    return this.substring(0, index) + string + this.substr(index);
+  }
+
+  return string + this;
+};
       setTimeout(() => {
           this.gibtebligatEk(ekarr).then(()=>{
             let join_part_one= this.GetTebligat.map(a=>Object.assign(a,this.GetTebligatek.find(b=>b.zarfOid==a.zarfOid))) //NODERED tarafında ticaret Tebligat dosyaları zarfOid Firebase alanında ki zarfOid ye göre yazdırıalacak
           let join_part_two=join_part_one.map(a=>Object.assign(a,{unvan:this.getMukellef.find(b=>b.tckn==a.tckn).unvan}))
-//           let arr=[]
-//    join_part_two.forEach(x=>{
-// let date=x.vdGondermeTarihi.slice(8,1)
-// let slice=date.split("")
-// console.log(slice);
-//    })
+
+        join_part_two.forEach(el=>{
+          let data=el.veri.vdGondermeTarihi.substring(0,8)
+el.veri.vdGondermeTarihi=data.substring(0,4).insert(4, "/")+data.substring(4,6).insert(6, "/")+data.substring(6,8);
+        })     
+
           console.log(join_part_two);
           this.items=join_part_two
           })

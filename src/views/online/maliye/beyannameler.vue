@@ -227,6 +227,7 @@ import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
+import request from 'request';
 
 let arr = [];
 export default {
@@ -443,8 +444,7 @@ setTimeout(()=>{
     //   console.log(res.data);
     // },
     gelendata(value) {
-      let aa=[{tckn:3410272497}]
-     let arr= value.map(a=>Object.assign(this.mukelefData.find(b=>b.tckn==a.tckn)))
+     let arr= value.map(a=>Object.assign(a,{unvan:this.mukelefData.find(b=>b.tckn==a.tckn)}.unvan))
      console.log(arr);
       this.selectredrow = arr;
     },
@@ -536,29 +536,58 @@ setTimeout(()=>{
     printClick(e) {},
     clickposta() {
       console.log(this.selectredrow);
-      let newarr = [];
-let mail=[]
+      let newarr =" []";
+let mail=""
       this.selectredrow.forEach((a) => {
         a.iletisim.forEach(il=>{
-          console.log(il.Mail);
-    
-     
-        // newarr.push({
-          //   kullaniciuid: a.KullaniciUid,
-        //   tckn: a.tckn,
-        //   id: a.id,
-        //   beyannameOid: a.beyannameOid,
-        //   tahakkukOid: a.tahakkukOid,
-        // });
-      axios.post(" https://api.sendgrid.com/v3/mail/send",
-{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": "melikeats0561@gmail.com"},"subject": "Sending with SendGrid is Fun",
-"content": [{"type": "text/plain", "value": "and easy to do anywhere, even with cURL"}]}
+          console.log(`Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`);
+
+        console.log(il.Mail);
+        let fileURl=`${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        a.tckn +
+        "%2FBEYANNAME" +
+        "%2F" +
+        a.beyannameOid +
+        ".pdf?alt=media"
+      }`;
+          let fileURlb=`${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        a.tckn +
+        "%2FBEYANNAME" +
+        "%2F" +
+        a.tahakkukOid +
+        ".pdf?alt=media"
+      }`;
+        request(fileURl, { encoding: null }, (err, res, body) => {
+              const textBuffered = Buffer.from(body);
+              console.log(textBuffered);
+              newarr=textBuffered
+              })  
+                request(fileURlb, { encoding: null }, (err, res, body) => {
+              const textBuffered = Buffer.from(body);
+              console.log(textBuffered);
+              mail=textBuffered
+              })  
+      axios.post("https://api.sendgrid.com/v3/mail/send",
+{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": "melikeats0561@gmail.com"},"subject": "Emusavirim EBeyanname Bilgilendirme Epostasi",
+"content": [{"type": "text/html","value": `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"` }],
+"attachments": [{"content": newarr.toString('base64'),
+          "filename": "attachment.pdf",
+          "type": 'application/pdf',
+        },
+        {"content": mail.toString('base64'),
+          "filename": "attachment.pdf",
+          "type": 'application/pdf',
+        }]}
 ,{headers:{
 "Authorization": "Bearer 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" ,
 'Content-Type': 'application/json'
 }}).then(res=>{
 console.log(res);
-})        })       
+})       
+ 
+})       
       });
       // console.log(newarr);
       // this.AddNewsEpostaSorgu({ data: newarr });
@@ -595,48 +624,51 @@ console.log(res);
     /////////////////////////////////
     fetch() {
       let beyan = [];
-     
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: Number(10),
       };
       console.log(this.kullaniciUid);
-      this.fetchBeyanname(data).then((el) => {
-        
-       
+      this.fetchBeyanname(data).then((el) => {   
         let ar=[]
       let unvanlaar=[];
       let beyantype=[]
-      console.log(this.beyannameData);
+   
+      // setTimeout(()=>{
+
+      // },) 
+setTimeout(()=>{ 
+    console.log(this.beyannameData);
 this.beyannameData.forEach(eld=>{
  ar.push( eld.vergiDairesi)
  beyantype.push(eld.beyannameKodu)
- console.log(eld);
+
 beyan = el;
 })
 this.mukelefData.forEach(esl=>{
  unvanlaar.push(esl.unvan)
 })
+},2000)
+
 setTimeout(()=>{
-  console.log(unvanlaar);
+  console.log(ar);
   this.turler=[...new Set(beyantype)]
   this.unvanlar=[...new Set(unvanlaar)]
  this.fetchvergiDairesi(ar).then(res=>{
   setTimeout(()=>{
-  },500)
+  },900)
 
-       this.items=  beyan.map(a=>Object.assign(a,{vergiDairesi:this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi).VergiDaire}))
-        console.log(  this.items);
+this.items=  beyan.map(a=>Object.assign(a,{vergiDairesi:this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi).VergiDaire}))
+console.log(this.items);
         })
-},2000)
+},2500)
        
       });
     },
 
   },
-  mounted() {
+  created() {
     this.fetch();
-    console.log(typeof this.listRequest.startDate);
 
   },
 };
