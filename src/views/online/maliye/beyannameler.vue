@@ -64,7 +64,7 @@
       </b-row>
     </b-modal>
 
-   <b-modal
+    <b-modal
       ref="listPopup"
       title="Listele"
       ok-title="Listele"
@@ -128,7 +128,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-    </b-modal> 
+    </b-modal>
     <b-modal
       ref="pdfPopup"
       title="Beyanname Görüntüle"
@@ -147,7 +147,7 @@
       </iframe>
     </b-modal>
 
-      <!-- <b-modal
+    <!-- <b-modal
       ref="listPopup"
       title="Listele"
       ok-title="Listele"
@@ -227,7 +227,7 @@ import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
-import request from 'request';
+import request from "request";
 
 let arr = [];
 export default {
@@ -281,10 +281,10 @@ export default {
           visible: false,
           showInColumnChooser: false,
         },
-          {
+        {
           dataField: "Gonderim",
           caption: "Gönderim",
-          width:"110"
+          width: "110",
         },
         {
           dataField: "unvan",
@@ -293,58 +293,56 @@ export default {
         {
           dataField: "beyannameKodu",
           caption: "Kodu",
-          width:"100"
+          width: "100",
         },
         {
           dataField: "vergiDairesi",
           caption: "Vergi Dairesi",
-          width:"150"
+          width: "150",
         },
         {
           dataField: "tckn",
           caption: "T.C. Kimlik No",
-           width:"110"
+          width: "110",
         },
         {
           dataField: "yuklemezamani",
           caption: "Tarih",
-           width:"140"
-          
+          width: "140",
         },
         {
           dataField: "beyannameTuru",
           caption: "Türü",
-           width:"120"
+          width: "120",
         },
         {
           dataField: "donem",
           caption: "Dönem",
-          width:"140"
+          width: "140",
         },
         {
           dataField: "FisNo",
           caption: "Fiş No",
-          width:"180"
+          width: "180",
         },
-           {
+        {
           dataField: "Toplam",
           caption: "Tutar",
-           alignment:"right",
-            width:"90",
-          customize_text:"priceColumn_customizeText"
+          alignment: "right",
+          width: "90",
+          customize_text: "priceColumn_customizeText",
         },
         {
           dataField: "beyan_pdf",
           caption: "Beyan & Tahakkuk",
           cellTemplate: "beyanColumnTemplate",
-           width:"100"
+          width: "100",
         },
         // {
         //   dataField: "tahak_pdf",
         //   caption: "Tahakkuk Pdf",
         //   cellTemplate: "tahakkukColumnTemplate",
         // },
-     
       ],
       mukellefid: "",
       userEmail: "",
@@ -364,14 +362,14 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["rePerson", "reMukellef", "reBeyanname","reVergiDaire"]),
+    ...mapGetters(["rePerson", "reMukellef", "reBeyanname", "reVergiDaire"]),
     beyannameData() {
-      let arr=[]
+      let arr = [];
 
-       this.reBeyanname.forEach(el=>{
-        arr.push(Object.assign(el.data(),{id:el.id}))
-       })
-       return arr
+      this.reBeyanname.forEach((el) => {
+        arr.push(Object.assign(el.data(), { id: el.id }));
+      });
+      return arr;
     },
     mukelefData() {
       return this.reMukellef;
@@ -382,60 +380,60 @@ export default {
     getUserUid() {
       return this.rePerson.kullaniciUid;
     },
-    getVDairesi(){
-      return this.reVergiDaire
-    }
+    getVDairesi() {
+      return this.reVergiDaire;
+    },
   },
 
   methods: {
-    sendmail(){
-
-
-    },
+    sendmail() {},
     priceColumn_customizeText(cellInfo) {
-            return cellInfo.value + '$';
-        },
+      return cellInfo.value + "$";
+    },
     ...mapActions([
       "AddNewsBeyanSorgu",
       "fetchBeyanname",
       "nextButtons",
       "prevButtonVuex",
-      "DeleteBeyanData"
+      "DeleteBeyanData",
     ]),
-deleteInsuranceClick(e){
-console.log(e);
-this.DeleteBeyanData(e)
-let fin = this.items.findIndex(el=>{
-  return el.id==e
-})
-this.items.splice(fin,1)
-},
+    deleteInsuranceClick(e) {
+      console.log(e);
+      this.DeleteBeyanData(e);
+      let fin = this.items.findIndex((el) => {
+        return el.id == e;
+      });
+      this.items.splice(fin, 1);
+    },
     getPageSize(e) {
       let beyan = [];
-         let unvanlaar=[]
+      let unvanlaar = [];
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: e,
       };
-          this.fetchBeyanname(data).then((el) => {
-       beyan = el;
-        let ar=[]
-     
-this.beyannameData.forEach(eld=>{
- ar.push( eld.vergiDairesi)
- 
-})
-this.mukelefData.forEach(esl=>{
- unvanlaar.push(esl.unvan)
-})
-setTimeout(()=>{
-    this.unvanlar=[...new Set(unvanlaar)]
+      this.fetchBeyanname(data).then((el) => {
+        beyan = el;
+        let ar = [];
 
- this.fetchvergiDairesi(ar).then(res=>{
-       this.items= beyan.map(a=>Object.assign(a,this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi)))
-        })
-},500)
-       
+        this.beyannameData.forEach((eld) => {
+          ar.push(eld.vergiDairesi);
+        });
+        this.mukelefData.forEach((esl) => {
+          unvanlaar.push(esl.unvan);
+        });
+        setTimeout(() => {
+          this.unvanlar = [...new Set(unvanlaar)];
+
+          this.fetchvergiDairesi(ar).then((res) => {
+            this.items = beyan.map((a) =>
+              Object.assign(
+                a,
+                this.getVDairesi.find((b) => b.VergiDaireKod == a.vergiDairesi)
+              )
+            );
+          });
+        }, 500);
       });
     },
     // async getQRCode(phone, msg) {
@@ -444,14 +442,23 @@ setTimeout(()=>{
     //   console.log(res.data);
     // },
     gelendata(value) {
-     let arr= value.map(a=>Object.assign(a,{unvan:this.mukelefData.find(b=>b.tckn==a.tckn)}.unvan))
-     console.log(arr);
+      let arr = value.map((a) =>
+        Object.assign(
+          a,
+          { unvan: this.mukelefData.find((b) => b.tckn == a.tckn) }.unvan
+        )
+      );
+      console.log(arr);
       this.selectredrow = arr;
     },
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    ...mapActions(["AddNewsBeyanSorgu", "AddNewsEpostaSorgu","fetchvergiDairesi"]),
+    ...mapActions([
+      "AddNewsBeyanSorgu",
+      "AddNewsEpostaSorgu",
+      "fetchvergiDairesi",
+    ]),
 
     sendClick(e) {
       var arr = [];
@@ -536,63 +543,88 @@ setTimeout(()=>{
     printClick(e) {},
     clickposta() {
       console.log(this.selectredrow);
-      let newarr =" []";
-let mail=""
+      let newarr = "";
+      let mail = "";
       this.selectredrow.forEach((a) => {
-        a.iletisim.forEach(il=>{
-          console.log(`Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`);
+        a.iletisim.forEach((il) => {
+          console.log(
+            `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
+          );
 
-        console.log(il.Mail);
-        let fileURl=`${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-        a.tckn +
-        "%2FBEYANNAME" +
-        "%2F" +
-        a.beyannameOid +
-        ".pdf?alt=media"
-      }`;
-          let fileURlb=`${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-        a.tckn +
-        "%2FBEYANNAME" +
-        "%2F" +
-        a.tahakkukOid +
-        ".pdf?alt=media"
-      }`;
-        request(fileURl, { encoding: null }, (err, res, body) => {
-              const textBuffered = Buffer.from(body);
-              console.log(textBuffered);
-              newarr=textBuffered
-              })  
-                request(fileURlb, { encoding: null }, (err, res, body) => {
-              const textBuffered = Buffer.from(body);
-              console.log(textBuffered);
-              mail=textBuffered
-              })  
-              let sender_mail=JSON.parse(localStorage.getItem("userData")).email
-      axios.post("https://api.sendgrid.com/v3/mail/send",
-{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": sender_mail},"subject": "Emusavirim EBeyanname Bilgilendirme Epostasi",
-"content": [{"type": "text/html","value": `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"` }],
-"attachments": [{"content": newarr.toString('base64'),
-          "filename": "attachment.pdf",
-          "type": 'application/pdf',
-        },
-        {"content": mail.toString('base64'),
-          "filename": "attachment.pdf",
-          "type": 'application/pdf',
-        }]}
-,{headers:{
-"Authorization": "Bearer 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" ,
-'Content-Type': 'application/json'
-}}).then(res=>{
-console.log(res);
-})       
- 
-})       
+          console.log(il.Mail);
+          let fileURl = `${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            a.tckn +
+            "%2FBEYANNAME" +
+            "%2F" +
+            a.beyannameOid +
+            ".pdf?alt=media"
+          }`;
+          let fileURlb = `${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            a.tckn +
+            "%2FTAHAKKUK" +
+            "%2F" +
+            a.tahakkukOid +
+            ".pdf?alt=media"
+          }`;
+          console.log(fileURl);
+          request(fileURl, { encoding: null }, (err, res, body) => {
+            const textBuffered = Buffer.from(body);
+            console.log(textBuffered);
+            newarr = textBuffered;
+          });
+          request(fileURlb, { encoding: null }, (err, res, body) => {
+            const textBuffered = Buffer.from(body);
+            console.log(textBuffered);
+            mail = textBuffered;
+          });
+          // boş dönüyor
+          let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
+          setTimeout(() => {
+            console.log(newarr, mail);
+            axios
+              .post(
+                "https://api.sendgrid.com/v3/mail/send",
+                {
+                  personalizations: [{ to: [{ email: `${il.Mail}` }] }],
+                  from: { email: mailBilgi },
+                  subject: "Emusavirim EBeyanname Bilgilendirme Epostasi",
+                  content: [
+                    {
+                      type: "text/html",
+                      value: `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"`,
+                    },
+                  ],
+                  attachments: [
+                    {
+                      content: newarr.toString("base64"),
+                      filename: "attachment.pdf",
+                      type: "application/pdf",
+                    },
+                    {
+                      content: mail.toString("base64"),
+                      filename: "attachment.pdf",
+                      type: "application/pdf",
+                    },
+                  ],
+                },
+                {
+                  headers: {
+                    Authorization:
+                      "Bearer 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",
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              });
+          }, 1000);
+        });
       });
       // console.log(newarr);
       // this.AddNewsEpostaSorgu({ data: newarr });
-
     },
     listClick() {
       this.$refs.listPopup.show();
@@ -605,16 +637,21 @@ console.log(res);
         const time = new Date(
           el.yuklemezamani.slice(0, 10).split(".").reverse().join("/")
         );
-        console.log(Object.values( this.listRequest));
-        if (this.listRequest.title.length > 0 || this.listRequest.type.length > 0) {
+        console.log(Object.values(this.listRequest));
+        if (
+          this.listRequest.title.length > 0 ||
+          this.listRequest.type.length > 0
+        ) {
           console.log("1.if");
-          return this.listRequest.title.includes(el.unvan) && this.listRequest.type.includes(el.beyannameKodu) && (now.getTime()>=time)<=time2.getTime()
-  
+          return (
+            this.listRequest.title.includes(el.unvan) &&
+            this.listRequest.type.includes(el.beyannameKodu) &&
+            now.getTime() >= time <= time2.getTime()
+          );
         } else if (this.listRequest.type.length > 0) {
           console.log("2.if");
-          return ;
-        }
-        else {
+          return;
+        } else {
           console.log("else");
           return el;
         }
@@ -630,58 +667,58 @@ console.log(res);
         limitSize: Number(10),
       };
       console.log(this.kullaniciUid);
-      this.fetchBeyanname(data).then((el) => {   
-        let ar=[]
-      let unvanlaar=[];
-      let beyantype=[]
-   
-      // setTimeout(()=>{
+      this.fetchBeyanname(data).then((el) => {
+        let ar = [];
+        let unvanlaar = [];
+        let beyantype = [];
 
-      // },) 
-setTimeout(()=>{ 
-    console.log(this.beyannameData);
-this.beyannameData.forEach(eld=>{
- ar.push( eld.vergiDairesi)
- beyantype.push(eld.beyannameKodu)
+        // setTimeout(()=>{
 
-beyan = el;
-})
-this.mukelefData.forEach(esl=>{
- unvanlaar.push(esl.unvan)
-})
-},2000)
+        // },)
+        setTimeout(() => {
+          console.log(this.beyannameData);
+          this.beyannameData.forEach((eld) => {
+            ar.push(eld.vergiDairesi);
+            beyantype.push(eld.beyannameKodu);
 
-setTimeout(()=>{
-  console.log(ar);
-  this.turler=[...new Set(beyantype)]
-  this.unvanlar=[...new Set(unvanlaar)]
- this.fetchvergiDairesi(ar).then(res=>{
-  setTimeout(()=>{
-  },900)
+            beyan = el;
+          });
+          this.mukelefData.forEach((esl) => {
+            unvanlaar.push(esl.unvan);
+          });
+        }, 2000);
 
-this.items=  beyan.map(a=>Object.assign(a,{vergiDairesi:this.getVDairesi.find(b=>b.VergiDaireKod==a.vergiDairesi).VergiDaire}))
-console.log(this.items);
-        })
-},2500)
-       
+        setTimeout(() => {
+          console.log(ar);
+          this.turler = [...new Set(beyantype)];
+          this.unvanlar = [...new Set(unvanlaar)];
+          this.fetchvergiDairesi(ar).then((res) => {
+            setTimeout(() => {}, 900);
+
+            this.items = beyan.map((a) =>
+              Object.assign(a, {
+                vergiDairesi: this.getVDairesi.find(
+                  (b) => b.VergiDaireKod == a.vergiDairesi
+                ).VergiDaire,
+              })
+            );
+            console.log(this.items);
+          });
+        }, 2500);
       });
     },
-
   },
   created() {
     this.fetch();
-
   },
 };
 </script>
 
 <style>
-.dx-datagrid-text-content{
- font-weight: bold;
- color:black;
+.dx-datagrid-text-content {
+  font-weight: bold;
+  color: black;
 }
-   
-
 </style>
 
 

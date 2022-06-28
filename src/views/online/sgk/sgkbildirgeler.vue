@@ -202,7 +202,7 @@ import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
-import request from 'request';
+import request from "request";
 export default {
   components: {
     AppTable,
@@ -218,8 +218,8 @@ export default {
 
   data() {
     return {
-        selectredrow: [],
-      id:"",
+      selectredrow: [],
+      id: "",
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
@@ -273,13 +273,12 @@ export default {
           caption: "id",
           visible: false,
           showInColumnChooser: false,
-           
         },
 
         {
           dataField: "Gonderim",
           caption: "Gönderim Durumu",
-            width:"90"
+          width: "90",
         },
         {
           dataField: "unvan",
@@ -292,12 +291,12 @@ export default {
         {
           dataField: "donem",
           caption: "Dönem",
-            width:"130"
+          width: "130",
         },
         {
           dataField: "sicilNo",
           caption: "Sicil No",
-            width:"230"
+          width: "230",
         },
         // {
         //   dataField: "BelgeCesidi",
@@ -319,15 +318,14 @@ export default {
         {
           dataField: "Toplam",
           caption: "Tutar",
-              alignment:"right",
-               width:"100"
-             
+          alignment: "right",
+          width: "100",
         },
         {
           dataField: "Goster",
           caption: "Tahahkuk Fişi & Hizmet",
           cellTemplate: "sgkGosterimColumnTemplate",
-            width:"100"
+          width: "100",
         },
       ],
     };
@@ -368,9 +366,8 @@ export default {
     queryClick() {
       this.$refs.queryPopup.show();
     },
-      gelendata(value) {
-     
-     console.log(value);
+    gelendata(value) {
+      console.log(value);
       this.selectredrow = value;
     },
     ...mapActions(["AddNewsBildirgeSorgu"]),
@@ -432,67 +429,91 @@ export default {
     //#region Boş Function
     emptyClick() {},
     //#endregion
-  clickposta() {
+    clickposta() {
       console.log(this.selectredrow);
-   let beyan=""
-      let hizmet=""
+      let beyan = "";
+      let hizmet = "";
       this.selectredrow.forEach((a) => {
-        a.iletisim.forEach(il=>{
-          console.log(`Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`);
+        a.iletisim.forEach((il) => {
+          console.log(
+            `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
+          );
 
-        console.log(il.Mail);
-        let fileURlbeyan=`${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-        a.tckn +
-        "%2FSGK" +
-        "%2F" +
-        a.bynthkoid +
-        ".pdf?alt=media"
-      }`;
-           let fileURlhizmet=`${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-        a.tckn +
-        "%2FSGK" +
-        "%2F" +
-        a.thkoid +
-        ".pdf?alt=media"
-      }`;
-   
-        request(fileURlbeyan, { encoding: null }, (err, res, body) => {
-              const textBuffered = Buffer.from(body);
-              console.log(textBuffered);
-              beyan=textBuffered;
-              })   
-                  request(fileURlhizmet, { encoding: null }, (err, res, body) => {
-              const textBuffered = Buffer.from(body);
-              console.log(textBuffered);
-              hizmet=textBuffered;
-              }) 
-      axios.post("https://api.sendgrid.com/v3/mail/send",
-{"personalizations": [{"to": [{"email": `${il.Mail}`}]}],"from": {"email": "melikeats0561@gmail.com"},"subject": "Emusavirim EBeyanname Bilgilendirme Epostasi",
-"content": [{"type": "text/html","value": `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"` }],
-"attachments": [{"content": beyan.toString('base64'),
-          "filename": "attachment.pdf",
-          "type": 'application/pdf',
-        },
-        {"content": hizmet.toString('base64'),
-          "filename": "attachment.pdf",
-          "type": 'application/pdf',
-        }
-        
-        ]}
-,{headers:{
-"Authorization": "Bearer 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" ,
-'Content-Type': 'application/json'
-}}).then(res=>{
-console.log(res);
-})       
+          console.log(il.Mail);
+          let fileURlbeyan = `${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            a.tckn +
+            "%2FSGK" +
+            "%2F" +
+            a.bynthkoid +
+            ".pdf?alt=media"
+          }`;
+          let fileURlhizmet = `${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            a.tckn +
+            "%2FSGK" +
+            "%2F" +
+            a.thkoid +
+            ".pdf?alt=media"
+          }`;
+          request(fileURlbeyan, { encoding: null }, (err, res, body) => {
+            const textBuffered = Buffer.from(body);
+            console.log(textBuffered);
+            beyan = textBuffered;
+          });
+          request(fileURlhizmet, { encoding: null }, (err, res, body) => {
+            const textBuffered = Buffer.from(body);
+            console.log(textBuffered);
+            hizmet = textBuffered;
+          });
 
-})       
+          let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
+setTimeout(()=>{
+  console.log(fileURlhizmet,fileURlbeyan); 
+              
+ axios.post("https://api.sendgrid.com/v3/mail/send",
+              {
+                personalizations: [{ to: [{ email: `${il.Mail}` }] }],
+                from:  { email: mailBilgi }  ,
+                subject: "Emusavirim EBeyanname Bilgilendirme Epostasi",
+                content: [
+                  {
+                    type: "text/html",
+                    value: `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"`,
+                  },
+                ],
+                attachments: [
+                  {
+                    content: beyan.toString("base64"),
+                    filename: "attachment.pdf",
+                    type: "application/pdf",
+                  },
+                  {
+                    content: hizmet.toString("base64"),
+                    filename: "attachment.pdf",
+                    type: "application/pdf",
+                  },
+                ],
+              },
+              {
+                headers: {
+                  Authorization:
+                    "Bearer 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",
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            });
+},
+1000);
+
+         
+        });
       });
       // console.log(newarr);
       // this.AddNewsEpostaSorgu({ data: newarr });
-
     },
     //#region SAYFA ICIN
     deleteInsuranceClick() {},
@@ -513,14 +534,18 @@ console.log(res);
     fetchVergi() {
       this.fetchSgkBildirge(
         JSON.parse(localStorage.getItem("userData")).userId
-      ).then(()=>{
-        setTimeout(()=>{
+      ).then(() => {
+        setTimeout(() => {
           console.log(this.getSgkBildirgeData);
-  let ex= this.getSgkBildirgeData.map(a=>Object.assign(a,{iletisim:this.getMukellefdata.find(b=>b.tckn==a.tckn).iletisim}))
-       console.log(ex);
-        },1000)
-     
-      })
+          let ex = this.getSgkBildirgeData.map((a) =>
+            Object.assign(a, {
+              iletisim: this.getMukellefdata.find((b) => b.tckn == a.tckn)
+                .iletisim,
+            })
+          );
+          console.log(ex);
+        }, 1000);
+      });
     },
   },
   mounted() {
