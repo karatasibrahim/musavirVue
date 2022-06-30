@@ -839,18 +839,18 @@ faaliyetget(space)
   }
   },
   computed: {
-    inquireMinDate() {
-      return this.inquireRequest.startDate;
-    },
-    inquireMaxDate() {
-      return this.inquireRequest.endDate;
-    },
-    listMinDate() {
-      return this.listRequest.startDate;
-    },
-    listMaxDate() {
-      return this.listRequest.endDate;
-    },
+    // inquireMinDate() {
+    //   return this.inquireRequest.startDate;
+    // },
+    // inquireMaxDate() {
+    //   return this.inquireRequest.endDate;
+    // },
+    // listMinDate() {
+    //   return this.listRequest.startDate;
+    // },
+    // listMaxDate() {
+    //   return this.listRequest.endDate;
+    // },
     ...mapGetters(["reilce","reil","reFaaliyet","reKalanBeyanname","reBeyanTakipProperties","reMukellef", "reSgkFirmalar", "reTicaretSicilGazetesi"]),
 
     getIl(){

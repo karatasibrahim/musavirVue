@@ -475,7 +475,7 @@ setTimeout(()=>{
               {
                 personalizations: [{ to: [{ email: `${il.Mail}` }] }],
                 from:  { email: mailBilgi }  ,
-                subject: "Emusavirim EBeyanname Bilgilendirme Epostasi",
+                subject: "Emüşavirim E-Bildirge Bilgilendirme E-postasi",
                 content: [
                   {
                     type: "text/html",

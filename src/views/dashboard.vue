@@ -59,7 +59,7 @@ import stats from "./stats.vue";
 import HomeTable1 from "@core/components/app-table/HomeTable1.vue";
 import HomeTable2 from "@core/components/app-table/HomeTable2.vue";
 
-import HomeChart from "@/@core/components/charts/HomeChart.vue";
+//import HomeChart from "@/@core/components/charts/HomeChart.vue";
 
 import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import mockData from "./../services/online/finance/service";
@@ -70,7 +70,7 @@ export default {
         stats,
         HomeTable1,
         HomeTable2,
-        HomeChart,
+        // HomeChart,
         BRow,
         BCol,
         BFormGroup,

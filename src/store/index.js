@@ -761,6 +761,12 @@ console.log(el.data());
       const a = collection(db, "BeyannameSorgu")
       const son = await addDoc(a, payload)
     },
+    async AddNewsWhatsappSorgu(contex,payload){
+      console.log(payload);
+      const a =collection(db,"WhatsappSorgu/"+payload.KullaniciUid+"/Sorgular")
+      const son=await addDoc(a,payload)
+
+    },
     async AddNewsTebligatSorgu(context, payload) {
       console.log(payload);
       const a = collection(db, "TebligatSorgu")

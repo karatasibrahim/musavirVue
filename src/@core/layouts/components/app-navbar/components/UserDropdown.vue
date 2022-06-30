@@ -60,7 +60,7 @@
       <span>Chat</span>
     </b-dropdown-item> -->
 
-    <b-dropdown-divider />
+   
 
     <b-dropdown-item
       :to="{ name: 'pages-account-setting' }"

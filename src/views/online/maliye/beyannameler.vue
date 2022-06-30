@@ -228,6 +228,7 @@ import ToastificationContent from "@core/components/toastification/Toastificatio
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
 import request from "request";
+ 
 
 let arr = [];
 export default {
@@ -458,6 +459,7 @@ export default {
       "AddNewsBeyanSorgu",
       "AddNewsEpostaSorgu",
       "fetchvergiDairesi",
+      "AddNewsWhatsappSorgu"
     ]),
 
     sendClick(e) {
@@ -473,32 +475,74 @@ export default {
       arr.forEach((iletim) => {
         iletim.iletisim.forEach((tel) => {
           //   let phone = tel.Telefon;
-          let msg =
-            tel.HitapŞekli +
-            " " +
-            iletim.unvan +
-            " " +
-            iletim.donem +
-            " " +
-            "beyannameniz ektedir. " +
-            " Toplam Borç Tuarınız" +
-            " " +
-            iletim.Toplam +
-            " " +
-            `${
-              "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-              iletim.tckn +
-              "%2FTAHAKKUK%2F" +
-              iletim.tahakkukOid +
-              ".pdf?alt=media"
-            }`;
-          window.open(
-            `${"https://wa.me/90" + tel.Telefon + "?text=" + msg}`,
-            "_blank"
-          );
+          let msgBaslik =
+            tel.HitapŞekli + "," + " "+
+            "Son ödeme tarihi " +
+            " "+
+            iletim.donem + " " + "olan" +
+            " "+
+             iletim.beyannameTuru + " "+ "ödemeniz"+
+            // iletim.unvan +
+           
+            " " + 
+            iletim.Toplam + " "+ "TL dir."
+            " " ;
+            
+            // let msgUrl=   `${
+            //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            //   iletim.tckn +
+            //   "%2FBEYANNAME%2F" +
+            //   iletim.beyannameOid +
+            //   ".pdf?alt=media"
+            // }`;
+            let beyanid= iletim.beyannameOid;
+            let msgTah=`${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            iletim.tckn +
+            "%2FTAHAKKUK" +
+            "%2F" +
+            iletim.tahakkukOid +
+            ".pdf?alt=media"
+          }`;
+         //let beyan=['Beyanname',msgUrl]
+          ;
+let phone = tel.Telefon;
+ 
+const data={
+  KullaniciUid:this.getUserUid,
+  SorguDurumu:0,
+  TelefonNo:phone,
+  MesajIcerik:msgBaslik,
+    //  Beyanname:db.doc('Beyanname/' + beyanid),
+     // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+   Beyanname:"Beyanname/"+beyanid,
+  Dosyalar:[
+    // {
+    //    "dosya":"Beyanname",
+    //    "url":msgUrl
+    // },
+    { 
+       "dosya":"Tahakkuk",
+       "url":msgTah
+       
+    }]  
+}; 
+ this.AddNewsWhatsappSorgu(data);
+
+//this.AddNewsWhatsappSorgu(data);
+
+          // window.open(
+          //   `${"https://wa.me/90" + tel.Telefon + "?text=" + msg}`,
+          //   "_blank"
+          // );
           //   this.getQRCode(phone, msg);
-        });
+        }); 
+        //this.AddNewsWhatsappSorgu(data);
+          
       });
+
+   
+     
     },
     inquireClick() {
       const data = {
@@ -589,7 +633,7 @@ export default {
                 {
                   personalizations: [{ to: [{ email: `${il.Mail}` }] }],
                   from: { email: mailBilgi },
-                  subject: "Emusavirim EBeyanname Bilgilendirme Epostasi",
+                  subject: "Emüşavirim E-Beyanname Bilgilendirme E-postasi",
                   content: [
                     {
                       type: "text/html",
