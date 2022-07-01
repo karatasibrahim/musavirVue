@@ -370,7 +370,10 @@ export default {
       console.log(value);
       this.selectredrow = value;
     },
-    ...mapActions(["AddNewsBildirgeSorgu"]),
+    ...mapActions([
+      "AddNewsBildirgeSorgu",      
+      "AddNewsWhatsappSorgu",
+      "AddNewsMailSorgu"]),
     inquireClick() {
       const data = {
         KullaniciUid: this.getUserUid,
@@ -385,7 +388,84 @@ export default {
     },
     downloadClick(e) {},
     printClick(e) {},
-    sendClick(e) {},
+    sendClick(e) {
+
+var arr=[];
+e.forEach((element)=>{
+  let data=this.getMukellefdata.find((el)=>{
+    return element.tckn==el.tckn;
+  });
+  console.log(data,element);
+  arr.push(Object.assign(element,data));
+
+  console.log(arr);
+});
+
+   arr.forEach((iletim) => {
+        iletim.iletisim.forEach((tel) => {
+          //   let phone = tel.Telefon;
+          let msgBaslik =
+            tel.HitapŞekli + "," + " "+
+            "Son ödeme tarihi " +
+            " "+
+            iletim.donem + " " + "olan" +
+            " "+
+             iletim.beyannameTuru + " "+ "ödemeniz"+
+            // iletim.unvan +
+           
+            " " + 
+            iletim.Toplam + " "+ "TL dir."
+            " " ;
+            
+            // let msgUrl=   `${
+            //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            //   iletim.tckn +
+            //   "%2FBEYANNAME%2F" +
+            //   iletim.beyannameOid +
+            //   ".pdf?alt=media"
+            // }`;
+           
+            let beyanid= iletim.beyannameOid;
+            let msgTah=`${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            iletim.tckn +
+            "%2FSGK" +
+            "%2F" +
+            iletim.thkoid +
+            ".pdf?alt=media"
+          }`;
+         //let beyan=['Beyanname',msgUrl]
+          ;
+let phone = tel.Telefon;
+ 
+const data={
+  KullaniciUid:this.getUserUid,
+  SorguDurumu:0,
+  TelefonNo:phone,
+  MesajIcerik:msgBaslik,
+      //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
+           // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+   Tablo:"Bildirge/"+beyanid,
+  Dosyalar:[
+    // {
+    //    "dosya":"Beyanname",
+    //    "url":msgUrl
+    // },
+    { 
+       "dosya":"Tahakkuk",
+       "url":msgTah
+       
+    }]  
+}; 
+ this.AddNewsWhatsappSorgu(data);
+ 
+        }); 
+       
+      });
+
+
+
+    },
     listClick() {
       this.$refs.listPopup.show();
     },
@@ -433,21 +513,39 @@ export default {
       console.log(this.selectredrow);
       let beyan = "";
       let hizmet = "";
+      let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
+        
       this.selectredrow.forEach((a) => {
         a.iletisim.forEach((il) => {
           console.log(
             `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
           );
-
+let msgBaslik=  
+            a.donem + " "+  "Son ödeme tarihli" +
+            " "+ 
+             a.beyannameTuru + " "+ "ödemeniz"+
+            // iletim.unvan +
+           
+            " " + 
+            a.Toplam + " "+ "TL dir."
+           
+            " "+
+             a.beyannameTuru + " "+ "ödemeniz"+
+            // iletim.unvan +
+           
+            " " + 
+            a.Toplam + " "+ "TL dir."+""
+            ;
           console.log(il.Mail);
-          let fileURlbeyan = `${
-            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-            a.tckn +
-            "%2FSGK" +
-            "%2F" +
-            a.bynthkoid +
-            ".pdf?alt=media"
-          }`;
+           console.log(msgBaslik);
+          // let fileURlbeyan = `${
+          //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+          //   a.tckn +
+          //   "%2FSGK" +
+          //   "%2F" +
+          //   a.bynthkoid +
+          //   ".pdf?alt=media"
+          // }`;
           let fileURlhizmet = `${
             "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
             a.tckn +
@@ -456,58 +554,79 @@ export default {
             a.thkoid +
             ".pdf?alt=media"
           }`;
-          request(fileURlbeyan, { encoding: null }, (err, res, body) => {
-            const textBuffered = Buffer.from(body);
-            console.log(textBuffered);
-            beyan = textBuffered;
-          });
-          request(fileURlhizmet, { encoding: null }, (err, res, body) => {
-            const textBuffered = Buffer.from(body);
-            console.log(textBuffered);
-            hizmet = textBuffered;
-          });
 
-          let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
-setTimeout(()=>{
-  console.log(fileURlhizmet,fileURlbeyan); 
+          const data={
+            KullaniciUid:this.getUserUid,
+        SorguDurumu:0,
+        Mail:mailBilgi,
+        MesajIcerik:msgBaslik,
+        //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
+        // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+         Tablo:"Bildirgeler/"+a.beyannameOid,
+        Dosyalar:[
+    // {
+    //    "dosya":"Beyanname",
+    //    "url":msgUrl
+    // },
+    { 
+       "dosya":"Tahakkuk",
+       "url":fileURlhizmet
+       
+    }]  
+          };
+          this.AddNewsMailSorgu(data);
+          // request(fileURlbeyan, { encoding: null }, (err, res, body) => {
+          //   const textBuffered = Buffer.from(body);
+          //   console.log(textBuffered);
+          //   beyan = textBuffered;
+          // });
+          // request(fileURlhizmet, { encoding: null }, (err, res, body) => {
+          //   const textBuffered = Buffer.from(body);
+          //   console.log(textBuffered);
+          //   hizmet = textBuffered;
+          // });
+
+         
+// setTimeout(()=>{
+//   console.log(fileURlhizmet,fileURlbeyan); 
               
- axios.post("https://api.sendgrid.com/v3/mail/send",
-              {
-                personalizations: [{ to: [{ email: `${il.Mail}` }] }],
-                from:  { email: mailBilgi }  ,
-                subject: "Emüşavirim E-Bildirge Bilgilendirme E-postasi",
-                content: [
-                  {
-                    type: "text/html",
-                    value: `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"`,
-                  },
-                ],
-                attachments: [
-                  {
-                    content: beyan.toString("base64"),
-                    filename: "attachment.pdf",
-                    type: "application/pdf",
-                  },
-                  {
-                    content: hizmet.toString("base64"),
-                    filename: "attachment.pdf",
-                    type: "application/pdf",
-                  },
-                ],
-              },
-              {
-                headers: {
-                  Authorization:
-                    "Bearer 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",
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            });
-},
-1000);
+//  axios.post("https://api.sendgrid.com/v3/mail/send",
+//               {
+//                 personalizations: [{ to: [{ email: `${il.Mail}` }] }],
+//                 from:  { email: mailBilgi }  ,
+//                 subject: "Emüşavirim E-Bildirge Bilgilendirme E-postasi",
+//                 content: [
+//                   {
+//                     type: "text/html",
+//                     value: `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"`,
+//                   },
+//                 ],
+//                 attachments: [
+//                   {
+//                     content: beyan.toString("base64"),
+//                     filename: "attachment.pdf",
+//                     type: "application/pdf",
+//                   },
+//                   {
+//                     content: hizmet.toString("base64"),
+//                     filename: "attachment.pdf",
+//                     type: "application/pdf",
+//                   },
+//                 ],
+//               },
+//               {
+//                 headers: {
+//                   Authorization:
+//                     "Bearer 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",
+//                   "Content-Type": "application/json",
+//                 },
+//               }
+//             )
+//             .then((res) => {
+//               console.log(res);
+//             });
+// },
+// 1000);
 
          
         });
