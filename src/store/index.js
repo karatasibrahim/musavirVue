@@ -165,6 +165,7 @@ export default new Vuex.Store({
     setMukkellef(state, payload) {
       return state.mukellef.push(payload)
     },
+    
     setBeyanname(state, payload) {
       return state.beyanname = payload
     },
@@ -766,6 +767,10 @@ console.log(el.data());
       const a =collection(db,"WhatsappSorgu/"+payload.KullaniciUid+"/Sorgular")
       const son=await addDoc(a,payload)
 
+    },
+    async AddNewsMailSorgu(contex,payload){
+      const yy=collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular")
+      const son=await addDoc(yy,payload)
     },
     async AddNewsTebligatSorgu(context, payload) {
       console.log(payload);

@@ -81,23 +81,23 @@ export default {
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
+        // startDate: new Date(),
+        // endDate: new Date(
+        //   new Date().getFullYear(),
+        //   new Date().getMonth() + 1,
+        //   new Date().getDate()
+        // ),
       },
       //#endregion
       listRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
-        type: null,
-        title: null,
+        // startDate: new Date(),
+        // endDate: new Date(
+        //   new Date().getFullYear(),
+        //   new Date().getMonth() + 1,
+        //   new Date().getDate()
+        // ),
+        // type: null,
+        // title: null,
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",

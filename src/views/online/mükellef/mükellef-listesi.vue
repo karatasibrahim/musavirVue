@@ -717,7 +717,7 @@ iletisimdata:[],
           showInColumnChooser: false,
         },
         {
-          dataField: "panel",
+          dataField: "panels",
           caption: "",
           width: "50",
           cellTemplate: "mukellefColumnTemplate",

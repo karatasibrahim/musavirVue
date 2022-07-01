@@ -372,6 +372,7 @@ export default {
       });
       return arr;
     },
+     
     mukelefData() {
       return this.reMukellef;
     },
@@ -459,7 +460,9 @@ export default {
       "AddNewsBeyanSorgu",
       "AddNewsEpostaSorgu",
       "fetchvergiDairesi",
-      "AddNewsWhatsappSorgu"
+      "AddNewsWhatsappSorgu",
+      "AddNewsMailSorgu"
+      
     ]),
 
     sendClick(e) {
@@ -513,8 +516,8 @@ const data={
   SorguDurumu:0,
   TelefonNo:phone,
   MesajIcerik:msgBaslik,
-    //  Beyanname:db.doc('Beyanname/' + beyanid),
-     // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+      //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
+           // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
    Beyanname:"Beyanname/"+beyanid,
   Dosyalar:[
     // {
@@ -528,21 +531,11 @@ const data={
     }]  
 }; 
  this.AddNewsWhatsappSorgu(data);
-
-//this.AddNewsWhatsappSorgu(data);
-
-          // window.open(
-          //   `${"https://wa.me/90" + tel.Telefon + "?text=" + msg}`,
-          //   "_blank"
-          // );
-          //   this.getQRCode(phone, msg);
+ 
         }); 
-        //this.AddNewsWhatsappSorgu(data);
-          
+       
       });
-
-   
-     
+  
     },
     inquireClick() {
       const data = {
@@ -589,21 +582,33 @@ const data={
       console.log(this.selectredrow);
       let newarr = "";
       let mail = "";
+        let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
       this.selectredrow.forEach((a) => {
         a.iletisim.forEach((il) => {
           console.log(
             `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
           );
-
+          let msgBaslik=  il.HitapŞekli + "," + " "+
+            "Son ödeme tarihi " +
+            " "+
+            a.donem + " " + "olan" +
+            " "+
+             a.beyannameTuru + " "+ "ödemeniz"+
+            // iletim.unvan +
+           
+            " " + 
+            a.Toplam + " "+ "TL dir."
+            " " ;
+ 
           console.log(il.Mail);
-          let fileURl = `${
-            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-            a.tckn +
-            "%2FBEYANNAME" +
-            "%2F" +
-            a.beyannameOid +
-            ".pdf?alt=media"
-          }`;
+          // let fileURl = `${
+          //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+          //   a.tckn +
+          //   "%2FBEYANNAME" +
+          //   "%2F" +
+          //   a.beyannameOid +
+          //   ".pdf?alt=media"
+          // }`;
           let fileURlb = `${
             "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
             a.tckn +
@@ -612,59 +617,80 @@ const data={
             a.tahakkukOid +
             ".pdf?alt=media"
           }`;
-          console.log(fileURl);
-          request(fileURl, { encoding: null }, (err, res, body) => {
-            const textBuffered = Buffer.from(body);
-            console.log(textBuffered);
-            newarr = textBuffered;
-          });
-          request(fileURlb, { encoding: null }, (err, res, body) => {
-            const textBuffered = Buffer.from(body);
-            console.log(textBuffered);
-            mail = textBuffered;
-          });
+           
+          const data={
+        KullaniciUid:this.getUserUid,
+        SorguDurumu:0,
+        Mail:mailBilgi,
+        MesajIcerik:msgBaslik,
+        //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
+        // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+         Beyanname:"Beyanname/"+a.beyannameOid,
+        Dosyalar:[
+    // {
+    //    "dosya":"Beyanname",
+    //    "url":msgUrl
+    // },
+    { 
+       "dosya":"Tahakkuk",
+       "url":fileURlb
+       
+    }]  
+}; 
+this.AddNewsMailSorgu(data);
+          // console.log(fileURl);
+          // request(fileURl, { encoding: null }, (err, res, body) => {
+          //   const textBuffered = Buffer.from(body);
+          //   console.log(textBuffered);
+          //   newarr = textBuffered;
+          // });
+          // request(fileURlb, { encoding: null }, (err, res, body) => {
+          //   const textBuffered = Buffer.from(body);
+          //   console.log(textBuffered);
+          //   mail = textBuffered;
+          // });
           // boş dönüyor
-          let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
-          setTimeout(() => {
-            console.log(newarr, mail);
-            axios
-              .post(
-                "https://api.sendgrid.com/v3/mail/send",
-                {
-                  personalizations: [{ to: [{ email: `${il.Mail}` }] }],
-                  from: { email: mailBilgi },
-                  subject: "Emüşavirim E-Beyanname Bilgilendirme E-postasi",
-                  content: [
-                    {
-                      type: "text/html",
-                      value: `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"`,
-                    },
-                  ],
-                  attachments: [
-                    {
-                      content: newarr.toString("base64"),
-                      filename: "attachment.pdf",
-                      type: "application/pdf",
-                    },
-                    {
-                      content: mail.toString("base64"),
-                      filename: "attachment.pdf",
-                      type: "application/pdf",
-                    },
-                  ],
-                },
-                {
-                  headers: {
-                    Authorization:
-                      "Bearer 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",
-                    "Content-Type": "application/json",
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-              });
-          }, 1000);
+        
+          // setTimeout(() => {
+          //   console.log(newarr, mail);
+          //   axios
+          //     .post(
+          //       "https://api.sendgrid.com/v3/mail/send",
+          //       {
+          //         personalizations: [{ to: [{ email: `${il.Mail}` }] }],
+          //         from: { email: mailBilgi },
+          //         subject: "Emüşavirim E-Beyanname Bilgilendirme E-postasi",
+          //         content: [
+          //           {
+          //             type: "text/html",
+          //             value: `"<h5>Sayın ${a.unvan}</h5> <br> <p>Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.</p>"`,
+          //           },
+          //         ],
+          //         attachments: [
+          //           {
+          //             content: newarr.toString("base64"),
+          //             filename: "attachment.pdf",
+          //             type: "application/pdf",
+          //           },
+          //           {
+          //             content: mail.toString("base64"),
+          //             filename: "attachment.pdf",
+          //             type: "application/pdf",
+          //           },
+          //         ],
+          //       },
+          //       {
+          //         headers: {
+          //           Authorization:
+          //             "Bearer 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",
+          //           "Content-Type": "application/json",
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       console.log(res);
+          //     });
+          // }, 1000);
         });
       });
       // console.log(newarr);
