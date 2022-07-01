@@ -50,7 +50,7 @@
     />
     </div>
 
-    <home-chart> </home-chart>
+    <!-- <home-chart> </home-chart> -->
   </div>
 </template>
 

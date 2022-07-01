@@ -582,7 +582,7 @@ const data={
       console.log(this.selectredrow);
       let newarr = "";
       let mail = "";
-        let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
+      let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
       this.selectredrow.forEach((a) => {
         a.iletisim.forEach((il) => {
           console.log(

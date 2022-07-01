@@ -314,24 +314,26 @@ export default {
   methods: {
     ...mapActions(["fetchBeyanname", "fetch", "fetchMukellef"]),
     FecthPersonData() {
-     
+     console.log("HEYOOOOOOOOOOOOOOOOOOO");
+          this.fetchMukellef(JSON.parse(localStorage.getItem("userData")).userId);
+
         this.fetch().then((res) => {
+          console.log(res[0]);
             res.forEach((el) => {
-                
-                this.fetchMukellef(el.data().kullaniciUid);
+                console.log(el.data().kullaniciUid);
                 this.fetchBeyanname(el.data().kullaniciUid);
         });
       });
     },
-    // fecthBeyan() {
-    //   let arr = [];
-    //   this.mukellefData.forEach((element) => {
-    //      console.log(el.data().kullaniciUid);
-    //     arr.push(element.MukellefId);
-    //   });
+     fecthBeyan() {
+       let arr = [];
+       this.mukellefData.forEach((element) => {
+          console.log(el.data().kullaniciUid);
+         arr.push(element.MukellefId);
+       });
 
-     
-    // },
+    
+     },
   },
 
   computed: {

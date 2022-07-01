@@ -312,10 +312,13 @@ export default new Vuex.Store({
     async fetchMukellef(context, payload) {
       console.log(payload);
       this.state.mukellef = []
+      console.log(payload);
+    //let user= JSON.parse(localStorage.getItem("userData")).userId
       const q = query(collection(db, "Mukellef"),
         where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
       mukellefdata.forEach((doc) => {
+        console.log(doc.data());
         context.commit("setMukkellef", Object.assign(doc.data(), {
           id: doc.id
         }))

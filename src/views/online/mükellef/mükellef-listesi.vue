@@ -865,6 +865,7 @@ faaliyetget(space)
       },
     getMukellefData() {
       return this.reMukellef;
+     
     },
     getFirmadata() {
       return this.reSgkFirmalar;
