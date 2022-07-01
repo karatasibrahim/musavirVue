@@ -601,6 +601,7 @@ const data={
             " " ;
  
           console.log(il.Mail);
+           let mailMuk= il.Mail;
           // let fileURl = `${
           //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
           //   a.tckn +
@@ -621,7 +622,7 @@ const data={
           const data={
         KullaniciUid:this.getUserUid,
         SorguDurumu:0,
-        Mail:mailBilgi,
+        Mail:mailMuk,
         MesajIcerik:msgBaslik,
         //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
         // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')

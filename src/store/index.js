@@ -23,7 +23,8 @@ import {
   limitToLast,
   endBefore,
   endAt,
-  startAfter
+  startAfter,
+  connectFirestoreEmulator
 } from "firebase/firestore";
 var firebase = require("firebase/app")
 import {
@@ -60,6 +61,7 @@ export default new Vuex.Store({
     beyanname: [],
     posSorgu: [],
     GelenFatura: [],
+    KullaniciAyarlar:[],
     GidenFatura: [],
     GibTebligat: [],
     GibTebligatEk: [],
@@ -86,7 +88,7 @@ export default new Vuex.Store({
     },
     rePerson(state) {
       return state.person
-    },
+    },    
     reMukellef(state) {
       return state.mukellef
     },
@@ -411,7 +413,15 @@ export default new Vuex.Store({
 
     },
 
-
+fetchKullaniciAyarlar(context,payload){
+  this.state.KullaniciAyarlar=[]
+  context.dispatch("actionArr", {
+    dbName: "KullaniciAyarlar",
+    İtemName: "kullaniciUid",
+    payload: payload,
+    
+  })
+},
     fecthGelenEarsivFat(context, payload) {
       this.state.GelenFatura = []
       context.dispatch("actionArr", {
@@ -692,7 +702,8 @@ console.log(el.data());
       console.log(paylod);
       const profile = doc(db, "KullaniciAyarlar", paylod.kullaniciUid)
       const gProfile = await setDoc(profile, paylod);
-    },
+    }, 
+  
     async updatePersonData(context, payload) {
 
       console.log(documentıd);
@@ -772,8 +783,20 @@ console.log(el.data());
 
     },
     async AddNewsMailSorgu(contex,payload){
-      const yy=collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular")
-      const son=await addDoc(yy,payload)
+    //    var ta= await getDoc( collection(db,"Bildirgeler/1vl0autsv81wok"))
+    //    const alovelaceDocumentRef = doc(db, 'Bildirgeler/1vl0autsv81wok');
+
+     
+    //   const GelenData=await addDoc(collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular"),
+    //   {
+    //     //user: db.doc('users/' + user_key),
+    //      TabloRef:doc(db, 'Bildirgeler/'+payload.beyanname.beyannameOid)
+    //   });
+    //   contex.commit(GelenData);
+    //   console.log(GelenData);
+        const yy=collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular")
+       const son=await addDoc(yy,payload)
+       
     },
     async AddNewsTebligatSorgu(context, payload) {
       console.log(payload);
