@@ -363,7 +363,7 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["rePerson", "reMukellef", "reBeyanname", "reVergiDaire"]),
+    ...mapGetters(["rePerson", "reMukellef","reKullaniciAyarlar", "reBeyanname", "reVergiDaire"]),
     beyannameData() {
       let arr = [];
 
@@ -371,6 +371,10 @@ export default {
         arr.push(Object.assign(el.data(), { id: el.id }));
       });
       return arr;
+    },
+     getKullaniciAyar()
+    {
+      return this.reKullaniciAyarlar;
     },
      
     mukelefData() {
@@ -518,7 +522,7 @@ const data={
   MesajIcerik:msgBaslik,
       //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
            // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
-   Beyanname:"Beyanname/"+beyanid,
+   Tablo:"Beyanname/"+beyanid,
   Dosyalar:[
     // {
     //    "dosya":"Beyanname",
@@ -622,19 +626,30 @@ const data={
           const data={
         KullaniciUid:this.getUserUid,
         SorguDurumu:0,
-        Mail:mailMuk,
+        GidecekMail:mailMuk,
         MesajIcerik:msgBaslik,
         //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
         // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
-         Beyanname:"Beyanname/"+a.beyannameOid,
-        Dosyalar:[
+         Tablo:"Beyanname/"+a.beyannameOid,
+          MesajBaslik:"Beyaname Tahakkuk Fişi",
+          Mail:{
+            host: this.getKullaniciAyar.mail.mailHost,
+            port: this.getKullaniciAyar.mail.mailPort,
+            secure:true,
+            requireTLS:true,
+            auth:{
+            user: this.getKullaniciAyar.mail.mailUser,
+            pass: this.getKullaniciAyar.mail.mailPass,
+            }
+            },
+        attachments:[
     // {
     //    "dosya":"Beyanname",
     //    "url":msgUrl
     // },
     { 
-       "dosya":"Tahakkuk",
-       "url":fileURlb
+       filename:"Tahakkuk.pdf",
+       path:fileURlb
        
     }]  
 }; 
@@ -776,6 +791,11 @@ this.AddNewsMailSorgu(data);
             console.log(this.items);
           });
         }, 2500);
+      });
+      this.fetchKullaniciAyarlar(
+        JSON.parse(localStorage.getItem("userData")).userId ).then(()=>{
+
+console.log(this.getKullaniciAyar);
       });
     },
   },

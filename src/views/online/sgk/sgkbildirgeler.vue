@@ -345,7 +345,7 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["reSgkBildirge", "reSgkFirmalar", "reMukellef", "rePerson"]),
+    ...mapGetters(["reSgkBildirge", "reSgkFirmalar","reKullaniciAyarlar", "reMukellef", "rePerson"]),
     getFirmadata() {
       return this.reSgkFirmalar;
     },
@@ -361,6 +361,10 @@ export default {
     getUserUid() {
       return this.rePerson.kullaniciUid;
     },
+    getKullaniciAyar()
+    {
+      return this.reKullaniciAyarlar;
+    }
   },
 
   methods: {
@@ -395,6 +399,7 @@ export default {
     printClick(e) {},
     sendClick(e) {
       var arr = [];
+      
       e.forEach((element) => {
         let data = this.getMukellefdata.find((el) => {
           return element.tckn == el.tckn;
@@ -404,6 +409,10 @@ export default {
 
         console.log(arr);
       });
+
+
+
+
 
       arr.forEach((iletim) => {
         iletim.iletisim.forEach((tel) => {
@@ -438,6 +447,7 @@ export default {
           // }`;
 
           let beyanid = iletim.beyannameOid;
+          let tahid=iletim.thkoid;
           let msgTah = `${
             "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
             iletim.tckn +
@@ -456,7 +466,7 @@ export default {
             MesajIcerik: msgBaslik,
             //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
             // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
-            Tablo: "Bildirge/" + beyanid,
+            Tablo: "Bildirgeler/" + tahid,
             Dosyalar: [
               // {
               //    "dosya":"Beyanname",
@@ -520,12 +530,24 @@ export default {
       let beyan = "";
       let hizmet = "";
       let mailBilgi = JSON.parse(localStorage.getItem("userData")).email;
+      var arr=[];
+//           arr.forEach((ayar) => {
+//         ayar.mail.forEach((tel) => {
+//  let mail=ayar.mail;
+//  console.log(mail);
 
+//         }
+//         )});
+
+  
       this.selectredrow.forEach((a) => {
         a.iletisim.forEach((il) => {
-          console.log(
-            `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
-          );
+          
+          // console.log(
+          //   `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
+          // );
+        
+        
           let msgBaslik =
             a.donem +
             " " +
@@ -575,24 +597,31 @@ export default {
           const data = {
             KullaniciUid: this.getUserUid,
             SorguDurumu: 0,
-            Mail: mailMuk,
+            GidecekMail: mailMuk,
             MesajIcerik: msgBaslik,
             //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
             // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
             //  Tablo:"Bildirgeler/"+a.beyannameOid,
-            Tablo: a.beyannameOid,
-            mailHost: "smtp.gmail.com",
-            mailPort: "587",
-            mailUser: mailBilgi,
-            mailPass: "123456",
-            Dosyalar: [
+            Tablo:"Bildirgeler/"+ a.thkoid,
+            MesajBaslik:"Sgk Tahakkuk Fişi",
+            Mail:{
+            host: this.getKullaniciAyar.mail.mailHost,
+            port: this.getKullaniciAyar.mail.mailPort,
+            secure:true,
+            requireTLS:true,
+            auth:{
+            user: this.getKullaniciAyar.mail.mailUser,
+            pass: this.getKullaniciAyar.mail.mailPass,
+               }
+            },
+            attachments: [
               // {
               //    "dosya":"Beyanname",
               //    "url":msgUrl
               // },
               {
-                dosya: "Tahakkuk",
-                url: fileURlhizmet,
+                filename: "Tahakkuk.pdf",
+                path: fileURlhizmet,
               },
             ],
           };
@@ -669,7 +698,7 @@ export default {
       this.$refs.pdfPopup.show();
     },
     //#endregion
-    ...mapActions(["fetchSgkBildirge"]),
+    ...mapActions(["fetchSgkBildirge","fetchKullaniciAyarlar"]),
     fetchVergi() {
       this.fetchSgkBildirge(
         JSON.parse(localStorage.getItem("userData")).userId
@@ -685,11 +714,17 @@ export default {
           console.log(ex);
         }, 1000);
       });
+
+
+      this.fetchKullaniciAyarlar(
+        JSON.parse(localStorage.getItem("userData")).userId ).then(()=>{
+
+console.log(this.getKullaniciAyar);
+      });
       // let kAyar=this.getSgkBildirgeData.map((a)=>
       // Object.assign(a,{ayar:this.getPerson.find((b)=>b.KullaniciUid==a.KullaniciUid).kAyar}))
-
-      this.fetchKullaniciAyarlar(this.getPerson[0].kullaniciUid);
-      this.clickposta();
+ 
+    
     },
   },
   mounted() {

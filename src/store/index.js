@@ -61,7 +61,6 @@ export default new Vuex.Store({
     beyanname: [],
     posSorgu: [],
     GelenFatura: [],
-    KullaniciAyarlar:[],
     GidenFatura: [],
     GibTebligat: [],
     GibTebligatEk: [],
@@ -72,6 +71,7 @@ export default new Vuex.Store({
     SgkFirmalar: [],
     TicaretSicilGazetesi: [],
     KalanBeyanname: [],
+    KullaniciAyarlar:{},
     BeyanTakipProperties: [],
     Faaliyet: {},
     il: [],
@@ -88,10 +88,13 @@ export default new Vuex.Store({
     },
     rePerson(state) {
       return state.person
-    },    
+    },
     reMukellef(state) {
       return state.mukellef
     },
+     reKullaniciAyarlar(state){
+      return state.KullaniciAyarlar
+     },
     reBeyanname(state) {
 
       return state.beyanname
@@ -167,7 +170,11 @@ export default new Vuex.Store({
     setMukkellef(state, payload) {
       return state.mukellef.push(payload)
     },
-    
+    setKullaniciAyarlar(state,payload){
+
+      return state.KullaniciAyarlar=payload
+      
+    },
     setBeyanname(state, payload) {
       return state.beyanname = payload
     },
@@ -309,8 +316,6 @@ export default new Vuex.Store({
       });
       return userdata
     },
-
-
     async fetchMukellef(context, payload) {
       console.log(payload);
       this.state.mukellef = []
@@ -328,6 +333,18 @@ export default new Vuex.Store({
       });
 
       return mukellefdata
+    },
+    async fetchKullaniciAyarlar(context,payload){
+      this.state.KullaniciAyarlar=[]
+      const q=query(collection(db,"KullaniciAyarlar"),
+      where("kullaniciUid","==",payload));
+      const kullaniciAyar=await getDocs(q);
+      kullaniciAyar.forEach((doc)=>{
+        context.commit("setKullaniciAyarlar",Object.assign(doc.data(),{
+          id:doc.id
+        }))
+      });
+      console.log(kullaniciAyar);
     },
     fetchOneWatch(context, payload) {
       let arr = []
@@ -412,16 +429,6 @@ export default new Vuex.Store({
       })
 
     },
-
-fetchKullaniciAyarlar(context,payload){
-  this.state.KullaniciAyarlar=[]
-  context.dispatch("actionArr", {
-    dbName: "KullaniciAyarlar",
-    İtemName: "kullaniciUid",
-    payload: payload,
-    
-  })
-},
     fecthGelenEarsivFat(context, payload) {
       this.state.GelenFatura = []
       context.dispatch("actionArr", {
@@ -431,8 +438,6 @@ fetchKullaniciAyarlar(context,payload){
         MutName: "setGelenFatura"
       })
     },
-
-
     async fetchGidenEarsiv(context, payload) {
       this.state.GidenFatura = []
 
@@ -445,7 +450,6 @@ fetchKullaniciAyarlar(context,payload){
       })
 
     },
-
     async fecthGibTebligat(context, payload) {
       this.state.GibTebligat = []
 
@@ -478,7 +482,7 @@ console.log(el.data());
         context.commit("setGibTebligatEk", el.data())
 
     })
-  },
+    },
     async fecthTibTebligat(context, payload) {
       this.state.TibTebligat = []
 
@@ -511,7 +515,6 @@ console.log(el.data());
         context.commit("setTibTebligatEk", el.data())
       })
     },
-
     async fetchVergiTebligat(context, payload) {
       this.state.VergiTebligat = []
 
@@ -523,7 +526,6 @@ console.log(el.data());
         MutName: "setVergiTebligat"
       })
     },
-
     async fetchSgkFirmaalar(context, payload) {
       this.state.SgkFirmalar = []
 
@@ -559,8 +561,6 @@ console.log(el.data());
       })
 
     },
-
-
     async fetchKalanBeyanname(context, payload) {
       this.state.KalanBeyanname = []
       console.log(payload);
@@ -572,7 +572,6 @@ console.log(el.data());
       })
 
     },
-
     async fetchBeyanTakipProperties(context, payload) {
       this.state.BeyanTakipProperties = []
       console.log(payload);
@@ -584,7 +583,6 @@ console.log(el.data());
       })
 
     },
-
     async fetchFaaliyet(context, payload) {
 
       console.log(payload);
@@ -625,7 +623,6 @@ console.log(el.data());
       })
 
     },
-
     async fetchCalisan(context, payload) {
       console.log(payload);
       this.state.calisan = []
@@ -665,7 +662,6 @@ console.log(el.data());
       })
 
     },
-
     async addkalanıd(context, payload) {
       let id = Math.floor((Math.random() * 1000) + 900)
       do {
@@ -691,7 +687,6 @@ console.log(el.data());
         context.commit('setMesaj', el.data())
       })
     },
-
     //!  UPTADE 
     async updateProfileDate(context, paylod) {
       console.log(paylod);
@@ -702,8 +697,7 @@ console.log(el.data());
       console.log(paylod);
       const profile = doc(db, "KullaniciAyarlar", paylod.kullaniciUid)
       const gProfile = await setDoc(profile, paylod);
-    }, 
-  
+    },
     async updatePersonData(context, payload) {
 
       console.log(documentıd);
@@ -712,7 +706,6 @@ console.log(el.data());
       const Gelendata = await updateDoc(q, payload);
       console.log(Gelendata);
     },
-
     async uptadeSgkFirma(context, payload) {
       console.log(`${payload.SubeId}`);
       const q = doc(db, "Firma", `${payload.SubeId}`)
@@ -803,7 +796,6 @@ console.log(el.data());
       const a = collection(db, "TebligatSorgu")
       const sonn = await addDoc(a, payload)
     },
-
     async AddNewsEpostaSorgu(contex, payload) {
       //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
       console.log(payload);
@@ -831,7 +823,6 @@ console.log(el.data());
       const a = collection(db, "BildirgeSorgu")
       const sonn = await addDoc(a, payload)
     },
-
     async AddNewsNotification(context, payload) {
       console.log(payload);
 
