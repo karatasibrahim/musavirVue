@@ -286,6 +286,7 @@ export default {
           dataField: "Gonderim",
           caption: "Gönderim",
           width: "110",
+           cellTemplate: "gonderimTemplate",
         },
         {
           dataField: "unvan",
@@ -465,8 +466,8 @@ export default {
       "AddNewsEpostaSorgu",
       "fetchvergiDairesi",
       "AddNewsWhatsappSorgu",
-      "AddNewsMailSorgu"
-      
+      "AddNewsMailSorgu",
+      "fetchKullaniciAyarlar"
     ]),
 
     sendClick(e) {

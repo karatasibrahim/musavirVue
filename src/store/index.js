@@ -335,11 +335,13 @@ export default new Vuex.Store({
       return mukellefdata
     },
     async fetchKullaniciAyarlar(context,payload){
+
       this.state.KullaniciAyarlar=[]
       const q=query(collection(db,"KullaniciAyarlar"),
       where("kullaniciUid","==",payload));
       const kullaniciAyar=await getDocs(q);
       kullaniciAyar.forEach((doc)=>{
+        console.log(doc.data());
         context.commit("setKullaniciAyarlar",Object.assign(doc.data(),{
           id:doc.id
         }))

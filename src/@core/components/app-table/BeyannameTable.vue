@@ -101,6 +101,17 @@
           @click="sendClick(selectedRowKeys)"
         />
       </template>
+
+            <template #gonderimTemplate="{data}">
+         <div>
+          <img v-if="data.data.hasOwnProperty('whatsappDurum')" height="18px" src="../../../images/wp_gond.png" alt=""/>  &nbsp;
+ <img v-if="data.data.hasOwnProperty('mailDurum')" height="18px" src="../../../images/mail_gond.png" alt=""/> &nbsp;
+<img v-if="data.data.hasOwnProperty('smsDurum')" height="18px" src="../../../images/sms_gond.png" alt=""/>
+       
+         </div>
+
+      </template>
+
       <template #smsTemplate>
         <DxButton
           type="warning"

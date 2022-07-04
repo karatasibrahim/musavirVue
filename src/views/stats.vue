@@ -321,7 +321,7 @@ export default {
           console.log(res[0]);
             res.forEach((el) => {
                 console.log(el.data().kullaniciUid);
-                this.fetchBeyanname(el.data().kullaniciUid);
+          
         });
       });
     },

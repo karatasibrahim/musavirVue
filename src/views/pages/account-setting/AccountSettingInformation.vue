@@ -11,7 +11,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-old-password"
-                  v-model="sms.smsFirma"
+                  v-model="getKullaniciAyar.sms.smsFirma"
                   name="old-password"
                   type="text"
                   placeholder=""
@@ -27,7 +27,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-new-password"
-                  v-model="sms.smsOriginator"
+                  v-model="getKullaniciAyar.sms.smsOriginator"
                   type="text"
                   name="new-password"
                   placeholder=""
@@ -43,7 +43,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-retype-new-password"
-                  v-model="sms.smsUser"
+                  v-model="getKullaniciAyar.sms.smsUser"
                   type="text"
                   name="retype-password"
                   placeholder=""
@@ -65,7 +65,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-retype-new-password"
-                  v-model="sms.smsPass"
+                  v-model="getKullaniciAyar.sms.smsPass"
                   type="text"
                   name="retype-password"
                   placeholder=""
@@ -94,7 +94,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-new-password"
-                  v-model="mail.mailHost"
+                  v-model="getKullaniciAyar.mail.mailHost"
                   :type="passwordFieldTypeNew"
                   name="new-password"
                   placeholder=""
@@ -107,7 +107,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-old-password"
-                  v-model="mail.mailPort"
+                  v-model="getKullaniciAyar.mail.mailPort"
                   name="old-password"
                   :type="passwordFieldTypeOld"
                   placeholder=""
@@ -115,7 +115,6 @@
               </b-input-group>
             </b-form-group>
           </b-col>
-     
           <b-col md="6">
             <b-form-group
               label-for="account-retype-new-password"
@@ -124,8 +123,8 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-retype-new-password"
-                  v-model="mail.mailUser"
                   type="text"
+                   v-model="getKullaniciAyar.mail.mailUser"
                   name="retype-password"
                   placeholder=""
                 />
@@ -146,7 +145,7 @@
               <b-input-group class="input-group-merge">
                 <b-form-input
                   id="account-retype-new-password"
-                  v-model="mail.mailPass"
+                  v-model="getKullaniciAyar.mail.mailPass"
                   type="text"
                   name="retype-password"
                   placeholder=""
@@ -209,7 +208,7 @@ import Cleave from "vue-cleave-component";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "cleave.js/dist/addons/cleave-phone.us";
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -260,7 +259,29 @@ smsPass:"",
       },
     };
   },
-  computed: {
+
+  methods: {
+    ...mapActions(["updateProfileSettings","fetchKullaniciAyarlar"]),
+    fetch(){
+      let uid=JSON.parse(localStorage.getItem("userData")).userId;
+      this.fetchKullaniciAyarlar(uid)
+    },
+  
+  sendData(){
+let uid=JSON.parse(localStorage.getItem("userData")).userId;
+console.log({kullaniciUid:uid,...this.getKullaniciAyar});
+ this.updateProfileSettings({kullaniciUid:uid,...this.getKullaniciAyar})
+    },
+    resetForm() {
+      this.localOptions = JSON.parse(JSON.stringify(this.informationData));
+    },
+  },
+    computed: {
+    ...mapGetters(["reKullaniciAyarlar"]),
+    getKullaniciAyar()
+    {
+return this.reKullaniciAyarlar
+    },
     passwordToggleIconOld() {
       return this.passwordFieldTypeOld === "password"
         ? "EyeIcon"
@@ -277,16 +298,9 @@ smsPass:"",
         : "EyeOffIcon";
     },
   },
-  methods: {
-    ...mapActions(["updateProfileSettings"]),
-    sendData(){
-let uid=JSON.parse(localStorage.getItem("userData")).userId;
-this.updateProfileSettings({kullaniciUid:uid,mail:this.mail,sms:this.sms})
-    },
-    resetForm() {
-      this.localOptions = JSON.parse(JSON.stringify(this.informationData));
-    },
-  },
+  mounted(){
+    this.fetch()
+  }
 };
 </script>
 
