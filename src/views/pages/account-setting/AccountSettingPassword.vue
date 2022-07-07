@@ -363,7 +363,9 @@ return this.resifre
     ...mapActions(["updatePersonData","fetchsifreler"]),
     fetchSifre(){
       console.log(this.getPersonData);
-this.fetchsifreler([this.getPersonData.KullaniciId])
+      let userID=JSON.parse(localStorage.getItem("userData")).userId;
+    console.log(userID);
+this.fetchsifreler(userID)
     },
     uptadedata(){
       console.log(this.getSifre)

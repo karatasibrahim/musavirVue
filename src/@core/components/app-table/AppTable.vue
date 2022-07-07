@@ -115,7 +115,15 @@
          @click="clickposta"
         />
       </template>
+  <template #gonderimsTemplate="{data}">
+         <div>
+          <img v-if="data.data.hasOwnProperty('whatsappDurum')" height="18px" src="../../../images/wp_gond.png" alt=""/>  &nbsp;
+ <img v-if="data.data.hasOwnProperty('mailDurum')" height="18px" src="../../../images/mail_gond.png" alt=""/> &nbsp;
+<img v-if="data.data.hasOwnProperty('smsDurum')" height="18px" src="../../../images/sms_gond.png" alt=""/>
+       
+         </div>
 
+      </template>
       <!-- <template #inquireTemplate>
         <DxButton
           type="danger"

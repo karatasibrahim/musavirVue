@@ -2,7 +2,7 @@
   <!-- Error page-->
   <div class="misc-wrapper">
     <b-link class="brand-logo">
-      <vuexy-logo />
+      <img src="../../images/7048.png" height="30px"/>
       <h2 class="brand-text text-primary ml-1">
         Müşavirim
       </h2>

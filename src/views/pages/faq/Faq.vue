@@ -68,9 +68,30 @@
               <feather-icon
                 icon="PhoneCallIcon"
                 size="18"
+                     color="green"
               />
             </b-avatar>
-            <h4>+ (552) 6401 640</h4>
+            <h4>+90 (552) 6401 640</h4>
+            <span class="text-body">Her zaman yardımcı olmaktan mutluluk duyarız!</span>
+          </b-card>
+        </b-col>
+           <b-col sm="6">
+          <b-card
+            class="shadow-none py-1 faq-contact-card"
+          >
+            <b-avatar
+              size="42"
+              rounded
+              variant="light-primary"
+              class="mb-2"
+            >
+              <feather-icon
+                icon="PhoneCallIcon"
+                size="18"
+                color="green"
+              />
+            </b-avatar>
+            <h4>+90 (536) 2650 356</h4>
             <span class="text-body">Her zaman yardımcı olmaktan mutluluk duyarız!</span>
           </b-card>
         </b-col>
@@ -87,10 +108,38 @@
               <feather-icon
                 icon="MailIcon"
                 size="18"
+                     color="red"
               />
             </b-avatar>
             <h4>info@emusavirim.com</h4>
             <span class="text-body">Daha hızlı yanıt almanın en iyi yolu!</span>
+          </b-card>
+        </b-col>
+         <b-col sm="6">
+          <b-card
+            class="shadow-none py-1 faq-contact-card"
+          >
+            <b-avatar
+              size="42"
+              rounded
+              variant="light-primary"
+              class="mb-2"
+            >
+              <feather-icon
+                icon="CodesandboxIcon"
+                size="18"
+                color="blue"
+              />
+            </b-avatar>
+            <h4>Masaüstü Uygulama</h4>
+            <span class="text-body">Whatsapp ve mail gönderimi için indirmeniz gerekmektedir.!</span> &nbsp;
+             <b-button
+     
+      variant="success"
+      @click="linkAc"
+    >
+      Uygulamayı İndir
+    </b-button>
           </b-card>
         </b-col>
       </b-row>
@@ -101,16 +150,18 @@
 
 <script>
 import {
-  BCard, BCardBody, BForm, BInputGroup, BFormInput, BCardText, BInputGroupPrepend, BTabs, BTab, BImg, BRow, BCol, BAvatar,
+  BCard, BCardBody,BButton, BForm, BInputGroup, BFormInput, BCardText, BInputGroupPrepend, BTabs, BTab, BImg, BRow, BCol, BAvatar,
 } from 'bootstrap-vue'
 import FaqQuestionAnswer from './FaqQuestionAnswer.vue'
 import mockData from "../../../services/online/faqQuestion/faq.datas.js";
+ 
 
 export default {
   components: {
     BForm,
     BCard,
     BRow,
+    BButton,
     BCol,
     BAvatar,
     BCardBody,
@@ -133,6 +184,10 @@ export default {
 
   },
   methods: {
+    linkAc()
+    {
+      window.open("http://musavir.emusavirim.com/Uygulama/EmusavirWhatsapp.rar")
+    }
     // fetchData() {
     //   this.$http.get('/faq/data', { params: { q: this.faqSearchQuery } }).then(res => { this.faqData = res.data })
     // },
@@ -145,4 +200,8 @@ export default {
 
 <style lang="scss">
 @import '@core/scss/vue/pages/page-faq.scss';
+.faq-contact{
+  display: block;
+}
+
 </style>

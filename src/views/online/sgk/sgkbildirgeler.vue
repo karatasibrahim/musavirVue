@@ -279,8 +279,9 @@ export default {
 
         {
           dataField: "Gonderim",
-          caption: "Gönderim Durumu",
+          caption: "Gönderim",
           width: "90",
+          cellTemplate:"gonderimsTemplate",
         },
         {
           dataField: "unvan",

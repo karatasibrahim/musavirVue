@@ -3,7 +3,7 @@
     <b-row class="auth-inner m-0">
       <!-- Brand logo-->
       <b-link class="brand-logo">
-        <vuexy-logo />
+     <img src="../../images/7048.png" height="30px"/>
         <h2 class="brand-text text-primary ml-1">Müşavirim</h2>
       </b-link>
       <!-- /Brand logo-->
@@ -22,7 +22,7 @@
       <b-col lg="4" class="d-flex align-items-center auth-bg px-2 p-lg-5">
         <b-col sm="8" md="6" lg="12" class="px-xl-2 mx-auto">
           <b-card-title class="mb-1 font-weight-bold" title-tag="h2">
-            Portal Giriş Paneli!
+          <b>Portal Giriş Paneli!</b>  
           </b-card-title>
           <b-card-text class="mb-2">
             Lütfen hesabınız ile giriş yapınız
@@ -50,7 +50,7 @@
           <validation-observer ref="loginForm" #default="{ invalid }">
             <b-form class="auth-login-form mt-2" @submit.prevent="login">
               <!-- email -->
-              <b-form-group label="Kullanıcı Kodu" label-for="login-email">
+              <b-form-group label="Kullanıcı E-posta" label-for="login-email">
                 <validation-provider
                   #default="{ errors }"
                   name="Email"
@@ -62,7 +62,8 @@
                     v-model="userEmail"
                     :state="errors.length > 0 ? false : null"
                     name="login-email"
-                    placeholder="12345678"
+                    placeholder="E-posta adresinizi giriniz"
+                     
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -71,9 +72,9 @@
               <!-- forgot password -->
               <b-form-group>
                 <div class="d-flex justify-content-between">
-                  <label for="login-password">Şifre</label>
+                  <label for="login-password"><b>Şifre</b></label>
                   <b-link :to="{ name: 'auth-forgot-password' }">
-                    <small>Şifremi unuttum?</small>
+                    <small><b>Şifremi unuttum?</b></small>
                   </b-link>
                 </div>
                 <validation-provider
@@ -93,7 +94,7 @@
                       class="form-control-merge"
                       :type="passwordFieldType"
                       name="login-password"
-                      placeholder="Password"
+                      placeholder="Şifrenizi giriniz"
                     />
                     <b-input-group-append is-text>
                       <feather-icon
@@ -114,7 +115,7 @@
                   v-model="status"
                   name="checkbox-1"
                 >
-                  Beni Hatırla
+                 <b> Beni Hatırla</b>
                 </b-form-checkbox>
               </b-form-group>
 
@@ -125,16 +126,16 @@
                 block
                 :disabled="invalid"
               >
-                Giriş
+               <b>Giriş</b> 
               </b-button>
             </b-form>
           </validation-observer>
 
           <b-card-text class="text-center mt-2">
-            <span>Hesabınız yok mu? </span>
+            <span><b>Hesabınız yok mu? </b></span>
             <b-link :to="{ name: 'auth-register' }">
                
-              <span>&nbsp;Hesap Oluştur</span>
+              <span>&nbsp;<b>Hesap Oluştur</b></span>
             </b-link>
           </b-card-text>
 
@@ -222,8 +223,8 @@ export default {
   data() {
     return {
       status: "",
-      password: "159263",
-      userEmail: "test@gmail.com",
+      password: "",
+      userEmail: "",
       sideImg: require("@/assets/images/pages/login-v2.svg"),
       required,
       email,
@@ -306,4 +307,11 @@ export default {
 
 <style lang="scss">
 @import "@core/scss/vue/pages/page-auth.scss";
+
+.d-block{
+  font-weight: bold;
+}
+.d-flex justify-content-between{
+   font-weight: bold;
+}
 </style>

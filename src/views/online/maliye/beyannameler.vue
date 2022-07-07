@@ -623,9 +623,9 @@ const data={
             a.tahakkukOid +
             ".pdf?alt=media"
           }`;
-           
+           let userID=JSON.parse(localStorage.getItem("userData")).userId;
           const data={
-        KullaniciUid:this.getUserUid,
+        KullaniciUid:userID,
         SorguDurumu:0,
         GidecekMail:mailMuk,
         MesajIcerik:msgBaslik,

@@ -4,10 +4,10 @@
 
       <!-- Brand logo-->
       <b-link class="brand-logo">
-        <vuexy-logo />
-
+       
+<img src="../../images/7048.png" height="30px"/>
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          Müşavirim
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -39,10 +39,10 @@
           class="px-xl-2 mx-auto"
         >
           <b-card-title class="mb-1">
-            Adventure starts here 🚀
+         <b> Emüşavirim Kullanıcı Kayıt Formu</b>
           </b-card-title>
           <b-card-text class="mb-2">
-            Make your app management easy and fun!
+            <b>Lütfen bilgileri eksiksiz giriniz!</b>
           </b-card-text>
 
           <!-- form -->
@@ -56,8 +56,10 @@
             >
               <!-- username -->
               <b-form-group
-                label="Username"
+                label="Kullanıcı E-posta"
+                
                 label-for="register-username"
+                
               >
                 <validation-provider
                   #default="{ errors }"
@@ -70,7 +72,7 @@
                     v-model="username"
                     name="register-username"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="johndoe"
+                    placeholder=""
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -78,7 +80,7 @@
 
               <!-- email -->
               <b-form-group
-                label="Email"
+                label="E-posta Tekrar"
                 label-for="register-email"
               >
                 <validation-provider
@@ -92,7 +94,7 @@
                     v-model="userEmail"
                     name="register-email"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="john@example.com"
+                    placeholder=""
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -101,7 +103,7 @@
               <!-- password -->
               <b-form-group
                 label-for="register-password"
-                label="Password"
+                label="Şifre"
               >
                 <validation-provider
                   #default="{ errors }"
@@ -140,8 +142,9 @@
                   v-model="status"
                   name="checkbox-1"
                 >
-                  I agree to
-                  <b-link>privacy policy & terms</b-link>
+                    <b-link><b>Gizlilik & kullanım şartlarını</b></b-link> &nbsp;
+                   <b>kabul ediyorum.</b>
+              
                 </b-form-checkbox>
               </b-form-group>
 
@@ -152,23 +155,23 @@
                :disabled="invalid"
                 @click="register(userEmail,password)"
               >
-                Sign up
+               <b>Kayıt ol</b>
               </b-button>
             </b-form>
           </validation-observer>
 
           <p class="text-center mt-2">
-            <span>Already have an account?</span>
+            <span><b>Mevcut hesabınız mı var? Buradan</b></span>
             <b-link :to="{name:'auth-login'}">
-              <span>&nbsp;Sign in instead</span>
+              <span>&nbsp;<b>Giriş Yapınız</b></span>
             </b-link>
           </p>
 
           <!-- divider -->
           <div class="divider my-2">
-            <div class="divider-text">
+            <!-- <div class="divider-text">
               or
-            </div>
+            </div> -->
           </div>
 
           <div class="auth-footer-btn d-flex justify-content-center">
@@ -306,4 +309,11 @@ console.log(error);
 
 <style lang="scss">
 @import '@core/scss/vue/pages/page-auth.scss';
+
+.d-block{
+  font-weight: bold;
+}
+.d-flex justify-content-between{
+   font-weight: bold;
+}
 </style>

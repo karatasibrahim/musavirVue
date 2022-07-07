@@ -24,7 +24,8 @@ import {
   endBefore,
   endAt,
   startAfter,
-  connectFirestoreEmulator
+  connectFirestoreEmulator,
+  Query
 } from "firebase/firestore";
 var firebase = require("firebase/app")
 import {
@@ -376,14 +377,13 @@ export default new Vuex.Store({
       return id
     },
     async fetchBeyanname(context, payload) {
-      console.log("-------------------------BURADA");
-      console.log(payload);
+     
       let ar = []
      context.dispatch("actionArr", {
         dbName: "Beyanname",
-        İtemName: "Kullanici",
+        İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
-        limit: payload.limitSize,
+        limit: payload.limitSize, 
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
@@ -619,7 +619,7 @@ console.log(el.data());
       console.log(payload);
       context.dispatch("actionArr", {
         dbName: "Sifreler",
-        İtemName: "KullaniciId",
+        İtemName: "KullaniciUid",
         payload: payload,
         MutName: "SetSifreler"
       })
