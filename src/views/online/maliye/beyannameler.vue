@@ -321,6 +321,7 @@ export default {
           dataField: "donem",
           caption: "Dönem",
           width: "140",
+          
         },
         {
           dataField: "FisNo",
@@ -752,8 +753,10 @@ this.AddNewsMailSorgu(data);
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: Number(10),
+        
       };
       console.log(this.kullaniciUid);
+      
       this.fetchBeyanname(data).then((el) => {
         let ar = [];
         let unvanlaar = [];

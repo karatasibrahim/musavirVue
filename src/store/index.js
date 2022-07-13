@@ -383,7 +383,7 @@ export default new Vuex.Store({
         dbName: "Beyanname",
         İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
-        limit: payload.limitSize, 
+        limit: payload.limitSize,       
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
