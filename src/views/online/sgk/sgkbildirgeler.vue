@@ -11,6 +11,7 @@
       :clickposta="clickposta"
       @onSelectionChanged="gelendata"
       :sendClick="sendClick"
+      :sendSms="sendSms"
       :items="getSgkBildirgeData"
       :totalRows="16"
       :title="'Sgk Bildirge Listesi'"
@@ -280,7 +281,7 @@ export default {
         {
           dataField: "Gonderim",
           caption: "Gönderim",
-          width: "90",
+          width: "100",
           cellTemplate:"gonderimsTemplate",
         },
         {
@@ -383,6 +384,7 @@ export default {
       "AddNewsWhatsappSorgu",
       "AddNewsMailSorgu",
       "fetchKullaniciAyarlar",
+      "updateSgkTah",
     ]),
     inquireClick() {
       const data = {
@@ -685,6 +687,58 @@ export default {
       // this.AddNewsEpostaSorgu({ data: newarr });
     },
     //#region SAYFA ICIN
+     sendSms(){
+      console.log(this.selectredrow);
+this.selectredrow.forEach((a)=>{
+  a.iletisim.forEach((il)=>{
+    let msgBaslik=il.HitapŞekli + "," + " "+
+            "donemi " +
+            " "+
+            a.donem + " " + "olan" +
+            " "+
+            "odemeniz"+
+            " " + 
+            a.Toplam + " "+ "TL dir."
+            " " ; 
+console.log(msgBaslik);
+         
+                      setTimeout(() => {         
+                axios
+                .post(
+                  "http://panel.1sms.com.tr:8080/api/smspost/v1",               
+                    `<sms>
+        <username>${this.getKullaniciAyar.sms.smsUser}</username>
+        <password>${this.getKullaniciAyar.sms.smsPass}</password>
+        <header>${this.getKullaniciAyar.sms.smsOriginator}</header>
+        <validity>2880</validity>
+        <sendDateTime>2022.1.23.9.30.0</sendDateTime>
+        <message>
+            <gsm>
+                <no>90${il.Telefon}</no>    
+            </gsm>
+            <msg><![CDATA[${msgBaslik}]]></msg>
+        </message>
+    </sms>
+    `).then((res)=>{
+                  console.log(res);
+                })
+               }, 1000);
+var currentData=new Date();
+var date=currentData.getDate();
+console.log("FFFFFFFFFFFFFFFFFFFFFFFFFF");
+console.log(a.thkoid);
+const data={
+  thkOid:a.thkoid,
+  smsDurum:{
+    durum:Number(1),
+    tarih:date,
+  }
+};
+this.updateSgkTah(data);
+
+  })
+})
+    },
     deleteInsuranceClick() {},
     showPdfPopup(e, tck, is) {
       this.activePdfUrl = `${

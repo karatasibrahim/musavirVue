@@ -14,6 +14,7 @@
       :totalRows="16"
       :title="'Beyannameler'"
       :clickposta="clickposta"
+      :sendSms="sendSms"
       :columns="columns"
       ref="appTablee"
       @pageSizes="getPageSize"
@@ -285,7 +286,7 @@ export default {
         {
           dataField: "Gonderim",
           caption: "Gönderim",
-          width: "110",
+          width: "100",
            cellTemplate: "gonderimTemplate",
         },
         {
@@ -404,6 +405,7 @@ export default {
       "nextButtons",
       "prevButtonVuex",
       "DeleteBeyanData",
+      "updateBeyanname",
     ]),
     deleteInsuranceClick(e) {
       console.log(e);
@@ -713,6 +715,61 @@ this.AddNewsMailSorgu(data);
       });
       // console.log(newarr);
       // this.AddNewsEpostaSorgu({ data: newarr });
+    },
+     sendSms(){
+    
+    this.selectredrow.forEach((a)=>{
+      a.iletisim.forEach((il)=>{    
+      let msgBaslik=  il.HitapŞekli + "," + " "+
+            "Son odeme tarihi " +
+            " "+
+            a.donem + " " + "olan" +
+            " "+
+             a.beyannameTuru + " "+ "odemeniz"+
+            " " + 
+            a.Toplam + " "+ "TL dir."
+            " " ;   
+       let fileURlb = `${
+            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            a.tckn +
+            "%2FTAHAKKUK" +
+            "%2F" +
+            a.tahakkukOid +
+            ".pdf?alt=media"
+          }`;           
+            setTimeout(() => {         
+            axios
+            .post(
+              "http://panel.1sms.com.tr:8080/api/smspost/v1",               
+                `<sms>
+    <username>${this.getKullaniciAyar.sms.smsUser}</username>
+    <password>${this.getKullaniciAyar.sms.smsPass}</password>
+    <header>${this.getKullaniciAyar.sms.smsOriginator}</header>
+    <validity>2880</validity>
+    <sendDateTime>2022.1.23.9.30.0</sendDateTime>
+    <message>
+        <gsm>
+            <no>90${il.Telefon}</no>    
+        </gsm>
+        <msg><![CDATA[${msgBaslik}]]></msg>
+    </message>
+</sms>
+`).then((res)=>{
+              console.log(res);
+            })
+           }, 1000);
+ var currentData=new Date();
+            var date=currentData.getDate();
+           const data={
+            beyanOid: a.beyannameOid,
+            smsDurum:{
+              durum:Number(1),
+              tarih:date,
+            }
+           };
+           this.updateBeyanname(data);
+      })
+    })
     },
     listClick() {
       this.$refs.listPopup.show();

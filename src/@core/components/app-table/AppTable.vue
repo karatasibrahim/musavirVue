@@ -104,7 +104,7 @@
           type="warning"
           text="Sms"
           icon="comment"
-          @click="listClick"
+          @click="sendSms"
         />
       </template>
        <template #epostaTemplate>
@@ -116,10 +116,11 @@
         />
       </template>
   <template #gonderimsTemplate="{data}">
-         <div>
-          <img v-if="data.data.hasOwnProperty('whatsappDurum')" height="18px" src="../../../images/wp_gond.png" alt=""/>  &nbsp;
- <img v-if="data.data.hasOwnProperty('mailDurum')" height="18px" src="../../../images/mail_gond.png" alt=""/> &nbsp;
-<img v-if="data.data.hasOwnProperty('smsDurum')" height="18px" src="../../../images/sms_gond.png" alt=""/>
+         <div class="row">
+           <div style="width:20px"></div>
+          <div style="width:30px"><img v-if="data.data.hasOwnProperty('whatsappDurum')" height="18px" src="../../../images/wp_gond.png" alt=""/></div>
+          <div style="width:30px"><img v-if="data.data.hasOwnProperty('mailDurum')" height="15px" src="../../../images/mail_gond.png" alt=""/></div>
+          <div style="width:30px"><img v-if="data.data.hasOwnProperty('smsDurum')" height="20px" src="../../../images/sms_gond.png" alt=""/></div>
        
          </div>
 
@@ -339,6 +340,7 @@ export default {
     deleteInsuranceClick: Function,
     showTaxPayerInfoClick: Function,
     showPanelClick: Function,
+    sendSms:Function,
   },
   data() {
     return {
@@ -448,6 +450,8 @@ window(e,tck){
   .dx-button.dx-button-warning {
         background-color: #ffc107;
     }
+
+     
 
 </style>
  

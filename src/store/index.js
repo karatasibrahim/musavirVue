@@ -690,6 +690,16 @@ console.log(el.data());
       })
     },
     //!  UPTADE 
+    async updateBeyanname(context,payload)
+    {
+       
+      const beyan=doc(db,"Beyanname",payload.beyanOid) 
+      const gBeyan=await updateDoc(beyan,payload);
+    },
+    async updateSgkTah(context,payload){
+      const sgk=doc(db,"Bildirgeler",payload.thkOid)
+      const gsgk=await updateDoc(sgk,payload);
+    },
     async updateProfileDate(context, paylod) {
       console.log(paylod);
       const profile = doc(db, "Kullanici", documentıd)
