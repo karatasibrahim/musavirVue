@@ -1,5 +1,31 @@
 <template>
   <div>
+       <b-overlay
+      :show="busy"
+      rounded="lg"
+      opacity="0.6"
+      @hidden="onHidden"
+    >
+      <template v-slot:overlay>
+        <div class="d-flex align-items-center">
+          <b-spinner
+            small
+            type="grow"
+            variant="secondary"
+          />
+          <b-spinner
+            type="grow"
+            variant="dark"
+          />
+          <b-spinner
+            small
+            type="grow"
+            variant="secondary"
+          />
+          <!-- We add an SR only text for screen readers -->
+          <span class="sr-only">Please wait...</span>
+        </div>
+      </template>
     <app-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -19,7 +45,7 @@
       ref="appTablee"
       @pageSizes="getPageSize"
     />
-
+ </b-overlay>
     <!-- Sorgula Popup -->
     <b-modal
       ref="queryPopup"
@@ -221,7 +247,7 @@
 
 <script>
 import AppTable from "@core/components/app-table/BeyannameTable.vue";
-import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
+import { BRow, BCol, BFormGroup, BOverlay,BSpinner,  BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
@@ -229,20 +255,26 @@ import ToastificationContent from "@core/components/toastification/Toastificatio
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
 import request from "request";
- 
+ import Ripple from 'vue-ripple-directive' 
 
 let arr = [];
 export default {
   components: {
     AppTable,
     BRow,
+    BOverlay,BSpinner, 
     vSelect,
     BCol,
     BFormGroup,
     BFormDatepicker,
   },
+   directives: {
+    Ripple,
+  },
   data() {
     return {
+        busy: false,
+    timeout: null,
       setQRCode: null,
       size: 125,
       phone: null,
@@ -395,6 +427,30 @@ export default {
   },
 
   methods: {
+    clearTimeout() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+        this.timeout = null
+      }
+    },
+    setTimeout(callback) {
+      this.clearTimeout()
+      this.timeout = setTimeout(() => {
+        this.clearTimeout()
+        callback()
+      }, 35000)
+    },
+    onHidden() {
+      // Return focus to the button
+      this.$refs.button.focus()
+    },
+    onClick() {
+      this.busy = true
+      // Simulate an async request
+      this.setTimeout(() => {
+        this.busy = false
+      })
+    },
     sendmail() {},
     priceColumn_customizeText(cellInfo) {
       return cellInfo.value + "$";
@@ -546,6 +602,10 @@ const data={
   
     },
     inquireClick() {
+         this.busy = true 
+      this.setTimeout(() => {
+        this.busy = false
+      })
       const data = {
         KullaniciUid: this.getUserUid,
 
@@ -871,6 +931,21 @@ console.log(this.getKullaniciAyar);
   font-weight: bold;
   color: black;
 }
+.main-menu.menu-light .navigation .navigation-header span {
+    font-weight: 500;
+   font-weight: bold;
+    color: red;
+}
+
+.main-menu.menu-light .navigation li a > * {
+    transition: transform 0.25s ease;
+      font-weight: bold;
+    color: black;
+     
+}
+  .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a svg, [dir=ltr] .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a i{
+    color:darkblue;
+  }
 </style>
 
 
