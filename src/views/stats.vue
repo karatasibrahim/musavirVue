@@ -314,7 +314,7 @@ export default {
   methods: {
     ...mapActions(["fetchBeyanname", "fetch", "fetchMukellef"]),
     FecthPersonData() {
-     console.log("HEYOOOOOOOOOOOOOOOOOOO");
+     
           this.fetchMukellef(JSON.parse(localStorage.getItem("userData")).userId);
 
         this.fetch().then((res) => {

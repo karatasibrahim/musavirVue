@@ -7,19 +7,19 @@
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
         <p class="user-name font-weight-bolder mb-0">
-          {{ userData.displayName || userData.email }}
+         {{getPersonData.Unvan}}
         </p>
-        <span class="user-status">{{ userData.role }}</span>
+        <span class="user-status">{{ getPersonData.role }}</span>
       </div>
       <b-avatar
         size="40"
-        :src="userData.avatar"
+       
         variant="light-primary"
         badge
         class="badge-minimal"
         badge-variant="success"
       >
-        <feather-icon v-if="!userData.displayName" icon="UserIcon" size="22" />
+        <feather-icon v-if="!getPersonData.Unvan" icon="UserIcon" size="22" />
       </b-avatar>
     </template>
 
@@ -101,6 +101,8 @@ import { initialAbility } from "@/libs/acl/config";
 import useJwt from "@/auth/jwt/useJwt";
 import { avatarText } from "@core/utils/filter";
 import { getAuth, signOut } from "firebase/auth";
+import {mapGetters} from "vuex";
+import { json } from "body-parser";
 
 export default {
   components: {
@@ -111,9 +113,16 @@ export default {
   },
   data() {
     return {
-      userData: {},
+       
       avatarText,
     };
+  },
+  computed:{
+...mapGetters(["rePerson"]),
+getPersonData()
+{
+  return this.rePerson
+},
   },
   methods: {
     logout() {
@@ -138,6 +147,18 @@ export default {
         });
       // Remove userData from localStorage
     },
+
+    fetch()
+  {
+const data={
+  kullaniciUid:JSON.parse(localStorage.getItem("userData")).userId,
+};
+ 
+  },
+  },
+  created()
+  {
+    this.fetch();
   },
 };
 </script>

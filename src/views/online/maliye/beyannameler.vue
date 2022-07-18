@@ -418,6 +418,7 @@ export default {
     getPerson() {
       return this.rePerson.kullaniciUid;
     },
+  
     getUserUid() {
       return this.rePerson.kullaniciUid;
     },

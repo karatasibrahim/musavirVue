@@ -195,4 +195,28 @@ export default {
     flex-wrap: wrap;
   }
 }
+
+ 
+.dx-datagrid-text-content {
+  font-weight: bold;
+  color: black;
+}
+.main-menu.menu-light .navigation .navigation-header span {
+    font-weight: 500;
+   font-weight: bold;
+    color: red;
+}
+
+.main-menu.menu-light .navigation li a > * {
+    transition: transform 0.25s ease;
+      font-weight: bold;
+    color: black;
+     
+}
+  .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a svg, [dir=ltr] .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a i{
+    color:darkblue;
+  }
+ 
+
+
 </style>

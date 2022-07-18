@@ -748,7 +748,7 @@ iletisimdata:[],
         },
         {
           dataField: "Durum",
-          caption: "Nace Kodu",
+          caption: "Aktif/Pasif",
         },
         {
           dataField: "Vade",
