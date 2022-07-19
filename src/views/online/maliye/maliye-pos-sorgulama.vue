@@ -9,7 +9,7 @@
       :sendClick="sendClick"
       :pk="id"
       :items="items"
-      :totalRows="16"
+      :totalRows="50"
       :title="'Pos Sorgulama'"
       :columns="columns"
     />
@@ -241,15 +241,15 @@ export default {
         },
         {
           dataField: "toplam",
-          caption: "toplam",
+          caption: "Toplam",
         },
         {
           dataField: "pos_uye_isy",
-          caption: "pos_uye_isy",
+          caption: "Pos Üye İşyeri No",
         },
         {
           dataField: "tckn",
-          caption: "tckn",
+          caption: "T.C.",
         },
         {
           dataField: "genelToplam",
@@ -354,6 +354,7 @@ export default {
         )
       );
       console.log(expected);
+      console.log("KKKKKKKKKKKKKKKKKKKKKK");
       let expected_alt = [];
       expected.forEach((ex) => {
         console.log(ex.veri);
