@@ -353,6 +353,7 @@ export default {
           this.Mukellefdataget.find((b) => b.tckn == a.tckn)
         )
       );
+        console.log("KKKKKKKKKKKKKKKKKKKKKK");
       console.log(expected);
       console.log("KKKKKKKKKKKKKKKKKKKKKK");
       let expected_alt = [];

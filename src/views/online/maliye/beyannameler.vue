@@ -7,11 +7,11 @@
       @hidden="onHidden"
     >
       <template v-slot:overlay>
-        <div class="d-flex align-items-center">
+        <div class="d-flex justify-content-between">
           <b-spinner
             small
             type="grow"
-            variant="secondary"
+            variant="info"
           />
           <b-spinner
             type="grow"
@@ -20,11 +20,14 @@
           <b-spinner
             small
             type="grow"
-            variant="secondary"
+            variant="info"
           />
-          <!-- We add an SR only text for screen readers -->
-          <span class="sr-only">Please wait...</span>
-        </div>
+    
+        </div><br>  
+          <div class="mb-0"
+               style="font-size:25px; color:red">
+              Sorgulama işlemi devam etmektedir..
+            </div> 
       </template>
     <app-table
       :showPdfPopupClick="showPdfPopup"
@@ -324,7 +327,10 @@ export default {
         {
           dataField: "unvan",
           caption: "Ünvan",
+ 
+          
         },
+        
         {
           dataField: "beyannameKodu",
           caption: "Kodu",
@@ -439,7 +445,7 @@ export default {
       this.timeout = setTimeout(() => {
         this.clearTimeout()
         callback()
-      }, 35000)
+      }, 45000)
     },
     onHidden() {
       // Return focus to the button
@@ -947,6 +953,9 @@ console.log(this.getKullaniciAyar);
   .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a svg, [dir=ltr] .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a i{
     color:darkblue;
   }
+
+  
+
 </style>
 
 
