@@ -335,7 +335,7 @@ export default {
       this.fetchPosSorgu(this.Mukellefdataget[0].musavirUid);
       setTimeout(() => {
         this.setOption();
-      }, 1000);
+      }, 500);
     },
     setOption() {
       let bankarr = [];

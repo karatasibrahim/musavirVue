@@ -72,7 +72,7 @@ export default new Vuex.Store({
     SgkFirmalar: [],
     TicaretSicilGazetesi: [],
     KalanBeyanname: [],
-    KullaniciAyarlar:{},
+    KullaniciAyarlar: {},
     BeyanTakipProperties: [],
     Faaliyet: {},
     il: [],
@@ -93,9 +93,9 @@ export default new Vuex.Store({
     reMukellef(state) {
       return state.mukellef
     },
-     reKullaniciAyarlar(state){
+    reKullaniciAyarlar(state) {
       return state.KullaniciAyarlar
-     },
+    },
     reBeyanname(state) {
 
       return state.beyanname
@@ -171,10 +171,10 @@ export default new Vuex.Store({
     setMukkellef(state, payload) {
       return state.mukellef.push(payload)
     },
-    setKullaniciAyarlar(state,payload){
+    setKullaniciAyarlar(state, payload) {
 
-      return state.KullaniciAyarlar=payload
-      
+      return state.KullaniciAyarlar = payload
+
     },
     setBeyanname(state, payload) {
       return state.beyanname = payload
@@ -202,7 +202,7 @@ export default new Vuex.Store({
     setGibTebligat(state, payload) {
       console.log(payload);
       payload.forEach(el => {
-        return state.GibTebligat.push({...el.data(),id:el.id})
+        return state.GibTebligat.push({ ...el.data(), id: el.id })
       })
     },
     setGibTebligatEk(state, payload) {
@@ -321,7 +321,7 @@ export default new Vuex.Store({
       console.log(payload);
       this.state.mukellef = []
       console.log(payload);
-    //let user= JSON.parse(localStorage.getItem("userData")).userId
+      //let user= JSON.parse(localStorage.getItem("userData")).userId
       const q = query(collection(db, "Mukellef"),
         where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
@@ -335,16 +335,16 @@ export default new Vuex.Store({
 
       return mukellefdata
     },
-    async fetchKullaniciAyarlar(context,payload){
+    async fetchKullaniciAyarlar(context, payload) {
 
-      this.state.KullaniciAyarlar=[]
-      const q=query(collection(db,"KullaniciAyarlar"),
-      where("kullaniciUid","==",payload));
-      const kullaniciAyar=await getDocs(q);
-      kullaniciAyar.forEach((doc)=>{
+      this.state.KullaniciAyarlar = []
+      const q = query(collection(db, "KullaniciAyarlar"),
+        where("kullaniciUid", "==", payload));
+      const kullaniciAyar = await getDocs(q);
+      kullaniciAyar.forEach((doc) => {
         console.log(doc.data());
-        context.commit("setKullaniciAyarlar",Object.assign(doc.data(),{
-          id:doc.id
+        context.commit("setKullaniciAyarlar", Object.assign(doc.data(), {
+          id: doc.id
         }))
       });
       console.log(kullaniciAyar);
@@ -377,13 +377,13 @@ export default new Vuex.Store({
       return id
     },
     async fetchBeyanname(context, payload) {
-     
+
       let ar = []
-     context.dispatch("actionArr", {
+      context.dispatch("actionArr", {
         dbName: "Beyanname",
-        İtemName: "Kullanici", 
+        İtemName: "Kullanici",
         payload: payload.kullaniciuid,
-        limit: payload.limitSize,       
+        limit: payload.limitSize,
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
@@ -402,7 +402,7 @@ export default new Vuex.Store({
       for (let i = 0; i < data.length; i += 10) {
         queries.push(query(
           collection(db, "VergiDairesi"),
-          where("VergiDaireKod", "in", data.slice(i, i + 10)), ))
+          where("VergiDaireKod", "in", data.slice(i, i + 10))))
       }
       let usersDocsSnaps = [];
       for (let i = 0; i < queries.length; i++) {
@@ -470,7 +470,7 @@ export default new Vuex.Store({
       for (let i = 0; i < data.length; i += 10) {
         queries.push(query(
           collection(db, "GibTebligatEk"),
-          where("TebligatId", "in", data.slice(i, i + 10)), ))
+          where("TebligatId", "in", data.slice(i, i + 10))))
       }
       let usersDocsSnaps = [];
       for (let i = 0; i < queries.length; i++) {
@@ -480,10 +480,10 @@ export default new Vuex.Store({
 
       let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
       usersDocs.forEach(el => {
-console.log(el.data());
+        console.log(el.data());
         context.commit("setGibTebligatEk", el.data())
 
-    })
+      })
     },
     async fecthTibTebligat(context, payload) {
       this.state.TibTebligat = []
@@ -503,7 +503,7 @@ console.log(el.data());
       for (let i = 0; i < data.length; i += 10) {
         queries.push(query(
           collection(db, "TicaretTebligatEk"),
-          where("TicaretTebtId", "in", data.slice(i, i + 10)), ))
+          where("TicaretTebtId", "in", data.slice(i, i + 10))))
       }
       let usersDocsSnaps = [];
       for (let i = 0; i < queries.length; i++) {
@@ -513,7 +513,7 @@ console.log(el.data());
 
       let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
       usersDocs.forEach(el => {
-console.log(el.data());
+        console.log(el.data());
         context.commit("setTibTebligatEk", el.data())
       })
     },
@@ -648,8 +648,11 @@ console.log(el.data());
     async actionArr(context, data) {
       return new Promise((resolve, reject) => {
         console.log("çaliştim", data);
+        //BU AY
+        var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
+        console.log("BUAY", buAy)
         let queries = query(collection(db, data.dbName),
-          where(data.İtemName, "==", data.payload), limit(data.limit)
+          where(data.İtemName, "==", data.payload), where("donem", "==", buAy), limit(data.limit)
         )
         let datas = getDocs(queries)
         datas.then(documentSnapshots => {
@@ -690,15 +693,14 @@ console.log(el.data());
       })
     },
     //!  UPTADE 
-    async updateBeyanname(context,payload)
-    {
-       
-      const beyan=doc(db,"Beyanname",payload.beyanOid) 
-      const gBeyan=await updateDoc(beyan,payload);
+    async updateBeyanname(context, payload) {
+
+      const beyan = doc(db, "Beyanname", payload.beyanOid)
+      const gBeyan = await updateDoc(beyan, payload);
     },
-    async updateSgkTah(context,payload){
-      const sgk=doc(db,"Bildirgeler",payload.thkOid)
-      const gsgk=await updateDoc(sgk,payload);
+    async updateSgkTah(context, payload) {
+      const sgk = doc(db, "Bildirgeler", payload.thkOid)
+      const gsgk = await updateDoc(sgk, payload);
     },
     async updateProfileDate(context, paylod) {
       console.log(paylod);
@@ -781,27 +783,27 @@ console.log(el.data());
       const a = collection(db, "BeyannameSorgu")
       const son = await addDoc(a, payload)
     },
-    async AddNewsWhatsappSorgu(contex,payload){
+    async AddNewsWhatsappSorgu(contex, payload) {
       console.log(payload);
-      const a =collection(db,"WhatsappSorgu/"+payload.KullaniciUid+"/Sorgular")
-      const son=await addDoc(a,payload)
+      const a = collection(db, "WhatsappSorgu/" + payload.KullaniciUid + "/Sorgular")
+      const son = await addDoc(a, payload)
 
     },
-    async AddNewsMailSorgu(contex,payload){
-    //    var ta= await getDoc( collection(db,"Bildirgeler/1vl0autsv81wok"))
-    //    const alovelaceDocumentRef = doc(db, 'Bildirgeler/1vl0autsv81wok');
+    async AddNewsMailSorgu(contex, payload) {
+      //    var ta= await getDoc( collection(db,"Bildirgeler/1vl0autsv81wok"))
+      //    const alovelaceDocumentRef = doc(db, 'Bildirgeler/1vl0autsv81wok');
 
-     
-    //   const GelenData=await addDoc(collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular"),
-    //   {
-    //     //user: db.doc('users/' + user_key),
-    //      TabloRef:doc(db, 'Bildirgeler/'+payload.beyanname.beyannameOid)
-    //   });
-    //   contex.commit(GelenData);
-    //   console.log(GelenData);
-        const yy=collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular")
-       const son=await addDoc(yy,payload)
-       
+
+      //   const GelenData=await addDoc(collection(db,"MailSorgu/"+payload.KullaniciUid+"/Sorgular"),
+      //   {
+      //     //user: db.doc('users/' + user_key),
+      //      TabloRef:doc(db, 'Bildirgeler/'+payload.beyanname.beyannameOid)
+      //   });
+      //   contex.commit(GelenData);
+      //   console.log(GelenData);
+      const yy = collection(db, "MailSorgu/" + payload.KullaniciUid + "/Sorgular")
+      const son = await addDoc(yy, payload)
+
     },
     async AddNewsTebligatSorgu(context, payload) {
       console.log(payload);
