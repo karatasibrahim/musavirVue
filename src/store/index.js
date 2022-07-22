@@ -383,7 +383,8 @@ export default new Vuex.Store({
         dbName: "Beyanname",
         İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
-        limit: payload.limitSize,       
+        limit: payload.limitSize,   
+        data:"donem",sortType:"desc",
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
@@ -648,9 +649,12 @@ console.log(el.data());
     async actionArr(context, data) {
       return new Promise((resolve, reject) => {
         console.log("çaliştim", data);
+        var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
+        console.log("BUAY", buAy)
         let queries = query(collection(db, data.dbName),
-          where(data.İtemName, "==", data.payload), limit(data.limit)
+          where(data.İtemName, "==", data.payload), where(data.data, "==", buAy), limit(data.limit)
         )
+        
         let datas = getDocs(queries)
         datas.then(documentSnapshots => {
 

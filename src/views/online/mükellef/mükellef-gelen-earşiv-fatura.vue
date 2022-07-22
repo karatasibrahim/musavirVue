@@ -428,6 +428,15 @@ export default {
       };
 
         this.AddGelenFaturaSorgu(data);
+             this.$toast({
+        component: ToastificationContent,
+        position: "top-right",
+        props: {
+          icon: "SearchIcon",
+          variant: "success",
+          text: `Gelen EArşiv fatura sorgulama işleminiz başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+        },
+      });
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
