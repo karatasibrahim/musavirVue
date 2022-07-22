@@ -1,179 +1,76 @@
 <template>
   <div>
-       <b-overlay
-      :show="busy"
-      rounded="lg"
-      opacity="0.6"
-      @hidden="onHidden"
-    >
+    <b-overlay :show="busy" rounded="lg" opacity="0.6" @hidden="onHidden">
       <template v-slot:overlay>
         <div class="d-flex justify-content-between">
-          <b-spinner
-            small
-            type="grow"
-            variant="info"
-          />
-          <b-spinner
-            type="grow"
-            variant="dark"
-          />
-          <b-spinner
-            small
-            type="grow"
-            variant="info"
-          />
-    
-        </div><br>  
-          <div class="mb-0"
-               style="font-size:25px; color:red">
-              Sorgulama işlemi devam etmektedir..
-            </div> 
+          <b-spinner small type="grow" variant="info" />
+          <b-spinner type="grow" variant="dark" />
+          <b-spinner small type="grow" variant="info" />
+
+        </div><br>
+        <div class="mb-0" style="font-size:25px; color:red">
+          Sorgulama işlemi devam etmektedir..
+        </div>
       </template>
-    <app-table
-      :showPdfPopupClick="showPdfPopup"
-      :inquireClick="queryClick"
-      :downloadClick="downloadClick"
-      :listClick="listClick"
-      :printClick="printClick"
-      :sendClick="sendClick"
-      @onSelectionChanged="gelendata"
-      :deleteInsuranceClick="deleteInsuranceClick"
-      :pk="id"
-      :items="items"
-      :totalRows="16"
-      :title="'Beyannameler'"
-      :clickposta="clickposta"
-      :sendSms="sendSms"
-      :columns="columns"
-      ref="appTablee"
-      @pageSizes="getPageSize"
-    />
- </b-overlay>
+      <app-table :showPdfPopupClick="showPdfPopup" :inquireClick="queryClick" :downloadClick="downloadClick"
+        :listClick="listClick" :printClick="printClick" :sendClick="sendClick" @onSelectionChanged="gelendata"
+        :deleteInsuranceClick="deleteInsuranceClick" :pk="id" :items="items" :totalRows="16" :title="'Beyannameler'"
+        :clickposta="clickposta" :sendSms="sendSms" :columns="columns" ref="appTablee" @pageSizes="getPageSize" />
+    </b-overlay>
     <!-- Sorgula Popup -->
-    <b-modal
-      ref="queryPopup"
-      title="Beyanname Sorgula"
-      ok-title="Sorgula"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="inquireClick"
-    >
+    <b-modal ref="queryPopup" title="Beyanname Sorgula" ok-title="Sorgula" cancel-title="İptal"
+      cancel-variant="outline-secondary" @ok="inquireClick">
       <b-row>
         <b-col cols="12">
-          <b-form-group
-            label="Başlangıç Tarihi"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-start-date"
-              v-model="inquireRequest.startDate"
-              :max="inquireMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
+          <b-form-group label="Başlangıç Tarihi" label-for="h-start-date" label-cols-md="4">
+            <b-form-datepicker id="h-start-date" v-model="inquireRequest.startDate" :max="inquireMaxDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]" :locale="dateTimeLanguage.locale"
+              class="mb-1" />
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group
-            label="Bitiş Tarihi"
-            label-for="h-end-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-end-date"
-              v-model="inquireRequest.endDate"
-              :min="inquireMinDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
+          <b-form-group label="Bitiş Tarihi" label-for="h-end-date" label-cols-md="4">
+            <b-form-datepicker id="h-end-date" v-model="inquireRequest.endDate" :min="inquireMinDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]" :locale="dateTimeLanguage.locale"
+              class="mb-1" />
           </b-form-group>
         </b-col>
       </b-row>
     </b-modal>
 
-    <b-modal
-      ref="listPopup"
-      title="Listele"
-      ok-title="Listele"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="listRunClick"
-    >
+    <b-modal ref="listPopup" title="Listele" ok-title="Listele" cancel-title="İptal" cancel-variant="outline-secondary"
+      @ok="listRunClick">
       <b-row>
         <b-col cols="12">
           <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4">
-            <v-select
-              v-model="listRequest.title"
-              :options="unvanlar"
-              multiple
-              placeholder="Ünvan Seçiniz"
-              label="Unvan"
-            />
+            <v-select v-model="listRequest.title" :options="unvanlar" multiple placeholder="Ünvan Seçiniz"
+              label="Unvan" />
           </b-form-group>
         </b-col>
         <b-col cols="12">
           <b-form-group label="Tür" label-for="h-type" label-cols-md="4">
-            <v-select
-              v-model="listRequest.type"
-              :options="turler"
-              multiple
-              placeholder="Tür Seçiniz"
-              label="BeyanTuru"
-            />
+            <v-select v-model="listRequest.type" :options="turler" multiple placeholder="Tür Seçiniz"
+              label="BeyanTuru" />
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group
-            label="Başlangıç Tarihi"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-start-date"
-              v-model="listRequest.startDate"
-              :max="listMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
+          <b-form-group label="Başlangıç Tarihi" label-for="h-start-date" label-cols-md="4">
+            <b-form-datepicker id="h-start-date" v-model="listRequest.startDate" :max="listMaxDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]" :locale="dateTimeLanguage.locale"
+              class="mb-1" />
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group
-            label="Bitiş Tarihi"
-            label-for="h-end-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-end-date"
-              v-model="listRequest.endDate"
-              :min="listMinDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
+          <b-form-group label="Bitiş Tarihi" label-for="h-end-date" label-cols-md="4">
+            <b-form-datepicker id="h-end-date" v-model="listRequest.endDate" :min="listMinDate"
+              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]" :locale="dateTimeLanguage.locale"
+              class="mb-1" />
           </b-form-group>
         </b-col>
       </b-row>
     </b-modal>
-    <b-modal
-      ref="pdfPopup"
-      title="Beyanname Görüntüle"
-      size="xl"
-      scrollable
-      ok-only
-      ok-title="Kapat"
-      no-stacking
-    >
-      <iframe
-        :src="this.activePdfUrl"
-        width="100%"
-        height="700"
-        frameborder="0"
-      >
+    <b-modal ref="pdfPopup" title="Beyanname Görüntüle" size="xl" scrollable ok-only ok-title="Kapat" no-stacking>
+      <iframe :src="this.activePdfUrl" width="100%" height="700" frameborder="0">
       </iframe>
     </b-modal>
 
@@ -245,39 +142,42 @@
     <!-- <input type="text" v-model="phone">
     <input type="text" v-model="msg"> -->
     <!-- <button @click="getQRCode">deneme</button>   -->
+
+
   </div>
 </template>
 
 <script>
 import AppTable from "@core/components/app-table/BeyannameTable.vue";
-import { BRow, BCol, BFormGroup, BOverlay,BSpinner,  BFormDatepicker } from "bootstrap-vue";
+import { BRow, BCol, BFormGroup, BOverlay, BSpinner, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import axios from "axios";
 import request from "request";
- import Ripple from 'vue-ripple-directive' 
+import Ripple from 'vue-ripple-directive'
+import { map } from 'postcss-rtl/lib/affected-props';
 
 let arr = [];
 export default {
   components: {
     AppTable,
     BRow,
-    BOverlay,BSpinner, 
+    BOverlay, BSpinner,
     vSelect,
     BCol,
     BFormGroup,
     BFormDatepicker,
   },
-   directives: {
+  directives: {
     Ripple,
   },
   data() {
     return {
-        busy: false,
-    timeout: null,
+      busy: false,
+      timeout: null,
       setQRCode: null,
       size: 125,
       phone: null,
@@ -322,15 +222,15 @@ export default {
           dataField: "Gonderim",
           caption: "Gönderim",
           width: "100",
-           cellTemplate: "gonderimTemplate",
+          cellTemplate: "gonderimTemplate",
         },
         {
           dataField: "unvan",
           caption: "Ünvan",
- 
-          
+
+
         },
-        
+
         {
           dataField: "beyannameKodu",
           caption: "Kodu",
@@ -360,7 +260,7 @@ export default {
           dataField: "donem",
           caption: "Dönem",
           width: "140",
-          
+
         },
         {
           dataField: "FisNo",
@@ -392,6 +292,9 @@ export default {
     };
   },
   computed: {
+
+
+
     inquireMinDate() {
       return this.inquireRequest.startDate;
     },
@@ -404,7 +307,7 @@ export default {
     listMaxDate() {
       return this.listRequest.endDate;
     },
-    ...mapGetters(["rePerson", "reMukellef","reKullaniciAyarlar", "reBeyanname", "reVergiDaire"]),
+    ...mapGetters(["rePerson", "reMukellef", "reKullaniciAyarlar", "reBeyanname", "reVergiDaire"]),
     beyannameData() {
       let arr = [];
 
@@ -413,18 +316,17 @@ export default {
       });
       return arr;
     },
-     getKullaniciAyar()
-    {
+    getKullaniciAyar() {
       return this.reKullaniciAyarlar;
     },
-     
+
     mukelefData() {
       return this.reMukellef;
     },
     getPerson() {
       return this.rePerson.kullaniciUid;
     },
-  
+
     getUserUid() {
       return this.rePerson.kullaniciUid;
     },
@@ -434,6 +336,8 @@ export default {
   },
 
   methods: {
+
+    ...mapMutations(['setBeyanname']),
     clearTimeout() {
       if (this.timeout) {
         clearTimeout(this.timeout)
@@ -458,7 +362,7 @@ export default {
         this.busy = false
       })
     },
-    sendmail() {},
+    sendmail() { },
     priceColumn_customizeText(cellInfo) {
       return cellInfo.value + "$";
     },
@@ -470,6 +374,7 @@ export default {
       "DeleteBeyanData",
       "updateBeyanname",
     ]),
+
     deleteInsuranceClick(e) {
       console.log(e);
       this.DeleteBeyanData(e);
@@ -550,66 +455,65 @@ export default {
         iletim.iletisim.forEach((tel) => {
           //   let phone = tel.Telefon;
           let msgBaslik =
-            tel.HitapŞekli + "," + " "+
+            tel.HitapŞekli + "," + " " +
             "Son ödeme tarihi " +
-            " "+
+            " " +
             iletim.donem + " " + "olan" +
-            " "+
-             iletim.beyannameTuru + " "+ "ödemeniz"+
+            " " +
+            iletim.beyannameTuru + " " + "ödemeniz" +
             // iletim.unvan +
-           
-            " " + 
-            iletim.Toplam + " "+ "TL dir."
-            " " ;
-            
-            // let msgUrl=   `${
-            //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-            //   iletim.tckn +
-            //   "%2FBEYANNAME%2F" +
-            //   iletim.beyannameOid +
-            //   ".pdf?alt=media"
-            // }`;
-            let beyanid= iletim.beyannameOid;
-            let msgTah=`${
-            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+
+            " " +
+            iletim.Toplam + " " + "TL dir."
+          " ";
+
+          // let msgUrl=   `${
+          //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+          //   iletim.tckn +
+          //   "%2FBEYANNAME%2F" +
+          //   iletim.beyannameOid +
+          //   ".pdf?alt=media"
+          // }`;
+          let beyanid = iletim.beyannameOid;
+          let msgTah = `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
             iletim.tckn +
             "%2FTAHAKKUK" +
             "%2F" +
             iletim.tahakkukOid +
             ".pdf?alt=media"
-          }`;
-         //let beyan=['Beyanname',msgUrl]
+            }`;
+          //let beyan=['Beyanname',msgUrl]
           ;
-let phone = tel.Telefon;
- 
-const data={
-  KullaniciUid:this.getUserUid,
-  SorguDurumu:0,
-  TelefonNo:phone,
-  MesajIcerik:msgBaslik,
-      //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
-           // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
-   Tablo:"Beyanname/"+beyanid,
-  Dosyalar:[
-    // {
-    //    "dosya":"Beyanname",
-    //    "url":msgUrl
-    // },
-    { 
-       "dosya":"Tahakkuk",
-       "url":msgTah
-       
-    }]  
-}; 
- this.AddNewsWhatsappSorgu(data);
- 
-        }); 
-       
+          let phone = tel.Telefon;
+
+          const data = {
+            KullaniciUid: this.getUserUid,
+            SorguDurumu: 0,
+            TelefonNo: phone,
+            MesajIcerik: msgBaslik,
+            //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
+            // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+            Tablo: "Beyanname/" + beyanid,
+            Dosyalar: [
+              // {
+              //    "dosya":"Beyanname",
+              //    "url":msgUrl
+              // },
+              {
+                "dosya": "Tahakkuk",
+                "url": msgTah
+
+              }]
+          };
+          this.AddNewsWhatsappSorgu(data);
+
+        });
+
       });
-  
+
     },
     inquireClick() {
-         this.busy = true 
+      this.busy = true
       this.setTimeout(() => {
         this.busy = false
       })
@@ -640,19 +544,18 @@ const data={
       });
     },
     showPdfPopup(e, tck, is) {
-      this.activePdfUrl = `${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+      this.activePdfUrl = `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
         tck +
         "%2F" +
         is +
         "%2F" +
         e +
         ".pdf?alt=media"
-      }`;
+        }`;
       this.$refs.pdfPopup.show();
     },
-    downloadClick(e) {},
-    printClick(e) {},
+    downloadClick(e) { },
+    printClick(e) { },
     clickposta() {
       console.log(this.selectredrow);
       let newarr = "";
@@ -663,20 +566,20 @@ const data={
           console.log(
             `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
           );
-          let msgBaslik=  il.HitapŞekli + "," + " "+
+          let msgBaslik = il.HitapŞekli + "," + " " +
             "Son ödeme tarihi " +
-            " "+
+            " " +
             a.donem + " " + "olan" +
-            " "+
-             a.beyannameTuru + " "+ "ödemeniz"+
+            " " +
+            a.beyannameTuru + " " + "ödemeniz" +
             // iletim.unvan +
-           
-            " " + 
-            a.Toplam + " "+ "TL dir."
-            " " ;
- 
+
+            " " +
+            a.Toplam + " " + "TL dir."
+          " ";
+
           console.log(il.Mail);
-           let mailMuk= il.Mail;
+          let mailMuk = il.Mail;
           // let fileURl = `${
           //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
           //   a.tckn +
@@ -685,46 +588,45 @@ const data={
           //   a.beyannameOid +
           //   ".pdf?alt=media"
           // }`;
-          let fileURlb = `${
-            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+          let fileURlb = `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
             a.tckn +
             "%2FTAHAKKUK" +
             "%2F" +
             a.tahakkukOid +
             ".pdf?alt=media"
-          }`;
-           let userID=JSON.parse(localStorage.getItem("userData")).userId;
-          const data={
-        KullaniciUid:userID,
-        SorguDurumu:0,
-        GidecekMail:mailMuk,
-        MesajIcerik:msgBaslik,
-        //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
-        // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
-         Tablo:"Beyanname/"+a.beyannameOid,
-          MesajBaslik:"Beyaname Tahakkuk Fişi",
-          Mail:{
-            host: this.getKullaniciAyar.mail.mailHost,
-            port: this.getKullaniciAyar.mail.mailPort,
-            secure:true,
-            requireTLS:true,
-            auth:{
-            user: this.getKullaniciAyar.mail.mailUser,
-            pass: this.getKullaniciAyar.mail.mailPass,
-            }
+            }`;
+          let userID = JSON.parse(localStorage.getItem("userData")).userId;
+          const data = {
+            KullaniciUid: userID,
+            SorguDurumu: 0,
+            GidecekMail: mailMuk,
+            MesajIcerik: msgBaslik,
+            //Beyanname:this.fetchBeyanname("/Beyanname/"+beyanid),
+            // user: db.doc('users/pb7La4kzEaBow4iWvmxZ')
+            Tablo: "Beyanname/" + a.beyannameOid,
+            MesajBaslik: "Beyaname Tahakkuk Fişi",
+            Mail: {
+              host: this.getKullaniciAyar.mail.mailHost,
+              port: this.getKullaniciAyar.mail.mailPort,
+              secure: true,
+              requireTLS: true,
+              auth: {
+                user: this.getKullaniciAyar.mail.mailUser,
+                pass: this.getKullaniciAyar.mail.mailPass,
+              }
             },
-        attachments:[
-    // {
-    //    "dosya":"Beyanname",
-    //    "url":msgUrl
-    // },
-    { 
-       filename:"Tahakkuk.pdf",
-       path:fileURlb
-       
-    }]  
-}; 
-this.AddNewsMailSorgu(data);
+            attachments: [
+              // {
+              //    "dosya":"Beyanname",
+              //    "url":msgUrl
+              // },
+              {
+                filename: "Tahakkuk.pdf",
+                path: fileURlb
+
+              }]
+          };
+          this.AddNewsMailSorgu(data);
           // console.log(fileURl);
           // request(fileURl, { encoding: null }, (err, res, body) => {
           //   const textBuffered = Buffer.from(body);
@@ -737,7 +639,7 @@ this.AddNewsMailSorgu(data);
           //   mail = textBuffered;
           // });
           // boş dönüyor
-        
+
           // setTimeout(() => {
           //   console.log(newarr, mail);
           //   axios
@@ -783,31 +685,30 @@ this.AddNewsMailSorgu(data);
       // console.log(newarr);
       // this.AddNewsEpostaSorgu({ data: newarr });
     },
-     sendSms(){
-    
-    this.selectredrow.forEach((a)=>{
-      a.iletisim.forEach((il)=>{    
-      let msgBaslik=  il.HitapŞekli + "," + " "+
+    sendSms() {
+
+      this.selectredrow.forEach((a) => {
+        a.iletisim.forEach((il) => {
+          let msgBaslik = il.HitapŞekli + "," + " " +
             "Son odeme tarihi " +
-            " "+
+            " " +
             a.donem + " " + "olan" +
-            " "+
-             a.beyannameTuru + " "+ "odemeniz"+
-            " " + 
-            a.Toplam + " "+ "TL dir."
-            " " ;   
-       let fileURlb = `${
-            "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+            " " +
+            a.beyannameTuru + " " + "odemeniz" +
+            " " +
+            a.Toplam + " " + "TL dir."
+          " ";
+          let fileURlb = `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
             a.tckn +
             "%2FTAHAKKUK" +
             "%2F" +
             a.tahakkukOid +
             ".pdf?alt=media"
-          }`;           
-            setTimeout(() => {         
+            }`;
+          setTimeout(() => {
             axios
-            .post(
-              "http://panel.1sms.com.tr:8080/api/smspost/v1",               
+              .post(
+                "http://panel.1sms.com.tr:8080/api/smspost/v1",
                 `<sms>
     <username>${this.getKullaniciAyar.sms.smsUser}</username>
     <password>${this.getKullaniciAyar.sms.smsPass}</password>
@@ -821,22 +722,22 @@ this.AddNewsMailSorgu(data);
         <msg><![CDATA[${msgBaslik}]]></msg>
     </message>
 </sms>
-`).then((res)=>{
-              console.log(res);
-            })
-           }, 1000);
- var currentData=new Date();
-            var date=currentData.getDate();
-           const data={
+`).then((res) => {
+                  console.log(res);
+                })
+          }, 1000);
+          var currentData = new Date();
+          var date = currentData.getDate();
+          const data = {
             beyanOid: a.beyannameOid,
-            smsDurum:{
-              durum:Number(1),
-              tarih:date,
+            smsDurum: {
+              durum: Number(1),
+              tarih: date,
             }
-           };
-           this.updateBeyanname(data);
+          };
+          this.updateBeyanname(data);
+        })
       })
-    })
     },
     listClick() {
       this.$refs.listPopup.show();
@@ -877,10 +778,10 @@ this.AddNewsMailSorgu(data);
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: Number(10),
-        
+
       };
       console.log(this.kullaniciUid);
-      
+
       this.fetchBeyanname(data).then((el) => {
         let ar = [];
         let unvanlaar = [];
@@ -902,33 +803,61 @@ this.AddNewsMailSorgu(data);
           });
         }, 2000);
 
-        setTimeout(() => {
-          console.log(ar);
-          this.turler = [...new Set(beyantype)];
-          this.unvanlar = [...new Set(unvanlaar)];
-          this.fetchvergiDairesi(ar).then((res) => {
-            setTimeout(() => {}, 900);
+        // setTimeout(() => {
+        //   console.log(ar);
+        //   this.turler = [...new Set(beyantype)];
+        //   this.unvanlar = [...new Set(unvanlaar)];
+        //   this.fetchvergiDairesi(ar).then((res) => {
+        //     setTimeout(() => {}, 900);
 
-            this.items = beyan.map((a) =>
-              Object.assign(a, {
-                vergiDairesi: this.getVDairesi.find(
-                  (b) => b.VergiDaireKod == a.vergiDairesi
-                ).VergiDaire,
-              })
-            );
-            console.log(this.items);
-          });
-        }, 2500);
+        //     this.items = beyan.map((a) =>
+        //       Object.assign(a, {
+        //         vergiDairesi: this.getVDairesi.find(
+        //           (b) => b.VergiDaireKod == a.vergiDairesi
+        //         ).VergiDaire,
+        //       })
+        //     );
+        //     console.log(this.items);
+        //   });
+        // }, 2500);
       });
+
+
       this.fetchKullaniciAyarlar(
-        JSON.parse(localStorage.getItem("userData")).userId ).then(()=>{
+        JSON.parse(localStorage.getItem("userData")).userId).then(() => {
 
-console.log(this.getKullaniciAyar);
-      });
+          console.log(this.getKullaniciAyar);
+        });
     },
   },
-  created() {
-    this.fetch();
+  async created() {
+    //this.fetch();
+
+    let beyan = [];
+    const data = {
+      kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
+      limitSize: Number(10),
+
+    };
+    console.log(this.kullaniciUid);
+
+    var veri = await this.fetchBeyanname(data)
+    this.items = veri;
+    //  this.fetchBeyanname(data).then((el) => {
+    //     let ar = [];
+    //     let unvanlaar = [];
+    //     let beyantype = [];
+
+    //     this.items = el;
+
+
+    //   });
+    this.fetchKullaniciAyarlar(
+      JSON.parse(localStorage.getItem("userData")).userId).then(() => {
+
+        console.log(this.getKullaniciAyar);
+      });
+
   },
 };
 </script>
@@ -938,24 +867,24 @@ console.log(this.getKullaniciAyar);
   font-weight: bold;
   color: black;
 }
+
 .main-menu.menu-light .navigation .navigation-header span {
-    font-weight: 500;
-   font-weight: bold;
-    color: red;
+  font-weight: 500;
+  font-weight: bold;
+  color: red;
 }
 
-.main-menu.menu-light .navigation li a > * {
-    transition: transform 0.25s ease;
-      font-weight: bold;
-    color: black;
-     
+.main-menu.menu-light .navigation li a>* {
+  transition: transform 0.25s ease;
+  font-weight: bold;
+  color: black;
+
 }
-  .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a svg, [dir=ltr] .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a i{
-    color:darkblue;
-  }
 
-  
-
+.vertical-layout.vertical-menu-modern .main-menu .navigation>li>a svg,
+[dir=ltr] .vertical-layout.vertical-menu-modern .main-menu .navigation>li>a i {
+  color: darkblue;
+}
 </style>
 
 

@@ -23,7 +23,7 @@
       <DxColumnChooser :enabled="true" />
       <DxColumnFixing :enabled="true" />
       <DxFilterPanel :visible="true" />
-      <DxHeaderFilter :visible="true" />
+      <DxHeaderFilter :visible="false" />
       <DxSearchPanel :visible="true" />
       <DxScrolling row-rendering-mode="virtual" />
   <DxPager

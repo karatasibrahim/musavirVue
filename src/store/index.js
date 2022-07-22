@@ -177,12 +177,13 @@ export default new Vuex.Store({
 
     },
     setBeyanname(state, payload) {
+
       return state.beyanname = payload
     },
     setPosSorgu(state, payload) {
 
       payload.forEach(el => {
-        console.log(el.data());
+        //  console.log(el.data());
         return state.posSorgu.push(el.data())
       })
     },
@@ -376,7 +377,7 @@ export default new Vuex.Store({
       } while (docSnap.exists());
       return id
     },
-    async fetchBeyanname(context, payload) {
+    fetchBeyanname(context, payload) {
 
       let ar = []
       context.dispatch("actionArr", {
@@ -384,10 +385,11 @@ export default new Vuex.Store({
         İtemName: "Kullanici",
         payload: payload.kullaniciuid,
         limit: payload.limitSize,
-        MutName: "setBeyanname"
+        MutName: "setBeyanname",
+
       }).then(el => {
         el.forEach(e => {
-          console.log(e.data());
+          // console.log(e.data());
           ar.push(Object.assign(e.data(), {
             id: e.id
           }))
@@ -647,10 +649,10 @@ export default new Vuex.Store({
     },
     async actionArr(context, data) {
       return new Promise((resolve, reject) => {
-        console.log("çaliştim", data);
+        //  console.log("çaliştim", data);
         //BU AY
         var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
-        console.log("BUAY", buAy)
+        //console.log("BUAY", buAy)
         let queries = query(collection(db, data.dbName),
           where(data.İtemName, "==", data.payload), where("donem", "==", buAy), limit(data.limit)
         )
