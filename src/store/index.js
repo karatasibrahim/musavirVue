@@ -379,12 +379,12 @@ export default new Vuex.Store({
     async fetchBeyanname(context, payload) {
      
       let ar = []
-     context.dispatch("actionArr", {
+     context.dispatch("actionArrBey", {
         dbName: "Beyanname",
         İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
         limit: payload.limitSize,   
-        data:"donem",sortType:"desc",
+        order:{data:"donem",sortType:"desc"},
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
@@ -646,15 +646,34 @@ console.log(el.data());
           MutName: "SetSgkVizite"
         })
     },
-    async actionArr(context, data) {
+    async actionArrBey(context, data) {
       return new Promise((resolve, reject) => {
         console.log("çaliştim", data);
         var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
         console.log("BUAY", buAy)
         let queries = query(collection(db, data.dbName),
-          where(data.İtemName, "==", data.payload), where(data.data, "==", buAy), limit(data.limit)
+          where(data.İtemName, "==", data.payload), where(data.order.data, "==", buAy), limit(data.limit)
         )
         
+        let datas = getDocs(queries)
+        datas.then(documentSnapshots => {
+
+          context.commit(data.MutName, documentSnapshots.docs);
+          let arr = []
+          console.log("ifteyim");
+          arr = documentSnapshots.docs
+          resolve(arr)
+        })
+
+      })
+
+    },
+    async actionArr(context, data) {
+      return new Promise((resolve, reject) => {
+        console.log("çaliştim", data);
+        let queries = query(collection(db, data.dbName),
+          where(data.İtemName, "==", data.payload), limit(data.limit)
+        )
         let datas = getDocs(queries)
         datas.then(documentSnapshots => {
 
