@@ -159,6 +159,7 @@ import axios from "axios";
 import request from "request";
 import Ripple from 'vue-ripple-directive'
 import { map } from 'postcss-rtl/lib/affected-props';
+import { mounted } from 'vue-echarts';
 
 let arr = [];
 export default {
@@ -369,6 +370,8 @@ export default {
     ...mapActions([
       "AddNewsBeyanSorgu",
       "fetchBeyanname",
+      "beyannameAyGetir",
+      "beyannameGetir",
       "nextButtons",
       "prevButtonVuex",
       "DeleteBeyanData",
@@ -383,36 +386,38 @@ export default {
       });
       this.items.splice(fin, 1);
     },
-    getPageSize(e) {
+    async getPageSize(e) {
       let beyan = [];
       let unvanlaar = [];
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
         limitSize: e,
       };
-      this.fetchBeyanname(data).then((el) => {
-        beyan = el;
-        let ar = [];
+      await this.beyannameGetir(e)
+      this.items = this.reBeyanname;
+      // this.fetchBeyanname(data).then((el) => {
+      //   beyan = el;
+      //   let ar = [];
 
-        this.beyannameData.forEach((eld) => {
-          ar.push(eld.vergiDairesi);
-        });
-        this.mukelefData.forEach((esl) => {
-          unvanlaar.push(esl.unvan);
-        });
-        setTimeout(() => {
-          this.unvanlar = [...new Set(unvanlaar)];
+      //   this.beyannameData.forEach((eld) => {
+      //     ar.push(eld.vergiDairesi);
+      //   });
+      //   this.mukelefData.forEach((esl) => {
+      //     unvanlaar.push(esl.unvan);
+      //   });
+      //   setTimeout(() => {
+      //     this.unvanlar = [...new Set(unvanlaar)];
 
-          this.fetchvergiDairesi(ar).then((res) => {
-            this.items = beyan.map((a) =>
-              Object.assign(
-                a,
-                this.getVDairesi.find((b) => b.VergiDaireKod == a.vergiDairesi)
-              )
-            );
-          });
-        }, 500);
-      });
+      //     this.fetchvergiDairesi(ar).then((res) => {
+      //       this.items = beyan.map((a) =>
+      //         Object.assign(
+      //           a,
+      //           this.getVDairesi.find((b) => b.VergiDaireKod == a.vergiDairesi)
+      //         )
+      //       );
+      //     });
+      //   }, 500);
+      // });
     },
     // async getQRCode(phone, msg) {
     //   const res = await axios.post("http://localhost:8087/api", { phone, msg });
@@ -830,7 +835,7 @@ export default {
         });
     },
   },
-  async created() {
+  async mounted() {
     //this.fetch();
 
     let beyan = [];
@@ -839,10 +844,11 @@ export default {
       limitSize: Number(10),
 
     };
-    console.log(this.kullaniciUid);
 
-    var veri = await this.fetchBeyanname(data)
-    this.items = veri;
+
+    await this.beyannameAyGetir(data)
+    //  console.log("REBEYANNAME", this.reBeyanname)
+    this.items = this.reBeyanname;
     //  this.fetchBeyanname(data).then((el) => {
     //     let ar = [];
     //     let unvanlaar = [];

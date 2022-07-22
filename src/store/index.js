@@ -652,7 +652,7 @@ export default new Vuex.Store({
         //  console.log("çaliştim", data);
         //BU AY
         var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
-        //console.log("BUAY", buAy)
+
         let queries = query(collection(db, data.dbName),
           where(data.İtemName, "==", data.payload), where("donem", "==", buAy), limit(data.limit)
         )
@@ -661,10 +661,41 @@ export default new Vuex.Store({
 
           context.commit(data.MutName, documentSnapshots.docs);
           let arr = []
-          console.log("ifteyim");
+          //console.log("ifteyim");
           arr = documentSnapshots.docs
           resolve(arr)
         })
+
+      })
+
+    },
+
+    beyannameAyGetir(context, data) {
+      var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
+
+      let queries = query(collection(db, "Beyanname"),
+        where("donem", "==", buAy), limit(10)
+      )
+      let datas = getDocs(queries)
+      datas.then(documentSnapshots => {
+
+        context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
+
+
+      })
+
+    },
+
+    beyannameGetir(context, payload) {
+      console.log("SAYFALAMA", payload)
+      let queries = query(collection(db, "Beyanname"),
+        limit(payload)
+      )
+      let datas = getDocs(queries)
+      datas.then(documentSnapshots => {
+
+        context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
+
 
       })
 

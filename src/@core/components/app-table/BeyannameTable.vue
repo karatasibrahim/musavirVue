@@ -1,23 +1,10 @@
 <template>
   <b-card no-body>
-    <DxDataGrid
-      style="margin-left: 10px; margin-right: 10px; margin-top: 15px"
-      :key-expr="pk"
-      :columns="columns"
-      :show-borders="true"
-      :mukellefid="mukellefid"
-      ref="appGrid"
-      :allow-column-reordering="true"
-      :allow-column-resizing="true"
-      :show-column-lines="true"
-      :show-row-lines="true"
-      :selected-row-keys="selectedRowKeys"
-      @selection-changed="onSelectionChanged"
-      :columns-auto-width="true"
-      :data-source="items"
-      @exporting="onExporting"
-
-    >
+    <DxDataGrid style="margin-left: 10px; margin-right: 10px; margin-top: 15px" :key-expr="pk" :columns="columns"
+      :show-borders="true" :mukellefid="mukellefid" ref="appGrid" :allow-column-reordering="true"
+      :allow-column-resizing="true" :show-column-lines="true" :show-row-lines="true"
+      :selected-row-keys="selectedRowKeys" @selection-changed="onSelectionChanged" :columns-auto-width="true"
+      :data-source="items" @exporting="onExporting">
       <DxExport :enabled="true" :allow-export-selected-data="true" />
       <DxLoadPanel :enabled="true" />
       <DxColumnChooser :enabled="true" />
@@ -26,38 +13,23 @@
       <DxHeaderFilter :visible="false" />
       <DxSearchPanel :visible="true" />
       <DxScrolling row-rendering-mode="virtual" />
-  <DxPager
-        :visible="true"
-        :allowed-page-sizes="pageSizes"
-        display-mode="full"
-        :show-page-size-selector="true"
-        :show-info="false"
-        
-      />
-       <DxPaging :page-size="pagesz" :enabled="pagedEnable" :page-index="pageIndex"/> 
+      <DxPager :visible="true" :allowed-page-sizes="pageSizes" display-mode="full" :show-page-size-selector="true"
+        :show-info="false" />
+      <DxPaging :page-size="pagesz" :enabled="pagedEnable" :page-index="pageIndex" />
       <!-- <DxPaging :page-size="5" v-pager /> -->
       <DxSorting mode="multiple" />
-      <DxSelection
-        :select-all-mode="'allPages'"
-        :show-check-boxes-mode="'always'"
-        :mode="selectable"
-      />
-      <DxStateStoring
-        :enabled="true"
-        type="custom"
-        storage-key="storage"
-        :customSave="saveLayout"
-      />
+      <DxSelection :select-all-mode="'allPages'" :show-check-boxes-mode="'always'" :mode="selectable" />
+      <DxStateStoring :enabled="true" type="custom" storage-key="storage" :customSave="saveLayout" />
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" template="listTemplate"/>
+        <DxItem location="before" template="listTemplate" />
         <DxItem location="before" template="wpTemplate" />
         <!-- <DxItem location="before" template="printTemplate" /> -->
-          <DxItem location="before" template="smsTemplate" />
+        <DxItem location="before" template="smsTemplate" />
         <DxItem location="before" template="epostaTemplate" />
-      
+
 
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
@@ -79,73 +51,41 @@
         />
       </template> -->
 
-     <template #printTemplate>
-         <DxDropDownButton
-          width="150"
-          :split-button="false"
-          :use-select-mode="false"
-          :items="printSettings"
-          @itemClick="printClick"
-          display-expr="name"
-          key-expr="id"
-          text="Yazdır"
-          icon="print"
-          type="back"
-        /> 
+      <template #printTemplate>
+        <DxDropDownButton width="150" :split-button="false" :use-select-mode="false" :items="printSettings"
+          @itemClick="printClick" display-expr="name" key-expr="id" text="Yazdır" icon="print" type="back" />
       </template>
       <template #wpTemplate>
-        <DxButton
-          type="success"
-          text="Whatsapp"
-          icon="share"
-          @click="sendClick(selectedRowKeys)"
-        />
+        <DxButton type="success" text="Whatsapp" icon="share" @click="sendClick(selectedRowKeys)" />
       </template>
 
-            <template #gonderimTemplate="{data}">
-         <div class="row">
+      <template #gonderimTemplate="{ data }">
+        <div class="row">
           <div style="width:20px"></div>
-         <div style="width:30px"><img v-if="data.data.hasOwnProperty('whatsappDurum')" height="18px" src="../../../images/wp_gond.png" alt=""/></div>
-         <div style="width:30px"><img v-if="data.data.hasOwnProperty('mailDurum')" height="15px" src="../../../images/mail_gond.png" alt=""/> </div>
-         <div style="width:30px"><img v-if="data.data.hasOwnProperty('smsDurum')" height="20px" src="../../../images/sms_gond.png" alt=""/></div>
-       
-         </div>
+          <div style="width:30px"><img v-if="data.data.hasOwnProperty('whatsappDurum')" height="18px"
+              src="../../../images/wp_gond.png" alt="" /></div>
+          <div style="width:30px"><img v-if="data.data.hasOwnProperty('mailDurum')" height="15px"
+              src="../../../images/mail_gond.png" alt="" /> </div>
+          <div style="width:30px"><img v-if="data.data.hasOwnProperty('smsDurum')" height="20px"
+              src="../../../images/sms_gond.png" alt="" /></div>
+
+        </div>
 
       </template>
 
       <template #smsTemplate>
-        <DxButton
-          type="warning"
-          text="Sms"
-          icon="comment"
-          @click="sendSms"
-        />
+        <DxButton type="warning" text="Sms" icon="comment" @click="sendSms" />
       </template>
       <template #epostaTemplate>
-        <DxButton
-          type="default"
-          text="E-posta"
-          icon="email"
-          @click="clickposta"
-        />
+        <DxButton type="default" text="E-posta" icon="email" @click="clickposta" />
       </template>
 
-<template #listTemplate>
-<DxButton
-type="list"
-text="Listele"
-icon="bulletlist"
-@click="listClick"
-/>
-</template>
+      <template #listTemplate>
+        <DxButton type="list" text="Listele" icon="bulletlist" @click="listClick" />
+      </template>
 
       <template #inquireTemplate>
-        <DxButton
-          type="danger"
-          text="Sorgula"
-          icon="search"
-          @click="inquireClick('http://')"
-        />
+        <DxButton type="danger" text="Sorgula" icon="search" @click="inquireClick('http://')" />
       </template>
 
       <template #headerTemplate>
@@ -160,10 +100,7 @@ icon="bulletlist"
 
       <template #panelColumnTemplate="{ data }">
         <div class="text-center">
-          <feather-icon
-            @click="showPanelClick(data.data.beyan_pdf)"
-            icon="BriefcaseIcon"
-          />
+          <feather-icon @click="showPanelClick(data.data.beyan_pdf)" icon="BriefcaseIcon" />
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
@@ -174,12 +111,9 @@ icon="bulletlist"
 
       <template #mukellefColumnTemplate="{ data }">
         <div class="text-center">
-          <feather-icon
-            @click="
-              showTaxPayerInfoClick(data.data.beyan_pdf, data.data.MukellefId)
-            "
-            icon="UserIcon"
-          />
+          <feather-icon @click="
+            showTaxPayerInfoClick(data.data.beyan_pdf, data.data.MukellefId)
+          " icon="UserIcon" />
 
           <!-- <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
@@ -189,62 +123,45 @@ icon="bulletlist"
       </template>
 
       <template #beyanColumnTemplate="{ data }">
-         <div class="text-center">
-          <img
-            src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.beyannameOid,data.data.tckn,'BEYANNAME')"
-          />
-          &nbsp; 
-            <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahakkukOid,data.data.tckn,'TAHAKKUK')"
-          />&nbsp; 
-            <img
-            class="text-right" height="14px"
+        <div class="text-center">
+          <img src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
+            @click="showPdfPopupClick(data.data.beyannameOid, data.data.tckn, 'BEYANNAME')" />
+          &nbsp;
+          <img src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+            @click="showPdfPopupClick(data.data.tahakkukOid, data.data.tckn, 'TAHAKKUK')" />&nbsp;
+          <img class="text-right" height="14px"
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
-            @click="deleteInsuranceClick(data.data.id)"
-          />
+            @click="deleteInsuranceClick(data.data.id)" />
         </div>
       </template>
 
 
       <template #tahakkukColumnTemplate="{ data }">
         <div class="text-center">
-          <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="
-              showPdfPopupClick(
-                data.data.tahakkukOid,
-                data.data.tckn,
-                'TAHAKKUK'
-              )
-            "
-          />
+          <img src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg" @click="
+            showPdfPopupClick(
+              data.data.tahakkukOid,
+              data.data.tckn,
+              'TAHAKKUK'
+            )
+          " />
         </div>
       </template>
 
       <template #sgkGosterimColumnTemplate="{ data }">
         <div class="text-left">
-          <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
-          />
+          <img src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg" @click="showPdfPopupClick(data.data.tahak_pdf)" />
           <span> &nbsp;</span>
-          <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupTahClick(data.data.tahak_pdf)"
-          />
+          <img src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg" @click="showPdfPopupTahClick(data.data.tahak_pdf)" />
 
           <span> &nbsp; </span>
-            <img
-            class="text-right" height="14px"
+          <img class="text-right" height="14px"
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
-            @click="deleteInsuranceClick(data.data)"
-          />
+            @click="deleteInsuranceClick(data.data)" />
         </div>
       </template>
     </DxDataGrid>
-   
+
     <!-- <b-row class="navigator" align-h="end">
       <b-col cols="1">
         <feather-icon icon="ArrowLeftCircleIcon" size="30" @click="prevButton"/>
@@ -362,10 +279,10 @@ export default {
     deleteInsuranceClick: Function,
     showTaxPayerInfoClick: Function,
     showPanelClick: Function,
-    nextButton:Function,
-    prevButton:Function,
-    clickposta:Function,
-    sendSms:Function
+    nextButton: Function,
+    prevButton: Function,
+    clickposta: Function,
+    sendSms: Function
   },
   data() {
     return {
@@ -382,56 +299,55 @@ export default {
         { id: 3, name: "Tümü", icon: "pdffile" },
       ],
       pageIndex: 0,
-      CountEquil:true,
-      pageSizeRefValue:10,
-      pagedEnable:true,
-      pagesz:10
+      CountEquil: true,
+      pageSizeRefValue: 10,
+      pagedEnable: true,
+      pagesz: 10
     };
   },
   computed: {
     dataGrid() {
       return this.$refs.appGrid.instance;
     },
-// pageSizeRef(){
-//   this.pageSizeRefValue=
-//   return  this.pageSizeRefValue
-    
-// }
+    // pageSizeRef(){
+    //   this.pageSizeRefValue=
+    //   return  this.pageSizeRefValue
+
+    // }
   },
   methods: {
-//     prevbutton() { 
-//       let pageCount = this.$refs['appGrid'].instance.pageIndex();
-//       console.log(pageCount, pageCount>0);
-//       if(pageCount>0) {
-//             console.log(pageCount);
-//             this.pageIndex = pageCount - 1;
-//       }       
-//     },
-//         nextbutton() {
-//       const pageCount = this.$refs['appGrid'].instance.pageIndex();
-//             this.pageIndex = pageCount + 1; 
-// // if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
-// //   return (pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)
-// // }
-//     },
-    
+    //     prevbutton() { 
+    //       let pageCount = this.$refs['appGrid'].instance.pageIndex();
+    //       console.log(pageCount, pageCount>0);
+    //       if(pageCount>0) {
+    //             console.log(pageCount);
+    //             this.pageIndex = pageCount - 1;
+    //       }       
+    //     },
+    //         nextbutton() {
+    //       const pageCount = this.$refs['appGrid'].instance.pageIndex();
+    //             this.pageIndex = pageCount + 1; 
+    // // if((pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)){
+    // //   return (pageCount+1)==(this.$refs['appGrid'].instance.pageCount()-1)
+    // // }
+    //     },
+
     window(e, tck) {
-      let url = `${
-        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+      let url = `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
         tck +
         "%2FTAHAKKUK%2F" +
         e +
         ".pdf?alt=media"
-      }`;
+        }`;
       window.open(url, "_blank");
       console.log(e);
     },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
-      this.selectionChangedBySelectBox = false;   
-      this.$emit("onSelectionChanged",selectedRowsData)
-      console.log(this.pageSizeRef,this.$refs["appGrid"].instance);
+      this.selectionChangedBySelectBox = false;
+      this.$emit("onSelectionChanged", selectedRowsData)
+      console.log(this.pageSizeRef, this.$refs["appGrid"].instance);
     },
     saveLayout(state) {
       state.columns.forEach((element) => {
@@ -480,34 +396,34 @@ export default {
       e.cancel = true;
     },
   },
-  watch:{
-pageSizeRefValue(){
-console.log(this.pagesz,this.pageSizeRefValue);
-  
- if(this.pageSizeRefValue>10){
-   this.pagesz=10
- }else{
-this.pagesz=this.pageSizeRefValue
- }
- console.log(this.pagesz);
-  this.$emit("pageSizes",this.pageSizeRefValue)
-  console.log(this.pageSizeRefValue,this.pagesz);
+  watch: {
+    pageSizeRefValue() {
+      //console.log(this.pagesz,this.pageSizeRefValue);
 
-}
+      if (this.pageSizeRefValue > 10) {
+        this.pagesz = 10
+      } else {
+        this.pagesz = this.pageSizeRefValue
+      }
+      //console.log(this.pagesz);
+      this.$emit("pageSizes", this.pageSizeRefValue)
+      // console.log(this.pageSizeRefValue, this.pagesz);
+
+    }
   },
-mounted(){
-  const ela= document.getElementsByClassName("dx-page-size")
-console.log(ela);
-for (let i = 0; i < ela.length; i++) {
-  const element = ela[i];
-  console.log(element);
-element.addEventListener('click',()=>{
-  this.pageSizeRefValue=element.innerHTML=="Tümü"?3000:Number(element.innerHTML);
-  console.log(element.innerHTML=="Tümü"?3000:Number(element.innerHTML));
-})
+  mounted() {
+    const ela = document.getElementsByClassName("dx-page-size")
+    //console.log(ela);
+    for (let i = 0; i < ela.length; i++) {
+      const element = ela[i];
+      console.log(element);
+      element.addEventListener('click', () => {
+        this.pageSizeRefValue = element.innerHTML == "Tümü" ? 3000 : Number(element.innerHTML);
+        //console.log(element.innerHTML=="Tümü"?3000:Number(element.innerHTML));
+      })
 
-}
-},
+    }
+  },
 
 };
 </script>
@@ -515,17 +431,20 @@ element.addEventListener('click',()=>{
 #exportButton {
   margin-bottom: 10px;
 }
+
 .feather.feather-trash,
 .feather.feather-user {
   width: 27px;
   height: 19px;
 
- 
+
 }
-  .dx-button.dx-button-warning {
-        background-color: #ffc107;
-    }
-    .dx-button.dx-button-list {
-        background-color: #9DD6DF;
-    }
+
+.dx-button.dx-button-warning {
+  background-color: #ffc107;
+}
+
+.dx-button.dx-button-list {
+  background-color: #9DD6DF;
+}
 </style>
