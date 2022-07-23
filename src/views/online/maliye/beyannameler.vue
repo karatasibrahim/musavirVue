@@ -954,7 +954,9 @@ console.log(this.getKullaniciAyar);
     color:darkblue;
   }
 
-  
+  .dx-header {  
+    color: blue!important;  
+}
 
 </style>
 

@@ -326,10 +326,8 @@ export default {
       });
       const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: this.inquireRequest.startDate
-          .replace("-", "")
-          .replace("-", ""),
-        bitis: this.inquireRequest.endDate.replace("-", "").replace("-", ""),
+        baslangic: this.inquireRequest.startDate,
+        bitis: this.inquireRequest.endDate,
 
         tckn: arr,
         SorguDurumu: 0,

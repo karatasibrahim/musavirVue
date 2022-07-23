@@ -384,7 +384,7 @@ export default new Vuex.Store({
         İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
         limit: payload.limitSize,   
-        order:{data:"donem",sortType:"desc"},
+        order:{data:"donem"},
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
