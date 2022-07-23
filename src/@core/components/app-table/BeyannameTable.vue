@@ -287,7 +287,7 @@ export default {
   data() {
     return {
       mukellefid: "",
-      pageSizes: [10, 20, 50, "all"],
+      pageSizes: [10, 20, 50],
       selectedRowKeys: [],
       downloadSettings: [
         { id: 1, name: "Detaylı İndir", icon: "download" },

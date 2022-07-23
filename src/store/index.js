@@ -680,24 +680,27 @@ export default new Vuex.Store({
       datas.then(documentSnapshots => {
 
         context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
-
+        //console.log("BEYANNAMEAYGETİR", documentSnapshots.docs.map(e => e.data()))
 
       })
 
     },
 
-    beyannameGetir(context, payload) {
+    async beyannameGetir(context, payload) {
       console.log("SAYFALAMA", payload)
       let queries = query(collection(db, "Beyanname"),
         limit(payload)
       )
-      let datas = getDocs(queries)
-      datas.then(documentSnapshots => {
+      let datas = await getDocs(queries)
 
-        context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
+      context.commit("setBeyanname", datas.docs.map(e => e.data()));
+      // console.log("BEYANNAMEGETİR", datas.docs.map(e => e.data()))
+      // datas.then(documentSnapshots => {
 
+      //   context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
+      //   console.log("BEYANNAMEGETİR", documentSnapshots.docs.map(e => e.data()))
 
-      })
+      // })
 
     },
     async addkalanıd(context, payload) {

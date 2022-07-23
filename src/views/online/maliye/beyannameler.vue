@@ -847,17 +847,9 @@ export default {
 
 
     await this.beyannameAyGetir(data)
-    //  console.log("REBEYANNAME", this.reBeyanname)
+
     this.items = this.reBeyanname;
-    //  this.fetchBeyanname(data).then((el) => {
-    //     let ar = [];
-    //     let unvanlaar = [];
-    //     let beyantype = [];
 
-    //     this.items = el;
-
-
-    //   });
     this.fetchKullaniciAyarlar(
       JSON.parse(localStorage.getItem("userData")).userId).then(() => {
 
