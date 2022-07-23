@@ -391,9 +391,9 @@ export default {
       let unvanlaar = [];
       const data = {
         kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
-        limitSize: e,
+        limit: e,
       };
-      await this.beyannameGetir(e)
+      await this.beyannameGetir(data)
       this.items = this.reBeyanname;
       // this.fetchBeyanname(data).then((el) => {
       //   beyan = el;
@@ -842,10 +842,9 @@ export default {
     const data = {
       kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
       limitSize: Number(10),
-
     };
 
-
+    console.log("KULLANICI", data)
     await this.beyannameAyGetir(data)
 
     this.items = this.reBeyanname;

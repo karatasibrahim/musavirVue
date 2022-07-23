@@ -670,26 +670,30 @@ export default new Vuex.Store({
 
     },
 
-    beyannameAyGetir(context, data) {
+    async beyannameAyGetir(context, data) {
       var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
 
       let queries = query(collection(db, "Beyanname"),
-        where("donem", "==", buAy), limit(10)
+        where("Kullanici", "==", data.kullaniciuid), where("donem", "==", buAy), limit(10)
       )
-      let datas = getDocs(queries)
-      datas.then(documentSnapshots => {
+      let datas = await getDocs(queries)
 
-        context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
-        //console.log("BEYANNAMEAYGETİR", documentSnapshots.docs.map(e => e.data()))
+      context.commit("setBeyanname", datas.docs.map(e => e.data()));
+      // let datas = getDocs(queries)
+      // datas.then(documentSnapshots => {
 
-      })
+      //   context.commit("setBeyanname", documentSnapshots.docs.map(e => e.data()));
+      //   //console.log("BEYANNAMEAYGETİR", documentSnapshots.docs.map(e => e.data()))
+
+      // })
 
     },
 
     async beyannameGetir(context, payload) {
-      console.log("SAYFALAMA", payload)
+      //  console.log("SAYFALAMA", payload)
       let queries = query(collection(db, "Beyanname"),
-        limit(payload)
+        where("Kullanici", "==", payload.kullaniciuid),
+        limit(payload.limit)
       )
       let datas = await getDocs(queries)
 
