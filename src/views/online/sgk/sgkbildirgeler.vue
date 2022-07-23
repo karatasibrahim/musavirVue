@@ -309,6 +309,7 @@ export default {
         {
           dataField: "payload.data.thkhaberlesme2.aciklama",
           caption: "Kanun",
+          width:"250"
         },
         // {
         //   dataField: "Durum",
