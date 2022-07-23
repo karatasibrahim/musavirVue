@@ -305,7 +305,7 @@ export default new Vuex.Store({
       );
       //Firebase kullanici kolaksiyonundaki verileri çektik burda if ile localstoge'deki veriyi sınadık
       const userdata = await getDocs(q)
-      console.log(userdata.parent);
+      console.log(userdata);
 
       userdata.forEach((doc) => {
         console.log("kullanıcı", doc.id);
@@ -881,6 +881,20 @@ console.log(el.data());
       console.log(payload);
       await deleteDoc(doc(db, "Beyanname", payload))
 
+    },
+     async DeleteGelenFatura(context,payload){
+  
+          console.log("SİLME İŞLEMİ",payload);
+         //await deleteDoc(doc(db,"GelenFaturalar").where('KullaniciUid','==',payload))
+
+
+         const q = query(collection(db, "GelenFaturalar"));
+         const querySnapshot = await getDocs(q);
+         querySnapshot.docs.forEach((doc)=>{
+          deleteDoc(doc.ref)
+         })
+console.log("FATURALAR",querySnapshot);
+           
     }
   },
   strict: process.env.DEV,

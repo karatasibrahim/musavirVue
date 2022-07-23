@@ -469,6 +469,7 @@ export default {
       "prevButtonVuex",
       "DeleteBeyanData",
       "updateBeyanname",
+      "DeleteGelenFatura"
     ]),
     deleteInsuranceClick(e) {
       console.log(e);

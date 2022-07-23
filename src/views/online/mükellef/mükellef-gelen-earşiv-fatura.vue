@@ -297,12 +297,7 @@ export default {
           visible: false,
           showInColumnChooser: false,
         },
-         {
-          dataField: "unvan",
-          caption: "Mükellef Unvan",
-          groupIndex:0
-          
-        },
+         
         {
           dataField: "veri.unvan",
           caption: "Gelen Unvan",
@@ -404,8 +399,11 @@ export default {
       "fecthGelenEarsivFat",
       "AddGelenFaturaSorgu",
       "fetchOneWatch",
+      "DeleteGelenFatura",
     ]),
+  
     inquireClick() {
+    
       this.busy = true 
       this.setTimeout(() => {
         this.busy = false
@@ -435,7 +433,11 @@ export default {
           text: `Gelen EArşiv fatura sorgulama işleminiz başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
         },
       });
+  this.DeleteGelenFatura(this.items);
+
+
     },
+    
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -472,9 +474,12 @@ export default {
     },
 
     fecthGelenFat() {
+   
       this.items = [];
       this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid);
       this.setList();
+      this.DeleteGelenFatura(this.items);
+ 
     },
     setList() {
       let arr = [];
@@ -527,8 +532,14 @@ export default {
       }
     },
   },
+  created(){
+    //  this.DeleteGelenFatura(this.items);
+  },
   mounted() {
     this.fecthGelenFat();
+  
+   
+     
   },
 };
 </script>

@@ -325,6 +325,7 @@ export default {
         });
       });
     },
+    
      fecthBeyan() {
        let arr = [];
        this.mukellefData.forEach((element) => {
