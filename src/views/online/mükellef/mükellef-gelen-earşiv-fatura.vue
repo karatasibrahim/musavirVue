@@ -1,23 +1,19 @@
 <template>
   <div>
-    <input
+    <!-- <input
       type="text"
       v-model="SearchBar"
       placeholder="FaturaNo Ara..."
       class="searchbar"
-    />
+    /> -->
     <b-overlay
       :show="busy"
       rounded="lg"
       opacity="0.6"
       @hidden="onHidden"
     >
-      <template v-slot:overlay>
-   
-
-        <div class="d-flex justify-content-between">
-         
-         
+      <template v-slot:overlay>   
+        <div class="d-flex justify-content-between">        
          <b-spinner
             small
             type="grow"
@@ -31,16 +27,12 @@
             small
             type="grow"
             variant="info"
-          />
-              
-           
+          />          
         </div> <br>  
           <div class="mb-0"
                style="font-size:25px; color:red">
               Sorgulama işlemi devam etmektedir..
-            </div>  
-         
-    
+            </div>     
       </template>
     <app-table
       :showPdfPopupClick="showPdfPopup"
@@ -369,7 +361,7 @@ export default {
       this.timeout = setTimeout(() => {
         this.clearTimeout()
         callback()
-      }, 1000)
+      }, 20000)
     },
     onHidden() {
       // Return focus to the button
@@ -478,7 +470,7 @@ export default {
       this.items = [];
       this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid);
       this.setList();
-      this.DeleteGelenFatura(this.items);
+
  
     },
     setList() {
@@ -515,22 +507,22 @@ export default {
     },
   },
   watch: {
-    SearchBar() {
-      console.log(this.SearchBar);
-      if (this.SearchBar.length < 3) {
-        this.items = this.GelenearsivDataGet;
-      } else {
-        this.items = [];
+    // SearchBar() {
+    //   console.log(this.SearchBar);
+    //   if (this.SearchBar.length < 3) {
+    //     this.items = this.GelenearsivDataGet;
+    //   } else {
+    //     this.items = [];
 
-        this.fetchOneWatch({ no: this.SearchBar, uid: KullaniciUid }).then(
-          (res) => {
-            console.log(res);
+    //     this.fetchOneWatch({ no: this.SearchBar, uid: KullaniciUid }).then(
+    //       (res) => {
+    //         console.log(res);
 
-            this.items = res;
-          }
-        );
-      }
-    },
+    //         this.items = res;
+    //       }
+    //     );
+    //   }
+    // },
   },
   created(){
     //  this.DeleteGelenFatura(this.items);

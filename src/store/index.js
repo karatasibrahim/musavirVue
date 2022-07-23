@@ -895,7 +895,22 @@ console.log(el.data());
          })
 console.log("FATURALAR",querySnapshot);
            
-    }
+    },
+
+    async DeleteGidenFatura(context,payload){
+  
+      console.log("SİLME İŞLEMİ",payload);
+     //await deleteDoc(doc(db,"GelenFaturalar").where('KullaniciUid','==',payload))
+
+
+     const q = query(collection(db, "GidenFaturalar"));
+     const querySnapshot = await getDocs(q);
+     querySnapshot.docs.forEach((doc)=>{
+      deleteDoc(doc.ref)
+     })
+console.log("FATURALAR",querySnapshot);
+       
+}
   },
   strict: process.env.DEV,
 });

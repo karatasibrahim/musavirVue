@@ -51,9 +51,9 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" /> 
-        <DxItem location="before" template="wpTemplate" />
+        <!-- <DxItem location="before" template="wpTemplate" />
         <DxItem location="before" template="smsTemplate" />
-        <DxItem location="before" template="epostaTemplate" />
+        <DxItem location="before" template="epostaTemplate" /> -->
               
 
         <DxItem name="columnChooserButton" />

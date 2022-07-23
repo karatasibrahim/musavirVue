@@ -1,5 +1,33 @@
 <template>
   <div>
+        <b-overlay
+      :show="busy"
+      rounded="lg"
+      opacity="0.6"
+      @hidden="onHidden"
+    >
+      <template v-slot:overlay>   
+        <div class="d-flex justify-content-between">        
+         <b-spinner
+            small
+            type="grow"
+            variant="info"
+          />     
+          <b-spinner
+            type="grow"
+            variant="dark"
+          />
+          <b-spinner
+            small
+            type="grow"
+            variant="info"
+          />          
+        </div> <br>  
+          <div class="mb-0"
+               style="font-size:25px; color:red">
+              Sorgulama işlemi devam etmektedir..
+            </div>     
+      </template>
     <app-table2
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -13,7 +41,7 @@
       :title="'Giden E-Arşiv Sorgulama'"
       :columns="columns"
     />
-
+ </b-overlay>
     <!-- Sorgula Popup -->
     <b-modal
       ref="queryPopup"
@@ -205,19 +233,26 @@
 
 <script>
 import AppTable2 from "@core/components/app-table/AppTable2.vue";
-import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
+import { BRow, BCol, BFormGroup, BOverlay,BSpinner,BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import { mapGetters, mapActions } from "vuex";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+ import Ripple from 'vue-ripple-directive' 
 export default {
   components: {
     AppTable2,
     BRow,
+    BOverlay,
+    BSpinner,
     vSelect,
     BCol,
     BFormGroup,
     BFormDatepicker,
+  },
+   directives: {
+    Ripple,
   },
   computed: {
     inquireMinDate() {
@@ -242,6 +277,8 @@ export default {
   },
   data() {
     return {
+       busy: false,
+    timeout: null,
       //#region Sorgulama Popup
       id:"",
       dateTimeLanguage: lng.dateTimeLanguage,
@@ -283,43 +320,93 @@ export default {
           dataField: "fatura.belgeNumarasi",
           caption: "Belge Numarası",
         },
+           {
+          dataField: "fatura.aliciUnvanAdSoyad",
+          caption: "Alıcı Ünvan",
+          width:250
+          
+        },
         {
           dataField: "fatura.aliciVknTckn",
           caption: "Alıcı VKN/TC",
+           alignment: "right",
         },
-        {
-          dataField: "fatura.aliciUnvanAdSoyad",
-          caption: "Alıcı Ünvan",
-        },
+     
         {
           dataField: "fatura.belgeTarihi",
           caption: "Belge Tarihi",
+           alignment: "right",
         },
         {
           dataField: "veri.tip",
           caption: "Belge Türü",
+           alignment: "right",
         },
         {
           dataField: "fatura.onayDurumu",
           caption: "Onay Durumu",
+           alignment: "right",
         },
         {
           dataField: "veri.odenecek",
           caption: "Tutar",
+           alignment: "right",
         },
         {
           dataField: "İçerik",
           caption: "İçerik",
+           alignment: "center",
         },
       ],
     };
   },
   methods: {
-    ...mapActions(["fetchGidenEarsiv", "AddGidenFaturaSorgu"]),
+        clearTimeout() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+        this.timeout = null
+      }
+    },
+    setTimeout(callback) {
+      this.clearTimeout()
+      this.timeout = setTimeout(() => {
+        this.clearTimeout()
+        callback()
+      }, 20000)
+    },
+    onHidden() {
+      // Return focus to the button
+      this.$refs.button.focus()
+     
+    },
+    onClick() {
+      this.busy = true
+      // Simulate an async request
+      this.setTimeout(() => {
+        this.busy = false
+      })
+         this.$toast({
+        component: ToastificationContent,
+        position: "top-right",
+        props: {
+          icon: "SearchIcon",
+          variant: "success",
+          text: `Beyanname Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+        },
+      });
+    },
+    ...mapActions(["fetchGidenEarsiv", "AddGidenFaturaSorgu","DeleteGidenFatura"]),
+    
+    
+    
     queryClick() {
       this.$refs.queryPopup.show();
     },
     inquireClick() {
+      this.busy = true 
+      this.setTimeout(() => {
+        this.busy = false
+      })
       let arr = [];
       this.inquireRequest.title.forEach((el) => {
         arr.push(el.value);
@@ -334,6 +421,7 @@ export default {
       };
 
       this.AddGidenFaturaSorgu(data);
+      this.DeleteGidenFatura(this.items);
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
