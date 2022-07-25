@@ -15,7 +15,7 @@
       cancel-title="İptal"
       cancel-variant="outline-secondary"
       @ok="inquireClick"
-      
+
     >
       <b-row>
         <b-col cols="12">
@@ -39,14 +39,14 @@
             label-for="h-start-date"
             label-cols-md="4"
           >
-            <b-form-datepicker
+            <!-- <b-form-datepicker
               id="h-start-date"
               v-model="inquireRequest.startDate"
               :max="inquireMaxDate"
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
-            />
+            /> -->
           </b-form-group>
         </b-col>
         <b-col cols="12">
@@ -55,14 +55,14 @@
             label-for="h-start-date"
             label-cols-md="4"
           >
-            <b-form-datepicker
+            <!-- <b-form-datepicker
               id="h-start-date"
               v-model="inquireRequest.startDate"
               :max="inquireMaxDate"
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
-            />
+            /> -->
           </b-form-group>
         </b-col>
         <b-col cols="12">
@@ -71,14 +71,14 @@
             label-for="h-end-date"
             label-cols-md="4"
           >
-            <b-form-datepicker
+            <!-- <b-form-datepicker
               id="h-end-date"
               v-model="inquireRequest.endDate"
               :min="inquireMinDate"
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
-            />
+            /> -->
           </b-form-group>
         </b-col>
       </b-row>
@@ -164,19 +164,20 @@
             label-for="h-end-date"
             label-cols-md="4"
           >
-            <b-form-datepicker
+            <!-- <b-form-datepicker
               id="h-end-date"
               v-model="inquireRequest.endDate"
               :min="inquireMinDate"
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
-            />
+            /> -->
           </b-form-group>
         </b-col>
       </b-row>
     </b-modal>
  <b-tabs>
+
     <b-tab title="GELEN FATURA">
          <b-overlay
       :show="busy"
@@ -185,13 +186,13 @@
       @hidden="onHidden"
        active
     >
-      <template v-slot:overlay>   
-        <div class="d-flex justify-content-between">        
+      <template v-slot:overlay>
+        <div class="d-flex justify-content-between">
          <b-spinner
             small
             type="grow"
             variant="info"
-          />     
+          />
           <b-spinner
             type="grow"
             variant="dark"
@@ -200,13 +201,14 @@
             small
             type="grow"
             variant="info"
-          />          
-        </div> <br>  
+          />
+        </div> <br>
           <div class="mb-0"
                style="font-size:25px; color:red">
               Sorgulama işlemi devam etmektedir..
-            </div>     
+            </div>
       </template>
+
     <app-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -216,17 +218,21 @@
       :sendClick="sendClick"
       :pk="id"
       ref="AppTable"
-      :items="items"
+      :mukellefData="mukelellefler"
+      :items="GElendataitems"
       :totalRows="50"
       :title="'Gelen E-Arşiv Sorgulama'"
       :columns="columns"
+      @selected-tckn="gettckn"
+      @sendEndDate="sendEndDate"
+      @sendStartDate="sendStartDate"
     />
  </b-overlay>
     </b-tab>
 
 
     <b-tab
-     
+
       title="GİDEN FATURA"
       type="danger"
     >
@@ -236,13 +242,13 @@
       opacity="0.6"
       @hidden="onHidden"
     >
-      <template v-slot:overlay>   
-        <div class="d-flex justify-content-between">        
+      <template v-slot:overlay>
+        <div class="d-flex justify-content-between">
          <b-spinner
             small
             type="grow"
             variant="info"
-          />     
+          />
           <b-spinner
             type="grow"
             variant="dark"
@@ -251,12 +257,12 @@
             small
             type="grow"
             variant="info"
-          />          
-        </div> <br>  
+          />
+        </div> <br>
           <div class="mb-0"
                style="font-size:25px; color:red">
               Sorgulama işlemi devam etmektedir..
-            </div>     
+            </div>
       </template>
     <app-table2
       :showPdfPopupClick="showPdfPopup"
@@ -274,10 +280,10 @@
  </b-overlay>
 
     </b-tab>
-   
-   
+
+
   </b-tabs>
-    
+
   </div>
 </template>
 
@@ -290,11 +296,11 @@ import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
 import { mapGetters, mapActions } from "vuex";
 let KullaniciUid = JSON.parse(localStorage.getItem("userData")).userId;
- import Ripple from 'vue-ripple-directive' 
+ import Ripple from 'vue-ripple-directive'
  import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 export default {
   components: {
-    AppTable, 
+    AppTable,
     AppTable2,
     BRow,
     BOverlay,
@@ -312,17 +318,12 @@ export default {
     return {
      busy: false,
     timeout: null,
+
       id: "",
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
-               startDate: {
-            month: "",
-            year: "",
-          },
-        endDate: {
-          month: "",
-          year: "",
-        },
+               startDate:'',
+        endDate:'',
         type: null,
         title: [],
       },
@@ -342,6 +343,7 @@ export default {
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
       items: [],
+      GElendataitems:[],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
       mukelellefler: [],
@@ -352,11 +354,16 @@ export default {
           visible: false,
           showInColumnChooser: false,
         },
-         
+           {
+          dataField: "MukUnvan",
+          caption: "Mükellef",
+          groupIndex:0,
+
+        },
         {
           dataField: "veri.unvan",
           caption: "Gelen Unvan",
-          
+
         },
         {
           dataField: "veri.faturaNo",
@@ -410,9 +417,22 @@ export default {
       ],
       SearchBar: "",
       RefData: this.$refs["AppTable"],
+      SelectedTckn:[]
     };
   },
   methods: {
+    sendStartDate(e){
+this.inquireRequest.startDate=e
+
+    },
+        sendEndDate(e){
+this.inquireRequest.endDate=e
+
+    },
+    gettckn(e){
+
+this.SelectedTckn=e
+    },
     clearTimeout() {
       if (this.timeout) {
         clearTimeout(this.timeout)
@@ -429,7 +449,7 @@ export default {
     onHidden() {
       // Return focus to the button
       this.$refs.button.focus()
-     
+
     },
     onClick() {
       this.busy = true
@@ -456,28 +476,23 @@ export default {
       "fetchOneWatch",
       "DeleteGelenFatura",
     ]),
-  
+
     inquireClick() {
-    
-      this.busy = true 
+
+      this.busy = true
       this.setTimeout(() => {
         this.busy = false
       })
-      let arr = [];
-      console.log(this.inquireRequest);
-      this.inquireRequest.title.forEach((el) => {
 
-        arr.push(el.tckn);
-      });
       const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
         baslangic: this.inquireRequest.startDate,
         bitis: this.inquireRequest.endDate,
 
-        tckn: arr,
+        tckn: this.SelectedTckn,
         SorguDurumu: 0,
       };
-
+console.log(data);
         this.AddGelenFaturaSorgu(data);
              this.$toast({
         component: ToastificationContent,
@@ -492,7 +507,7 @@ export default {
 
 
     },
-    
+
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -529,12 +544,12 @@ export default {
     },
 
     fecthGelenFat() {
-   
+
       this.items = [];
       this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid);
       this.setList();
 
- 
+
     },
     setList() {
       let arr = [];
@@ -545,16 +560,23 @@ export default {
       console.log(this.RefData, this.$refs["AppTable"].instance);
       this.mukelellefler = [...new Set(arr)];
         console.log(this.mukelellefler);
-       
+        this.setTimeout(()=>{
+this.GElendataitems=this.GelenearsivDataGet.map(a=>{
+return Object.assign(a,{MukUnvan:this.Mukellefdataget.find(b=> a.tckn.includes(b.tckn)).unvan})
+
+})
+console.log(this.GelenearsivDataGet);
+        },50)
+
     },
   },
   computed: {
     // inquireMinDate() {
     //   return this.inquireRequest.startDate;
     // },
-    // inquireMaxDate() {
-    //   return this.inqurireRequest.endDate;
-    // },
+    inquireMaxDate() {
+
+    },
     // listMinDate() {
     //   return this.listRequest.startDate;
     // },
@@ -588,13 +610,13 @@ export default {
     // },
   },
   created(){
-  
+
   },
   mounted() {
     this.fecthGelenFat();
-  
-   
-     
+
+
+
   },
 };
 </script>
@@ -622,11 +644,11 @@ export default {
 .nav-tabs .nav-link.active .nav-tabs .nav-item.show .nav-link {
     background-color: transparent;
     border-color: #dae1e7 #dae1e7 transparent;
-    background-color: #fff; 
-    border-color:red;  
+    background-color: #fff;
+    border-color:red;
     border-left-style: solid;
     border-top: solid;
-    border-width: 2px; 
+    border-width: 2px;
     cursor: pointer;
     display: flex;
     align-items: center;

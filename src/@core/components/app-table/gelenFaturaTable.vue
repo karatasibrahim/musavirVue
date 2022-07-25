@@ -97,28 +97,51 @@
 <template #mukellef>
 <DxDropDownBox
   type="success"
-        
+        :data-source="mukellefData"
       placeholder="Lütfen Mükellef Seçiniz"
-      
-          @click="sendClick(selectedRowKeys)">
-
+      display-expr="title"
+      value-expr="tckn"
+         width="410"
+        >
+          <template #content>
+            <DxTreeView
+   
+       ref="treeViewRefName"
+              :data-source="mukellefData"
+      @item-selection-changed="treeView_itemSelectionChanged($event)"
+              key-expr="tckn"
+             :select-by-click="true"
+              :select-nodes-recursive="false"
+              selection-mode="multiple"
+              show-check-boxes-mode="normal"
+              display-expr="title"
+              width="400"
+            />
+          </template>
 </DxDropDownBox>
 </template>
 <template #dataFirst>
-  <DxDateBox
-            :value="now"
+ <b-form-datepicker
+              v-model="startdate"
             type="date"
             width="150"
             placeholder="Başlangıç"
+             apply-value-mode="useButtons"
+
           />
+
 </template>
 <template #dataLast>
-  <DxDateBox
-            :value="now"
+ <b-form-datepicker
+  ref="endDate"
+             v-model="endDate"
             type="date"
             width="150"
             placeholder="Başlangıç"
+                       
           />
+
+ 
 </template>
 
  <template #wpTemplate>
@@ -264,6 +287,7 @@ import {
   BCardBody,
   BCardTitle,
   BCardText,
+  BFormDatepicker
 } from "bootstrap-vue";
 
 import {
@@ -298,7 +322,7 @@ import { exportDataGrid as exportDataGridToPdf } from "devextreme/pdf_exporter";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver-es";
-
+import DxTreeView from 'devextreme-vue/tree-view';
 export default {
   name: "AppTable",
   components: {
@@ -307,6 +331,7 @@ export default {
     BCardTitle,
     BCardText,
     DxDataGrid,
+    BFormDatepicker,
     DxDateBox,
     DxScrolling,
     DxPager,
@@ -314,6 +339,7 @@ export default {
     DxPaging,
     DxSearchPanel,
     DxSorting,
+    DxTreeView,
     DxFilterRow,
     DxHeaderFilter,
     DxDropDownButton,
@@ -356,6 +382,9 @@ export default {
       type: String,
       default: "multiple",
     },
+    mukellefData:{
+      type:Array
+    },
     showPdfPopupClick: Function,
     inquireClick: Function,
     downloadClick: Function,
@@ -368,7 +397,8 @@ export default {
   },
   data() {
     return {
- 
+ startdate: new Date(),
+ endDate: new Date(),
       mukellefid:"",
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
@@ -384,6 +414,15 @@ export default {
   
     };
   },
+  watch:{
+startdate(){
+  this.$emit('sendStartDate',this.startdate)
+},
+endDate(){
+
+  this.$emit('sendEndDate',this.endDate)
+}
+  },
   computed: {
     dataGrid() {
       return this.$refs.appGrid.instance;
@@ -391,6 +430,17 @@ export default {
  
   },
   methods: {
+    saveenddate(){
+console.log(this.$refs.endDate);
+    },
+    getEnd(e){
+console.log(e);
+    },
+        treeView_itemSelectionChanged(e) {
+      console.log(e.component.getSelectedNodeKeys()); 
+  this.$emit("selected-tckn",e.component.getSelectedNodeKeys())
+    },
+
 window(e,tck){
   let url= `${"https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/"+tck+"%2FTAHAKKUK%2F"+ e+".pdf?alt=media"}`
   window.open(url,'_blank')

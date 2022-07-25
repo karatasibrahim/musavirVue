@@ -335,6 +335,7 @@ export default {
   },
   data() {
     return {
+      now:null,
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
       downloadSettings: [
