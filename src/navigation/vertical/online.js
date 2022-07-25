@@ -9,11 +9,15 @@ export default [
     children: [
       {
         title: 'Mükellef Ekle',
-        route: 'online-maliye-mükellef-ekle',
+        route: 'online-mukellef-mukellef-ekle',
       },
       {
         title: 'Mükellef Listesi',
-        route: { name: 'online-mükellef-listesi', params: { id: 4987 } },
+        route: { name: 'online-mukellef-listesi', params: { id: 4987 } },
+      },
+      {
+        title: 'EArşiv Fatura',
+        route: { name: 'online-mukellef-fatura', params: { id: 4987 } },
       },
       // {
       //   title: 'Mükellef Özeti',
@@ -36,11 +40,11 @@ export default [
           // },
           {
             title: 'Gelen E-Arşiv Fatura',
-            route: 'online-mükellef-gelen-earşiv-fatura',
+            route: 'online-mukellef-gelen-earşiv-fatura',
           },
           {
             title: 'Giden E-Arşiv Fatura',
-            route: 'online-mükellef-giden-earşiv-fatura',
+            route: 'online-mukellef-giden-earşiv-fatura',
           },
           // {
           //   title: 'Kesintiler (Stopaj)',

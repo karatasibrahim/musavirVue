@@ -47,7 +47,11 @@
       />
       <DxFilterRow :visible="true" />
       <DxToolbar>
-        <DxItem location="before" template="headerTemplate" />
+        <!-- <DxItem location="before" template="headerTemplate" /> -->
+               <DxItem location="before" template="mukellef" /> 
+            <DxItem location="before" template="dataFirst"/>
+                 <DxItem location="before" template="dataLast"/>
+                 <DxItem location="before" template="faturaDurum"/>
         <DxItem location="before" template="inquireTemplate" />
         <!-- <DxItem location="before" template="listTemplate" />
         <DxItem location="before" template="printTemplate" />
@@ -99,12 +103,49 @@
       <template #inquireTemplate>
         <DxButton
           type="danger"
-          text="Sorgula"
+          text="Gib'ten Sorgula"
+         
           icon="search"
           @click="inquireClick"
         />
       </template>
+<template #mukellef>
+<DxDropDownBox
+  type="success"
+        
+      placeholder="Lütfen Mükellef Seçiniz"
+      
+          @click="sendClick(selectedRowKeys)">
 
+</DxDropDownBox>
+</template>
+<template #dataFirst>
+  <DxDateBox
+            :value="now"
+            type="date"
+            width="150"
+            placeholder="Başlangıç"
+          />
+</template>
+<template #dataLast>
+  <DxDateBox
+            :value="now"
+            type="date"
+            width="150"
+            placeholder="Başlangıç"
+          />
+</template>
+
+<template #faturaDurum>
+<DxDropDownBox
+  type="success"
+        
+      placeholder="Lütfen Seçiniz"
+      
+          @click="sendClick(selectedRowKeys)">
+
+</DxDropDownBox>
+</template>
       <!-- <template #trash>
         <DxButton
           type="normal"
@@ -214,7 +255,9 @@ import {
 } from "devextreme-vue/data-grid";
 import { BButton } from "bootstrap-vue";
 import DxButton from "devextreme-vue/button";
+import DxDateBox from 'devextreme-vue/date-box';
 import DxDropDownButton from "devextreme-vue/drop-down-button";
+import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import Ripple from "vue-ripple-directive";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -232,7 +275,9 @@ export default {
     BCardText,
     DxDataGrid,
     DxScrolling,
+    DxDateBox,
     DxPager,
+    DxDropDownBox,
     BCardHeader,
     DxPaging,
     DxSearchPanel,
@@ -336,6 +381,17 @@ export default {
           element.caption = column_custom_ref.caption;
       });
       //state.columns burada kayda gönderilecek.
+    },
+      window(e, tck) {
+      let url = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tck +
+        "%2FGİDEN%2F" +
+        e +
+        ".html?alt=media"
+      }`;
+      window.open(url, "_blank");
+      console.log(e);
     },
     exportPdf() {
       const doc = new jsPDF({

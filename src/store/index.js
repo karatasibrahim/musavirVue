@@ -354,7 +354,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         console.log(payload);
         this.state.mukellef = []
-        const q = query(collection(db, "GelenFaturalar"),
+        const q = onSnapshot(doc(db, "GelenFaturalar"),
           where("KullaniciUid", "==", payload.uid),
           where("FaturaNo", "==", payload.no));
         const mukellefdata = getDocs(q);
@@ -687,6 +687,7 @@ console.log(el.data());
       })
 
     },
+ 
     async addkalanıd(context, payload) {
       let id = Math.floor((Math.random() * 1000) + 900)
       do {

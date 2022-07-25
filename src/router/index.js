@@ -23,6 +23,9 @@ const router = new VueRouter({
   },
   routes: [
     { path: "/", redirect: { name: "dashboard" } },
+    {path:"/", redirect:{name:"mukellef-mukellef-listesi"}}, //sayfa yenilendiğinde hataya düşmemesi için bu şekilde düzenliyoruz.
+    {path:"/", redirect:{name:"maliye-beyannameler"}},
+    {path:"/", redirect:{name:"sgk-sgkbildirgeler"}},
     ...main,
     ...online,
     ...pages,

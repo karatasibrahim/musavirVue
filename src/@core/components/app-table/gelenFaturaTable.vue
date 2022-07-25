@@ -49,8 +49,12 @@
       />
       <DxFilterRow :visible="true" />
       <DxToolbar>
-        <DxItem location="before" template="headerTemplate" />
+        <!-- <DxItem location="before" template="headerTemplate" /> -->
+            <DxItem location="before" template="mukellef" /> 
+            <DxItem location="before" template="dataFirst"/>
+                 <DxItem location="before" template="dataLast"/>
         <DxItem location="before" template="inquireTemplate" /> 
+     
         <!-- <DxItem location="before" template="wpTemplate" />
         <DxItem location="before" template="smsTemplate" />
         <DxItem location="before" template="epostaTemplate" /> -->
@@ -60,7 +64,7 @@
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
       </DxToolbar>
-
+ 
       <!-- <template #sendTemplate>
         <DxDropDownButton
           width="150"
@@ -90,6 +94,33 @@
           type="back"
         />
       </template> -->
+<template #mukellef>
+<DxDropDownBox
+  type="success"
+        
+      placeholder="Lütfen Mükellef Seçiniz"
+      
+          @click="sendClick(selectedRowKeys)">
+
+</DxDropDownBox>
+</template>
+<template #dataFirst>
+  <DxDateBox
+            :value="now"
+            type="date"
+            width="150"
+            placeholder="Başlangıç"
+          />
+</template>
+<template #dataLast>
+  <DxDateBox
+            :value="now"
+            type="date"
+            width="150"
+            placeholder="Başlangıç"
+          />
+</template>
+
  <template #wpTemplate>
         <DxButton
           type="success"
@@ -119,7 +150,7 @@
        <template #inquireTemplate>
         <DxButton
           type="danger"
-          text="Sorgula"
+          text="Gib'ten Sorgula"
           icon="search"
         
           @click="inquireClick('http://89.43.29.189:1880/test1')"  
@@ -257,7 +288,9 @@ import {
 } from "devextreme-vue/data-grid";
 import { BButton } from "bootstrap-vue";
 import DxButton from "devextreme-vue/button";
+import DxDateBox from 'devextreme-vue/date-box';
 import DxDropDownButton from "devextreme-vue/drop-down-button";
+import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import Ripple from "vue-ripple-directive";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -274,6 +307,7 @@ export default {
     BCardTitle,
     BCardText,
     DxDataGrid,
+    DxDateBox,
     DxScrolling,
     DxPager,
     BCardHeader,
@@ -283,6 +317,7 @@ export default {
     DxFilterRow,
     DxHeaderFilter,
     DxDropDownButton,
+    DxDropDownBox,
     DxFilterPanel,
     DxColumn,
     DxSelection,

@@ -50,8 +50,8 @@
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
         <DxItem location="before" template="listTemplate" />
-        <DxItem location="before" template="printTemplate" />
-        <DxItem location="before" template="sendTemplate" />
+        <!-- <DxItem location="before" template="printTemplate" />
+        <DxItem location="before" template="sendTemplate" /> -->
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
@@ -88,7 +88,7 @@
 
       <template #listTemplate>
         <DxButton
-          type="normal"
+          type="success"
           text="Listele"
           icon="detailslayout"
           @click="listClick"
@@ -97,7 +97,7 @@
 
       <template #inquireTemplate>
         <DxButton
-          type="normal"
+          type="danger"
           text="Sorgula"
           icon="search"
           @click="inquireClick"

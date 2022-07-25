@@ -525,7 +525,7 @@ export default {
     // },
   },
   created(){
-    //  this.DeleteGelenFatura(this.items);
+  
   },
   mounted() {
     this.fecthGelenFat();

@@ -1,14 +1,19 @@
 export default [
   //Mükellef İşlemleri Menüsü
   {
-    path: "/mükellef/mükellef-listesi",
-    name: "online-mükellef-listesi",
-    component: () => import("@/views/online/mükellef/mükellef-listesi"),
+    path: "/mukellef/mukellef-listesi",
+    name: "online-mukellef-listesi",
+    component: () => import("@/views/online/mukellef/mukellef-listesi"),
   },
   {
-    path: "/mükellef/mükellef-ekle",
-    name: "online-maliye-mükellef-ekle",
-    component: () => import("@/views/online/mükellef/mükellef-ekle"),
+    path: "/mukellef/mukellef-ekle",
+    name: "online-mukellef-mukellef-ekle",
+    component: () => import("@/views/online/mukellef/mukellef-ekle"),
+  },
+  {
+    path: "/mukellef/mukellef-fatura",
+    name: "online-mukellef-fatura",
+    component: () => import("@/views/online/mukellef/mukellef-fatura"),
   },
   // {
   //   path: "/mükellef/mükellef-özeti",
@@ -31,14 +36,14 @@ export default [
   //   component: () => import("@/views/online/mükellef/mükellef-geçmiş-araçlarım"),
   // },
   {
-    path: "/mükellef/mükellef-gelen-earşiv-fatura",
-    name: "online-mükellef-gelen-earşiv-fatura",
-    component: () => import("@/views/online/mükellef/mükellef-gelen-earşiv-fatura"),
+    path: "/mukellef/mukellef-gelen-earşiv-fatura",
+    name: "online-mukellef-gelen-earşiv-fatura",
+    component: () => import("@/views/online/mukellef/mukellef-gelen-earşiv-fatura"),
   },
   {
-    path: "/mükellef/mükellef-giden-earşiv-fatura",
-    name: "online-mükellef-giden-earşiv-fatura",
-    component: () => import("@/views/online/mükellef/mükellef-giden-earşiv-fatura"),
+    path: "/mukellef/mukellef-giden-earşiv-fatura",
+    name: "online-mukellef-giden-earşiv-fatura",
+    component: () => import("@/views/online/mukellef/mukellef-giden-earşiv-fatura"),
   },
   // {
   //   path: "/mükellef/mükellef-stopaj",

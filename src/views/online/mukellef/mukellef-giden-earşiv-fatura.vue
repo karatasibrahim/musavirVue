@@ -232,7 +232,7 @@
 </template>
 
 <script>
-import AppTable2 from "@core/components/app-table/AppTable2.vue";
+import AppTable2 from "@core/components/app-table/gidenFaturalarTable.vue";
 import { BRow, BCol, BFormGroup, BOverlay,BSpinner,BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
