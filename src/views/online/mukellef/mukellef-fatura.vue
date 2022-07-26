@@ -529,15 +529,21 @@ return Object.assign(a,{MukUnvan:this.Mukellefdataget.find(b=> a.tckn.includes(b
         let arr = [];
       //  let durumarr = [];
         this.GidenDataitems = this.getGidenArsiv;
-        //   this.setTimeout(()=>{
-        // this.GidenDataitems=this.getGidenArsiv.map(a=>{
-        //   return Object.assign(a,{MukellefUnvan:this.Mukellefdataget.find(b=>a.tckn.includes(b.tckn)).unvan})
-        // })
-        //  },50);
+          this.setTimeout(()=>{
+        this.GidenDataitems=this.getGidenArsiv.map(a=>{
+          return Object.assign(a,{MukellefUnvan:this.Mukellefdataget.find(b=>a.tckn.includes(b.tckn)).unvan})
+        })
+         },50);
+this.Mukellefdataget.forEach((el)=>{
+  arr.push({tckn:el.tckn});
+});
+console.log("gelen mük",this.Mukellefdataget);
+        
+         console.log("GİDEN",this.GidenDataitems);
        this.Mukellefdataget.forEach((data) => {
          arr.push({ title: data.unvan, value: data.tckn });
        });
-       console.log(arr, durumarr);
+       console.log(arr);
        this.unvanlar = [...new Set(arr)];
       },
   },
