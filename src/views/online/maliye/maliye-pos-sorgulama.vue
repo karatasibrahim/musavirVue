@@ -231,25 +231,37 @@ export default {
           caption: "Unvan",
           groupIndex: 0,
         },
+    
         {
           dataField: "pos_banka_adi",
           caption: "Banka Adı",
+      
+          
+        },
+               {
+          dataField: "tckn",
+          caption: "T.C.",
+          width:"200",
+         alignment: "right"
         },
         {
           dataField: "pos_banka_vkn",
           caption: "Vergi No",
+          width:"200",
+         alignment: "right"
         },
-        {
-          dataField: "toplam",
-          caption: "Toplam",
-        },
+        
         {
           dataField: "pos_uye_isy",
           caption: "Pos Üye İşyeri No",
+          width:"200",
+         alignment: "right"
         },
-        {
-          dataField: "tckn",
-          caption: "T.C.",
+     {
+          dataField: "toplam",
+          caption: "Toplam",
+          width:"200",
+         alignment: "right"
         },
         {
           dataField: "genelToplam",
