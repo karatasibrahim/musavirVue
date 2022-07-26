@@ -27,9 +27,9 @@ export default [
       //   title: 'Vergi No Sorgulama',
       //   route: 'online-maliye-vergi-sorgula',
       // },
-      {
-        title: 'Maliye',
-        children: [
+      // {
+      //   title: 'Maliye',
+      //   children: [
           // {
           //   title: 'Gayrimenkul Satış',
           //   route: 'online-mükellef-gayrimenkul-satış',
@@ -38,14 +38,14 @@ export default [
           //   title: 'Geçmiş Araçlarım',
           //   route: 'online-mükellef-geçmiş-araçlarım',
           // },
-          {
-            title: 'Gelen E-Arşiv Fatura',
-            route: 'online-mukellef-gelen-earşiv-fatura',
-          },
-          {
-            title: 'Giden E-Arşiv Fatura',
-            route: 'online-mukellef-giden-earşiv-fatura',
-          },
+          // {
+          //   title: 'Gelen E-Arşiv Fatura',
+          //   route: 'online-mukellef-gelen-earşiv-fatura',
+          // },
+          // {
+          //   title: 'Giden E-Arşiv Fatura',
+          //   route: 'online-mukellef-giden-earşiv-fatura',
+          // },
           // {
           //   title: 'Kesintiler (Stopaj)',
           //   route: 'online-mükellef-stopaj',
@@ -66,8 +66,8 @@ export default [
           //   title: 'Yoklama Denetim',
           //   route: 'online-mükellef-denetim',
           // },
-        ],
-      },
+      //   ],
+      // },
     ],
   },
   {

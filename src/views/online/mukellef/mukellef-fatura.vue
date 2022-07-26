@@ -8,7 +8,7 @@
     /> -->
 
     <!-- Sorgula Popup -->
-    <b-modal
+    <!-- <b-modal
       ref="queryPopup"
       title="Gelen E-Arşiv Fatura Sorgula"
       ok-title="Sorgula"
@@ -39,7 +39,7 @@
             label-for="h-start-date"
             label-cols-md="4"
           >
-            <!-- <b-form-datepicker
+            < <b-form-datepicker
               id="h-start-date"
               v-model="inquireRequest.startDate"
               :max="inquireMaxDate"
@@ -47,14 +47,14 @@
               :locale="dateTimeLanguage.locale"
               class="mb-1"
             /> -->
-          </b-form-group>
+          <!-- </b-form-group>
         </b-col>
         <b-col cols="12">
           <b-form-group
             label="Başlangıç Tarihi"
             label-for="h-start-date"
-            label-cols-md="4"
-          >
+            label-cols-md="4" -->
+        
             <!-- <b-form-datepicker
               id="h-start-date"
               v-model="inquireRequest.startDate"
@@ -63,14 +63,14 @@
               :locale="dateTimeLanguage.locale"
               class="mb-1"
             /> -->
-          </b-form-group>
+          <!-- </b-form-group>
         </b-col>
         <b-col cols="12">
           <b-form-group
             label="Bitiş Tarihi"
             label-for="h-end-date"
-            label-cols-md="4"
-          >
+            label-cols-md="4" -->
+         
             <!-- <b-form-datepicker
               id="h-end-date"
               v-model="inquireRequest.endDate"
@@ -79,12 +79,12 @@
               :locale="dateTimeLanguage.locale"
               class="mb-1"
             /> -->
-          </b-form-group>
+          <!-- </b-form-group>
         </b-col>
       </b-row>
-    </b-modal>
+    </b-modal> -->
 
-    <b-modal
+     <b-modal
       ref="pdfPopup"
       title="Görüntüle"
       size="xl"
@@ -101,7 +101,7 @@
       >
       </iframe>
     </b-modal>
-
+<!--
     <b-modal
       ref="listPopup"
       title="Gelen E-Arşiv Listele"
@@ -164,7 +164,7 @@
             label-for="h-end-date"
             label-cols-md="4"
           >
-            <!-- <b-form-datepicker
+              <b-form-datepicker
               id="h-end-date"
               v-model="inquireRequest.endDate"
               :min="inquireMinDate"
@@ -172,11 +172,11 @@
               :locale="dateTimeLanguage.locale"
               class="mb-1"
             /> -->
-          </b-form-group>
+          <!-- </b-form-group>
         </b-col>
       </b-row>
-    </b-modal>
- <b-tabs>
+    </b-modal>  -->
+   <b-tabs>
 
     <b-tab title="GELEN FATURA">
          <b-overlay
@@ -210,7 +210,7 @@
       </template>
 
     <app-table
-      :showPdfPopupClick="showPdfPopup"
+       
       :inquireClick="queryClick"
       :downloadClick="downloadClick"
       :listClick="listClick"
@@ -267,15 +267,18 @@
     <app-table2
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
-      :listClick="listClick"
-      :printClick="printClick"
-      :sendClick="sendClick"
-          ref="AppTable2"
+      
+      ref="AppTable2"
+        :mukellefData="mukelellefler"
        :pk="id"
-      :items="items"
+       :items="GidenDataitems"
+     
       :totalRows="16"
       :title="'Giden E-Arşiv Sorgulama'"
-      :columns="columns"
+      :columns="columnsG"
+      @selected-tckn="gettckn"
+      @sendEndDate="sendEndDate"
+      @sendStartDate="sendStartDate"
     />
  </b-overlay>
 
@@ -415,8 +418,69 @@ export default {
           width:"200"
         },
       ],
+        items:[],
+        GidenDataitems:[],
+      columnsG: [
+      
+        {
+          dataField: "id",
+          caption: "Id",
+          visible: false,
+          showInColumnChooser: false,
+        },
+           {
+          dataField: "MukellefUnvan",
+          caption: "Mükellef",
+          groupIndex:0,
+
+        },
+        {
+          dataField: "fatura.belgeNumarasi",
+          caption: "Belge Numarası",
+        },
+           {
+          dataField: "fatura.aliciUnvanAdSoyad",
+          caption: "Alıcı Ünvan",
+          width:250
+          
+        },
+        {
+          dataField: "fatura.aliciVknTckn",
+          caption: "Alıcı VKN/TC",
+           alignment: "right",
+        },
+     
+        {
+          dataField: "fatura.belgeTarihi",
+          caption: "Belge Tarihi",
+           alignment: "right",
+        },
+        {
+          dataField: "veri.tip",
+          caption: "Belge Türü",
+           alignment: "right",
+        },
+        {
+          dataField: "fatura.onayDurumu",
+          caption: "Onay Durumu",
+           alignment: "right",
+        },
+        {
+          dataField: "veri.odenecek",
+          caption: "Tutar",
+           alignment: "right",
+        },
+        {
+          dataField: "İçerik",
+          caption: "Pdf",
+            alignment: "center",
+            width:"80",
+          cellTemplate: "gidenFaturaTemplate",
+         
+        },
+      ],
       SearchBar: "",
-      RefData: this.$refs["AppTable"],
+      RefData: this.$refs["AppTable2"],
       SelectedTckn:[]
     };
   },
@@ -468,18 +532,8 @@ this.SelectedTckn=e
       });
     },
     queryClick() {
-      this.$refs.queryPopup.show();
-    },
-    ...mapActions([
-      "fecthGelenEarsivFat",
-      "AddGelenFaturaSorgu",
-      "fetchOneWatch",
-      "DeleteGelenFatura",
-    ]),
-
-    inquireClick() {
-
-      this.busy = true
+     // this.$refs.queryPopup.show();
+ this.busy = true
       this.setTimeout(() => {
         this.busy = false
       })
@@ -494,6 +548,7 @@ this.SelectedTckn=e
       };
 console.log(data);
         this.AddGelenFaturaSorgu(data);
+        this.AddGidenFaturaSorgu(data);
              this.$toast({
         component: ToastificationContent,
         position: "top-right",
@@ -503,20 +558,67 @@ console.log(data);
           text: `Gelen EArşiv fatura sorgulama işleminiz başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
         },
       });
-  this.DeleteGelenFatura(this.items);
-
 
     },
+    ...mapActions([
+      "fecthGelenEarsivFat",
+      "AddGelenFaturaSorgu",
+      "fetchOneWatch",
+      "DeleteGelenFatura",
+      "fetchGidenEarsiv",
+      "AddGidenFaturaSorgu"
+    ]),
 
-    showPdfPopup(pdfUrl) {
-      //this.activePdfUrl=pdfUrl;
-      this.$refs.pdfPopup.show();
-    },
+//     inquireClick() {
+
+//       this.busy = true
+//       this.setTimeout(() => {
+//         this.busy = false
+//       })
+
+//       const data = {
+//         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
+//         baslangic: this.inquireRequest.startDate,
+//         bitis: this.inquireRequest.endDate,
+
+//         tckn: this.SelectedTckn,
+//         SorguDurumu: 0,
+//       };
+// console.log(data);
+//         this.AddGelenFaturaSorgu(data);
+//              this.$toast({
+//         component: ToastificationContent,
+//         position: "top-right",
+//         props: {
+//           icon: "SearchIcon",
+//           variant: "success",
+//           text: `Gelen EArşiv fatura sorgulama işleminiz başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+//         },
+//       });
+//   //this.DeleteGelenFatura(this.items);
+
+
+//     },
+
+    // showPdfPopup(pdfUrl) {
+    //   //this.activePdfUrl=pdfUrl;
+    //   this.$refs.pdfPopup.show();
+    // },
     downloadClick(e) {},
     printClick(e) {},
     sendClick(e) {},
     listClick() {
       this.$refs.listPopup.show();
+    },
+        showPdfPopup(tckn, e ) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tckn +
+        "%2FGİDEN%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
+      this.$refs.pdfPopup.show();
     },
     listRunClick() {
       let now = new Date(this.listRequest.startDate);
@@ -544,12 +646,9 @@ console.log(data);
     },
 
     fecthGelenFat() {
-
       this.items = [];
       this.fecthGelenEarsivFat(this.Mukellefdataget[0].musavirUid);
       this.setList();
-
-
     },
     setList() {
       let arr = [];
@@ -557,18 +656,37 @@ console.log(data);
       this.Mukellefdataget.forEach((el) => {
         arr.push({ title: el.unvan, tckn: el.tckn });
       });
-      console.log(this.RefData, this.$refs["AppTable"].instance);
+      //console.log(this.RefData, this.$refs["AppTable"].instance);
       this.mukelellefler = [...new Set(arr)];
         console.log(this.mukelellefler);
         this.setTimeout(()=>{
 this.GElendataitems=this.GelenearsivDataGet.map(a=>{
 return Object.assign(a,{MukUnvan:this.Mukellefdataget.find(b=> a.tckn.includes(b.tckn)).unvan})
 
-})
-console.log(this.GelenearsivDataGet);
-        },50)
-
+}) 
+  },50);
     },
+
+     fetchGidenars() {
+      this.fetchGidenEarsiv(this.Mukellefdataget[0].musavirUid);
+        this.GidenDataitems = this.getGidenArsiv;
+       this.setArr();
+    },
+      setArr() {
+        let arr = [];
+      //  let durumarr = [];
+        this.GidenDataitems = this.getGidenArsiv;
+        //   this.setTimeout(()=>{
+        // this.GidenDataitems=this.getGidenArsiv.map(a=>{
+        //   return Object.assign(a,{MukellefUnvan:this.Mukellefdataget.find(b=>a.tckn.includes(b.tckn)).unvan})
+        // })
+        //  },50);
+       this.Mukellefdataget.forEach((data) => {
+         arr.push({ title: data.unvan, value: data.tckn });
+       });
+       console.log(arr, durumarr);
+       this.unvanlar = [...new Set(arr)];
+      },
   },
   computed: {
     // inquireMinDate() {
@@ -583,9 +701,12 @@ console.log(this.GelenearsivDataGet);
     // listMaxDate() {
     //   return this.listRequest.endDate;
     // },
-    ...mapGetters(["reMukellef", "reGelenArsiv"]),
+    ...mapGetters(["reMukellef", "reGelenArsiv","reGidenArsiv"]),
     Mukellefdataget() {
       return this.reMukellef;
+    },
+      getGidenArsiv() {
+      return this.reGidenArsiv;
     },
     GelenearsivDataGet() {
       return this.reGelenArsiv;
@@ -614,7 +735,7 @@ console.log(this.GelenearsivDataGet);
   },
   mounted() {
     this.fecthGelenFat();
-
+this.fetchGidenars();
 
 
   },

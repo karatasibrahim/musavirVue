@@ -48,10 +48,10 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <!-- <DxItem location="before" template="headerTemplate" /> -->
-               <DxItem location="before" template="mukellef" /> 
-            <DxItem location="before" template="dataFirst"/>
-                 <DxItem location="before" template="dataLast"/>
-                 <DxItem location="before" template="faturaDurum"/>
+          <DxItem location="before" template="mukellef" /> 
+            <DxItem location="before" template="dataFirsts"/>
+                 <DxItem location="before" template="dataLasts"/>
+                 <!-- <DxItem location="before" template="faturaDurum"/> -->
         <DxItem location="before" template="inquireTemplate" />
         <!-- <DxItem location="before" template="listTemplate" />
         <DxItem location="before" template="printTemplate" />
@@ -62,7 +62,7 @@
         <DxItem name="exportButton" />
       </DxToolbar>
 
-      <template #sendTemplate>
+      <!-- <template #sendTemplate>
         <DxDropDownButton
           width="150"
           ref="sendDrop"
@@ -89,7 +89,7 @@
           text="Yazdır"
           icon="print"
         />
-      </template>
+      </template> -->
 
       <template #listTemplate>
         <DxButton
@@ -109,31 +109,55 @@
           @click="inquireClick"
         />
       </template>
+
 <template #mukellef>
 <DxDropDownBox
   type="success"
-        
+        :data-source="mukellefData"
       placeholder="Lütfen Mükellef Seçiniz"
-      
-          @click="sendClick(selectedRowKeys)">
-
+      display-expr="title"
+      value-expr="tckn"
+         width="410"
+        >
+          <template #content>
+            <DxTreeView
+   
+       ref="treeViewRefName"
+              :data-source="mukellefData"
+            @item-selection-changed="treeView_itemSelectionChanged($event)"
+              key-expr="tckn"
+             :select-by-click="true"
+              :select-nodes-recursive="false"
+              selection-mode="multiple"
+              show-check-boxes-mode="normal"
+              display-expr="title"
+              width="400"
+            />
+          </template>
 </DxDropDownBox>
 </template>
-<template #dataFirst>
-  <DxDateBox
-            :value="now"
+<template #dataFirsts>
+ <b-form-datepicker
+              v-model="startdate"
             type="date"
             width="150"
-            placeholder="Başlangıç"
+            placeholder="Başlangıç Tarihi"
+             apply-value-mode="useButtons"
+
           />
+
 </template>
-<template #dataLast>
-  <DxDateBox
-            :value="now"
+<template #dataLasts>
+ <b-form-datepicker
+  ref="endDate"
+             v-model="endDate"
             type="date"
             width="150"
-            placeholder="Başlangıç"
+            placeholder="Bitiş Tarihi"
+                       
           />
+
+ 
 </template>
 
 <template #faturaDurum>
@@ -164,60 +188,26 @@
         <DxButton type="normal" icon="exportpdf" @click="exportPdf" />
       </template>
 
-      <template #panelColumnTemplate="{ data }">
-        <div class="text-center">
-          <img
-            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
-            @click="showPanelClick(data.data.beyan_pdf)"
-          />
-        </div>
-      </template>
+     
+    
+ 
 
-      <template #mukellefColumnTemplate="{ data }">
-        <div class="text-center">
-          <img
-            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
-            @click="showTaxPayerInfoClick(data.data.beyan_pdf)"
-          />
-        </div>
-      </template>
+  
 
-      <template #beyanColumnTemplate="{ data }">
-        <div class="text-center">
-          <img
-            src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.beyan_pdf)"
-          />
-        </div>
-      </template>
-
-      <template #tahakkukColumnTemplate="{ data }">
-        <div class="text-center">
-          <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
-          />
-        </div>
-      </template>
-
-      <template #sgkGosterimColumnTemplate="{ data }">
+      <template #gidenFaturaTemplate="{ data }">
         <div class="text-left">
+          &nbsp; &nbsp;
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
+             @click="
+              showPdfPopupClick(
+                data.tckn,
+                data.data.veri.ETTN,
+                'FATURA'
+              )"
           />
           <span> &nbsp; &nbsp; &nbsp;</span>
-          <img
-            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
-            @click="showPdfPopupClick(data.data.tahak_pdf)"
-          />
-
-          <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
-          <img
-            class="text-right"
-            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
-            @click="deleteInsuranceClick(data.data)"
-          />
+           
         </div>
       </template>
     </DxDataGrid>
@@ -231,6 +221,7 @@ import {
   BCardBody,
   BCardTitle,
   BCardText,
+    BFormDatepicker
 } from "bootstrap-vue";
 
 import {
@@ -265,6 +256,7 @@ import { exportDataGrid as exportDataGridToPdf } from "devextreme/pdf_exporter";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver-es";
+import DxTreeView from 'devextreme-vue/tree-view';
 
 export default {
   name: "AppTable",
@@ -274,12 +266,16 @@ export default {
     BCardTitle,
     BCardText,
     DxDataGrid,
+    BFormDatepicker,
+       DxDateBox,
     DxScrolling,
-    DxDateBox,
+ DxTreeView,
     DxPager,
-    DxDropDownBox,
     BCardHeader,
-    DxPaging,
+       DxPaging,
+    DxDropDownBox,
+    
+ 
     DxSearchPanel,
     DxSorting,
     DxFilterRow,
@@ -323,6 +319,9 @@ export default {
       type: String,
       default: "multiple",
     },
+    mukellefData:{
+       type:Array
+    },
     showPdfPopupClick: Function,
     inquireClick: Function,
     downloadClick: Function,
@@ -335,9 +334,11 @@ export default {
   },
   data() {
     return {
-      now:null,
+      startdate: new Date(),
+ endDate: new Date(),
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
+       mukellefid:"",
       downloadSettings: [
         { id: 1, name: "Detaylı İndir", icon: "download" },
         { id: 2, name: "Detaysız İndir", icon: "download" },
@@ -354,12 +355,31 @@ export default {
       ],
     };
   },
+   watch:{
+startdate(){
+  this.$emit('sendStartDate',this.startdate)
+},
+endDate(){
+
+  this.$emit('sendEndDate',this.endDate)
+}
+  },
   computed: {
     dataGrid() {
       return this.$refs.appGrid.instance;
     },
   },
   methods: {
+        saveenddate(){
+console.log(this.$refs.endDate);
+    },
+    getEnd(e){
+console.log(e);
+    },
+        treeView_itemSelectionChanged(e) {
+      console.log(e.component.getSelectedNodeKeys()); 
+  this.$emit("selected-tckn",e.component.getSelectedNodeKeys())
+    },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;

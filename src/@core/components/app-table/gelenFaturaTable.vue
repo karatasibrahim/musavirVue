@@ -125,7 +125,7 @@
               v-model="startdate"
             type="date"
             width="150"
-            placeholder="Başlangıç"
+            placeholder="Başlangıç Tarihi"
              apply-value-mode="useButtons"
 
           />
@@ -137,14 +137,14 @@
              v-model="endDate"
             type="date"
             width="150"
-            placeholder="Başlangıç"
+            placeholder="Bitiş Tarihi"
                        
           />
 
  
 </template>
 
- <template #wpTemplate>
+ <!-- <template #wpTemplate>
         <DxButton
           type="success"
           text="Whatsapp"
@@ -168,7 +168,7 @@
           icon="email"
           @click="listClick"
         />
-      </template>
+      </template> -->
 
        <template #inquireTemplate>
         <DxButton
@@ -176,7 +176,7 @@
           text="Gib'ten Sorgula"
           icon="search"
         
-          @click="inquireClick('http://89.43.29.189:1880/test1')"  
+          @click="inquireClick()"  
         />
       </template>  
 
