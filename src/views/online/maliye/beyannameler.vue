@@ -49,7 +49,7 @@
       @pageSizes="getPageSize"
     />
  </b-overlay>
-    <!-- Sorgula Popup -->
+    
     <b-modal
       ref="queryPopup"
       title="Beyanname Sorgula"
@@ -177,74 +177,7 @@
       </iframe>
     </b-modal>
 
-    <!-- <b-modal
-      ref="listPopup"
-      title="Listele"
-      ok-title="Listele"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="listClick"
-    >
-      <b-row>
-        <b-col cols="12">
-          <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4">
-            <v-select
-              v-model="listRequest.title"
-              :options="unvanlar"
-              multiple
-              placeholder="Ünvan Seçiniz"
-              label="Unvan"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group label="Tür" label-for="h-type" label-cols-md="4">
-            <v-select
-              v-model="listRequest.type"
-              :options="turler"
-              multiple
-              placeholder="Tür Seçiniz"
-              label="BeyanTuru"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Başlangıç Tarihi"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-start-date"
-              v-model="listRequest.startDate"
-              :max="listMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Bitiş Tarihi"
-            label-for="h-end-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-end-date"
-              v-model="listRequest.endDate"
-              :min="listMinDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </b-modal>   -->
-    <!-- <input type="text" v-model="phone">
-    <input type="text" v-model="msg"> -->
-    <!-- <button @click="getQRCode">deneme</button>   -->
+     
   </div>
 </template>
 

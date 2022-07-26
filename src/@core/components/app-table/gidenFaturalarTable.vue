@@ -201,9 +201,9 @@
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
              @click="
               showPdfPopupClick(
-                data.tckn,
+                data.data.tckn,
                 data.data.veri.ETTN,
-                'FATURA'
+               
               )"
           />
           <span> &nbsp; &nbsp; &nbsp;</span>

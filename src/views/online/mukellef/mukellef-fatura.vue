@@ -7,82 +7,6 @@
       class="searchbar"
     /> -->
 
-    <!-- Sorgula Popup -->
-    <!-- <b-modal
-      ref="queryPopup"
-      title="Gelen E-Arşiv Fatura Sorgula"
-      ok-title="Sorgula"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="inquireClick"
-
-    >
-      <b-row>
-        <b-col cols="12">
-          <b-form-group
-            label="Mükellef Seçimi"
-            label-for="h-type"
-            label-cols-md="4"
-          >
-            <v-select
-              v-model="inquireRequest.title"
-              :options="mukelellefler"
-              placeholder="Mükellef Seçiniz"
-              label="title"
-              multiple
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Ay Seçimi"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            < <b-form-datepicker
-              id="h-start-date"
-              v-model="inquireRequest.startDate"
-              :max="inquireMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            /> -->
-          <!-- </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Başlangıç Tarihi"
-            label-for="h-start-date"
-            label-cols-md="4" -->
-        
-            <!-- <b-form-datepicker
-              id="h-start-date"
-              v-model="inquireRequest.startDate"
-              :max="inquireMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            /> -->
-          <!-- </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Bitiş Tarihi"
-            label-for="h-end-date"
-            label-cols-md="4" -->
-         
-            <!-- <b-form-datepicker
-              id="h-end-date"
-              v-model="inquireRequest.endDate"
-              :min="inquireMinDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            /> -->
-          <!-- </b-form-group>
-        </b-col>
-      </b-row>
-    </b-modal> -->
 
      <b-modal
       ref="pdfPopup"
@@ -93,89 +17,17 @@
       ok-title="Kapat"
       no-stacking
     >
+    
       <iframe
         :src="this.activePdfUrl"
+        
         width="100%"
         height="700"
         frameborder="0"
       >
       </iframe>
     </b-modal>
-<!--
-    <b-modal
-      ref="listPopup"
-      title="Gelen E-Arşiv Listele"
-      ok-title="Listele"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="listRunClick"
-    >
-      <b-row>
-        <b-col cols="12">
-          <b-form-group
-            label="Mükellef Seçimi"
-            label-for="h-type"
-            label-cols-md="4"
-          >
-            <v-select
-              v-model="inquireRequest.title"
-              :options="mukelellefler"
-              multiple
-              placeholder="Mükellef Seçiniz"
-              label="MükellefSeçimi"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Ay Seçimi"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-start-date"
-              v-model="listRequest.startDate"
-              :max="inquireMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Başlangıç Tarihi"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-start-date"
-              v-model="inquireRequest.startDate"
-              :max="inquireMaxDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Bitiş Tarihi"
-            label-for="h-end-date"
-            label-cols-md="4"
-          >
-              <b-form-datepicker
-              id="h-end-date"
-              v-model="inquireRequest.endDate"
-              :min="inquireMinDate"
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            /> -->
-          <!-- </b-form-group>
-        </b-col>
-      </b-row>
-    </b-modal>  -->
+
    <b-tabs>
 
     <b-tab title="GELEN FATURA">
@@ -532,7 +384,7 @@ this.SelectedTckn=e
       });
     },
     queryClick() {
-     // this.$refs.queryPopup.show();
+    
  this.busy = true
       this.setTimeout(() => {
         this.busy = false
@@ -610,15 +462,16 @@ console.log(data);
     listClick() {
       this.$refs.listPopup.show();
     },
-        showPdfPopup(tckn, e ) {
+    showPdfPopup(tckn, e ) {
       this.activePdfUrl = `${
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
         tckn +
         "%2FGİDEN%2F" +
         e +
-        ".pdf?alt=media"
+        ".html?alt=media"
       }`;
       this.$refs.pdfPopup.show();
+      console.log(tckn,e);
     },
     listRunClick() {
       let now = new Date(this.listRequest.startDate);
