@@ -45,7 +45,7 @@
               Sorgulama işlemi devam etmektedir..
             </div>
           </template>
-
+ 
           <app-table
             :inquireClick="queryClick"
             :downloadClick="downloadClick"
@@ -465,10 +465,10 @@ export default {
       this.Mukellefdataget.forEach((el) => {
         arr.push({ title: el.unvan, tckn: el.tckn });
       });
-      //console.log(this.RefData, this.$refs["AppTable"].instance);
+      console.log(this.RefData, this.$refs["AppTable"].instance);
       this.mukelellefler = [...new Set(arr)];
       console.log(this.mukelellefler);
-      this.setTimeout(() => {
+    setTimeout(() => {
         this.GElendataitems = this.GelenearsivDataGet.map((a) => {
           return Object.assign(a, {
             MukUnvan: this.Mukellefdataget.find((b) => a.tckn.includes(b.tckn))
@@ -477,7 +477,7 @@ export default {
         });
 
         console.log("GELEN",this.GElendataitems);
-      }, 50);
+      }, 1000);
     },
 
     fetchGidenars() {
