@@ -182,25 +182,25 @@ export default new Vuex.Store({
     setPosSorgu(state, payload) {
 
       payload.forEach(el => {
-        console.log(el.data());
+         
         return state.posSorgu.push(el.data())
       })
     },
     setGelenFatura(state, payload) {
 
       payload.forEach(el => {
-        console.log(el.data());
+        
         return state.GelenFatura.push(el.data())
       })
     },
     setGidenFatura(state, payload) {
       payload.forEach(el => {
-        console.log(el);
+       
         return state.GidenFatura.push(el.data())
       })
     },
     setGibTebligat(state, payload) {
-      console.log(payload);
+      
       payload.forEach(el => {
         return state.GibTebligat.push({...el.data(),id:el.id})
       })
@@ -208,12 +208,12 @@ export default new Vuex.Store({
     setGibTebligatEk(state, payload) {
       state.GibTebligatEk = []
       payload.forEach(el => {
-        console.log(el.data());
+        
         return state.GibTebligatEk.push(el.data())
       })
     },
     setTibTebligat(state, payload) {
-      console.log("MUTATİON", payload);
+     
       payload.forEach(el => {
         return state.TibTebligat.push(el.data())
       })
@@ -224,7 +224,7 @@ export default new Vuex.Store({
       })
     },
     setVergiTebligat(state, payload) {
-      console.log("MUTATİON", payload);
+     
       payload.forEach(el => {
         return state.VergiTebligat.push(el.data())
       })
@@ -235,7 +235,7 @@ export default new Vuex.Store({
       })
     },
     setSgkFirma(state, payload) {
-      console.log(payload);
+     
       payload.forEach(el => {
         return state.SgkFirmalar.push(el.data())
       })
@@ -274,7 +274,7 @@ export default new Vuex.Store({
       state.il.push(payload)
     },
     SetSifreler(state, payload) {
-      console.log(payload);
+     
       payload.forEach(el => {
         state.Sifre = el.data()
       })
@@ -286,12 +286,12 @@ export default new Vuex.Store({
     },
     SetSgkVizite(state, payload) {
       payload.forEach(el => {
-        console.log(el.data());
+      
         state.sgkVizite.push(el.data())
       })
     },
     setMesaj(state, payload) {
-      console.log(payload);
+    
       state.notification.push(payload)
     }
   },
@@ -305,28 +305,27 @@ export default new Vuex.Store({
       );
       //Firebase kullanici kolaksiyonundaki verileri çektik burda if ile localstoge'deki veriyi sınadık
       const userdata = await getDocs(q)
-      console.log(userdata);
+      
 
       userdata.forEach((doc) => {
-        console.log("kullanıcı", doc.id);
+       
         documentıd = doc.id;
         context.commit("setperson", doc.data())
-        console.log(doc.data());
-        console.log(documentıd);
+       
 
       });
       return userdata
     },
     async fetchMukellef(context, payload) {
-      console.log(payload);
+     
       this.state.mukellef = []
-      console.log(payload);
+    
     //let user= JSON.parse(localStorage.getItem("userData")).userId
       const q = query(collection(db, "Mukellef"),
         where("musavirUid", "==", payload));
       const mukellefdata = await getDocs(q);
       mukellefdata.forEach((doc) => {
-        console.log(doc.data());
+      
         context.commit("setMukkellef", Object.assign(doc.data(), {
           id: doc.id
         }))
@@ -342,21 +341,22 @@ export default new Vuex.Store({
       where("kullaniciUid","==",payload));
       const kullaniciAyar=await getDocs(q);
       kullaniciAyar.forEach((doc)=>{
-        console.log(doc.data());
+       
         context.commit("setKullaniciAyarlar",Object.assign(doc.data(),{
           id:doc.id
         }))
       });
-      console.log(kullaniciAyar);
+     
     },
     fetchOneWatch(context, payload) {
       let arr = []
       return new Promise((resolve, reject) => {
-        console.log(payload);
+       
         this.state.mukellef = []
         const q = onSnapshot(doc(db, "GelenFaturalar"),
-          where("KullaniciUid", "==", payload.uid),
-          where("FaturaNo", "==", payload.no));
+          where("KullaniciUid", "==", payload.uid)
+         );
+         // where("FaturaNo", "==", payload.no)
         const mukellefdata = getDocs(q);
         mukellefdata.then(res => {
 
@@ -388,7 +388,7 @@ export default new Vuex.Store({
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {
-          console.log(e.data());
+          
           ar.push(Object.assign(e.data(), {
             id: e.id
           }))
@@ -398,7 +398,7 @@ export default new Vuex.Store({
       return ar
     },
     async fetchvergiDairesi(contex, data) {
-      console.log(data);
+     
       let queries = [];
       for (let i = 0; i < data.length; i += 10) {
         queries.push(query(
@@ -421,7 +421,7 @@ export default new Vuex.Store({
 
     },
     async fetchPosSorgu(context, payload) {
-      console.log(payload);
+     
       this.state.posSorgu = []
 
       context.dispatch("actionArr", {
@@ -444,7 +444,7 @@ export default new Vuex.Store({
     async fetchGidenEarsiv(context, payload) {
       this.state.GidenFatura = []
 
-      console.log(payload);
+     
       context.dispatch("actionArr", {
         dbName: "GidenFaturalar",
         İtemName: "KullaniciUid",
@@ -456,7 +456,7 @@ export default new Vuex.Store({
     async fecthGibTebligat(context, payload) {
       this.state.GibTebligat = []
 
-      console.log(payload);
+      
 
       context.dispatch("actionArr", {
         dbName: "GibTebligat",
@@ -481,7 +481,7 @@ export default new Vuex.Store({
 
       let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
       usersDocs.forEach(el => {
-console.log(el.data());
+
         context.commit("setGibTebligatEk", el.data())
 
     })
@@ -489,7 +489,7 @@ console.log(el.data());
     async fecthTibTebligat(context, payload) {
       this.state.TibTebligat = []
 
-      console.log(payload);
+   
       context.dispatch("actionArr", {
         dbName: "TicaretTebligat",
         İtemName: "MukellefID",
@@ -514,14 +514,12 @@ console.log(el.data());
 
       let usersDocs = [...new Set([].concat(...usersDocsSnaps.map((o) => o.docs)))];
       usersDocs.forEach(el => {
-console.log(el.data());
         context.commit("setTibTebligatEk", el.data())
       })
     },
     async fetchVergiTebligat(context, payload) {
       this.state.VergiTebligat = []
 
-      console.log(payload);
       context.dispatch("actionArr", {
         dbName: "VergiTebligat",
         İtemName: "MukellefID",
@@ -532,7 +530,6 @@ console.log(el.data());
     async fetchSgkFirmaalar(context, payload) {
       this.state.SgkFirmalar = []
 
-      console.log(payload);
       context.dispatch("actionArr", {
         dbName: "Firma",
         İtemName: "MukellefId",
@@ -544,7 +541,6 @@ console.log(el.data());
     async fetchSgkBildirge(context, payload) {
       this.state.SgkBildirge = []
 
-      console.log(payload);
       context.dispatch("actionArr", {
         dbName: "Bildirgeler",
         İtemName: "Kullanici",
@@ -555,7 +551,7 @@ console.log(el.data());
     },
     async fetchTicaretSicilGazetesi(context, payload) {
       this.state.TicaretSicilGazetesi = []
-      console.log(payload);
+
       context.dispatch("actionArr", {
         dbName: "TicaretSicilGazetesi",
         İtemName: "SubeID",
@@ -566,7 +562,7 @@ console.log(el.data());
     },
     async fetchKalanBeyanname(context, payload) {
       this.state.KalanBeyanname = []
-      console.log(payload);
+
       context.dispatch("actionArr", {
         dbName: "KalanBeyanname",
         İtemName: "MukellefId",
@@ -577,7 +573,7 @@ console.log(el.data());
     },
     async fetchBeyanTakipProperties(context, payload) {
       this.state.BeyanTakipProperties = []
-      console.log(payload);
+
       context.dispatch("actionArr", {
         dbName: "BeyanTakipProperties",
         İtemName: "TurPropId",
@@ -588,7 +584,6 @@ console.log(el.data());
     },
     async fetchFaaliyet(context, payload) {
 
-      console.log(payload);
 
       const q = query(collection(db, "FaaliyetKodlari"), where("FaaliyetKodu", "==", payload), limit(1))
       const Gelendata = await getDocs(q);
@@ -617,7 +612,6 @@ console.log(el.data());
 
     },
     async fetchsifreler(context, payload) {
-      console.log(payload);
       context.dispatch("actionArr", {
         dbName: "Sifreler",
         İtemName: "KullaniciUid",
@@ -627,7 +621,6 @@ console.log(el.data());
 
     },
     async fetchCalisan(context, payload) {
-      console.log(payload);
       this.state.calisan = []
       context.dispatch("actionArr", {
         dbName: "Calisan",
@@ -637,7 +630,6 @@ console.log(el.data());
       })
     },
     async fetchSgkVizite(context, payload) {
-      console.log(payload);
       this.state.sgkVizite.length > 0 ? console.log("data var") :
         context.dispatch("actionArr", {
           dbName: "Vizite",
@@ -646,11 +638,37 @@ console.log(el.data());
           MutName: "SetSgkVizite"
         })
     },
+    
+    async beyannameAyGetir(context, data) {
+      var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
+
+      let queries = query(collection(db, "Beyanname"),
+        where("Kullanici", "==", data.kullaniciuid), where("donem", "==", buAy), limit(10)
+      )
+      let datas = await getDocs(queries)
+
+      context.commit("setBeyanname", datas.docs.map(e => e.data()));
+     
+
+    },
+    async beyannameGetir(context, payload) {
+      
+      let queries = query(collection(db, "Beyanname"),
+        where("Kullanici", "==", payload.kullaniciuid),
+        limit(payload.limit)
+      )
+      let datas = await getDocs(queries)
+
+      context.commit("setBeyanname", datas.docs.map(e => e.data()));
+    
+
+    },
+
     async actionArrBey(context, data) {
       return new Promise((resolve, reject) => {
-        console.log("çaliştim", data);
+     
         var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
-        console.log("BUAY", buAy)
+       
         let queries = query(collection(db, data.dbName),
           where(data.İtemName, "==", data.payload), where(data.order.data, "==", buAy), limit(data.limit)
         )
@@ -660,7 +678,7 @@ console.log(el.data());
 
           context.commit(data.MutName, documentSnapshots.docs);
           let arr = []
-          console.log("ifteyim");
+       
           arr = documentSnapshots.docs
           resolve(arr)
         })
@@ -670,7 +688,7 @@ console.log(el.data());
     },
     async actionArr(context, data) {
       return new Promise((resolve, reject) => {
-        console.log("çaliştim", data);
+     
         let queries = query(collection(db, data.dbName),
           where(data.İtemName, "==", data.payload), limit(data.limit)
         )
@@ -679,7 +697,7 @@ console.log(el.data());
 
           context.commit(data.MutName, documentSnapshots.docs);
           let arr = []
-          console.log("ifteyim");
+        
           arr = documentSnapshots.docs
           resolve(arr)
         })
@@ -699,9 +717,9 @@ console.log(el.data());
       return id
     },
     async fetchMesaj(context, payload) {
-      console.log(payload);
+    
       this.state.notification = []
-      console.log("çaliştim");
+    
       this.state.mesaj = []
       let q = query(
         collection(db, "MukellefBildirim"),
@@ -709,7 +727,7 @@ console.log(el.data());
       )
       const dat = await getDocs(q)
       dat.forEach(el => {
-        console.log(el.data());
+      
         context.commit('setMesaj', el.data())
       })
     },
@@ -725,25 +743,24 @@ console.log(el.data());
       const gsgk=await updateDoc(sgk,payload);
     },
     async updateProfileDate(context, paylod) {
-      console.log(paylod);
+ 
       const profile = doc(db, "Kullanici", documentıd)
       const gProfile = await updateDoc(profile, paylod);
     },
     async updateProfileSettings(context, paylod) {
-      console.log(paylod);
+   
       const profile = doc(db, "KullaniciAyarlar", paylod.kullaniciUid)
       const gProfile = await setDoc(profile, paylod);
     },
     async updatePersonData(context, payload) {
 
-      console.log(documentıd);
       const q = doc(db, "Sifreler", payload.SifreId.toString())
 
       const Gelendata = await updateDoc(q, payload);
-      console.log(Gelendata);
+
     },
     async uptadeSgkFirma(context, payload) {
-      console.log(`${payload.SubeId}`);
+  
       const q = doc(db, "Firma", `${payload.SubeId}`)
 
       const Gelendata = await updateDoc(q, {
@@ -763,50 +780,50 @@ console.log(el.data());
         SubeNot: payload.SubeNot,
         İsyeriSifresi: payload.İsyeriSifresi
       });
-      console.log(Gelendata);
+    
       context.commit('SetSgkBildirge', Gelendata)
     },
     async AddNewMükellef(context, payload) {
-      console.log(payload);
+      
       let data = JSON.parse(JSON.stringify(payload))
       const q = doc(db, "Mukellef", data.id)
       delete data.data.id
       const Gelendata = await updateDoc(q, data.data);
-      console.log(Gelendata);
+     
     },
     async uptadeSifre(context, payload) {
-      console.log(documentıd);
+      
       const q = doc(db, "Sifreler", payload.SifreId.toString())
       const Gelendata = await updateDoc(q, payload);
-      console.log(Gelendata);
+  
     },
     //! ADD DATA
     async AddNewSgkData(context, payload) {
       // await setDoc(doc(db, "Firma", payload.SubeId ), payload);
-      console.log(payload.SubeId.toString());
+ 
       const res = await setDoc(doc(db, "Firma", payload.SubeId.toString()), payload)
-      console.log(res);
+ 
     },
     async AddNewBeyanTakip(contex, payload) {
-      console.log(payload.KalanId.toString());
+
       const res = await setDoc(doc(db, "KalanBeyanname", payload.KalanId.toString()), payload)
-      console.log(res);
+    
     },
     async AddNewsssMükellef(context, payload) {
-      console.log(documentıd);
+
       const q = doc(db, "Mukellef", payload.MukellefId.toString())
       const Gelendata = await setDoc(q, payload);
-      console.log(Gelendata);
+    
     },
     async AddNewsBeyanSorgu(contex, payload) {
       //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
-      console.log(payload);
+   
       //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
       const a = collection(db, "BeyannameSorgu")
       const son = await addDoc(a, payload)
     },
     async AddNewsWhatsappSorgu(contex,payload){
-      console.log(payload);
+    
       const a =collection(db,"WhatsappSorgu/"+payload.KullaniciUid+"/Sorgular")
       const son=await addDoc(a,payload)
 
@@ -828,39 +845,39 @@ console.log(el.data());
        
     },
     async AddNewsTebligatSorgu(context, payload) {
-      console.log(payload);
+  
       const a = collection(db, "TebligatSorgu")
       const sonn = await addDoc(a, payload)
     },
     async AddNewsEpostaSorgu(contex, payload) {
       //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım
-      console.log(payload);
+
       //Adddoc da biz id vermeyiiz firebase kendisi oluşturur
       const a = collection(db, "EpostaGonder")
       const son = await addDoc(a, payload)
     },
     async AddPosSorgu(context, payload) {
-      console.log(payload);
+    
       const veri = collection(db, "MukellefPosSorgu")
       const veriSon = await addDoc(veri, payload)
     },
     async AddGelenFaturaSorgu(context, payload) {
-      console.log(payload);
+    
       const veri = collection(db, "GelenFaturaSorgu")
       const veriSon = await addDoc(veri, payload)
     },
     async AddGidenFaturaSorgu(context, payload) {
-      console.log(payload);
+    
       const veri = collection(db, "GidenFaturaSorgu")
       const veriSon = await addDoc(veri, payload)
     },
     async AddNewsBildirgeSorgu(context, payload) {
-      console.log(payload);
+   
       const a = collection(db, "BildirgeSorgu")
       const sonn = await addDoc(a, payload)
     },
     async AddNewsNotification(context, payload) {
-      console.log(payload);
+     
 
       const Gelendata = await addDoc(collection(db, "MukellefBildirim"), {
         Gonderilenler: payload.Gonderilenler,
@@ -869,23 +886,23 @@ console.log(el.data());
         Tarih: payload.Tarih
       });
       context.commit('setMesaj', Gelendata)
-      console.log(Gelendata);
+    
       context.dispatch('fetchMesaj', payload.KullaniciId)
     },
     //! DELETE DATA
     async DeleteSgkData(context, payload) {
-      console.log(payload);
+    
       await deleteDoc(doc(db, "Firma", payload.toString()))
 
     },
     async DeleteBeyanData(context, payload) {
-      console.log(payload);
+     
       await deleteDoc(doc(db, "Beyanname", payload))
 
     },
      async DeleteGelenFatura(context,payload){
   
-          console.log("SİLME İŞLEMİ",payload);
+       
          //await deleteDoc(doc(db,"GelenFaturalar").where('KullaniciUid','==',payload))
 
 
@@ -894,13 +911,13 @@ console.log(el.data());
          querySnapshot.docs.forEach((doc)=>{
           deleteDoc(doc.ref)
          })
-console.log("FATURALAR",querySnapshot);
+
            
     },
 
     async DeleteGidenFatura(context,payload){
   
-      console.log("SİLME İŞLEMİ",payload);
+ 
      //await deleteDoc(doc(db,"GelenFaturalar").where('KullaniciUid','==',payload))
 
 
@@ -909,7 +926,7 @@ console.log("FATURALAR",querySnapshot);
      querySnapshot.docs.forEach((doc)=>{
       deleteDoc(doc.ref)
      })
-console.log("FATURALAR",querySnapshot);
+
        
 }
   },

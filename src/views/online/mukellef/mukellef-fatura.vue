@@ -338,7 +338,7 @@ export default {
         props: {
           icon: "SearchIcon",
           variant: "success",
-          text: `Beyanname Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+          text: `Fatura Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
         },
       });
     },
@@ -596,4 +596,15 @@ export default {
   transition: 0.1s ease-in-out;
   text-decoration: none;
 }
+
+element.style {
+    text-align: left;
+    color: black;
+}
+.dx-datagrid-content .dx-datagrid-table .dx-row > td.dx-datagrid-group-space + td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td.dx-datagrid-group-space + td {
+    border-left: none;
+  
+    color: black;
+}
+ 
 </style>

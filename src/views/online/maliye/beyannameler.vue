@@ -391,6 +391,17 @@ export default {
         this.busy = false
       })
     },
+    async getPageSize(e) {
+      let beyan = [];
+      let unvanlaar = [];
+      const data = {
+        kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
+        limit: e,
+      };
+      await this.beyannameGetir(data)
+      this.items = this.reBeyanname;
+ 
+    },
     sendmail() {},
     priceColumn_customizeText(cellInfo) {
       return cellInfo.value + "$";
@@ -823,7 +834,7 @@ this.AddNewsMailSorgu(data);
         // setTimeout(()=>{
 
         // },)
-        setTimeout(() => {
+        //setTimeout(() => {
           console.log(this.beyannameData);
           this.beyannameData.forEach((eld) => {
             ar.push(eld.vergiDairesi);
@@ -834,7 +845,7 @@ this.AddNewsMailSorgu(data);
           this.mukelefData.forEach((esl) => {
             unvanlaar.push(esl.unvan);
           });
-        }, 2000);
+        //}, 300);
 
         setTimeout(() => {
           console.log(ar);

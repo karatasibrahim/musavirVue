@@ -370,7 +370,7 @@ export default {
   data() {
     return {
       mukellefid: "",
-      pageSizes: [10, 20, 50, "all"],
+      pageSizes: [10, 20, 50,100,200, "all"],
       selectedRowKeys: [],
       downloadSettings: [
         { id: 1, name: "Detaylı İndir", icon: "download" },

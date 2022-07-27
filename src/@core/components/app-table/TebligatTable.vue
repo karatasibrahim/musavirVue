@@ -49,11 +49,11 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" template="downloadTemplate" />
+        <!-- <DxItem location="before" template="downloadTemplate" />
         <DxItem location="before" template="printTemplate" />
         <DxItem location="before" template="sendTemplate" />
         <DxItem location="before" template="okunduYap" />
-        <DxItem location="before" template="trash" />
+        <DxItem location="before" template="trash" /> -->
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
@@ -129,7 +129,7 @@
 
       <template #inquireTemplate>
         <DxButton
-          type="normal"
+          type="danger"
           text="Sorgula"
           icon="search"
           @click="inquireClick"

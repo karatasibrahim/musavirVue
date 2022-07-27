@@ -16,6 +16,24 @@
         Vergi Denetim Kurulu Başkanı
       </button>
     </div>
+      <b-overlay
+          :show="busy"
+          rounded="lg"
+          opacity="0.6"
+          @hidden="onHidden"
+          active
+        >
+          <template v-slot:overlay>
+            <div class="d-flex justify-content-between">
+              <b-spinner small type="grow" variant="info" />
+              <b-spinner type="grow" variant="dark" />
+              <b-spinner small type="grow" variant="info" />
+            </div>
+            <br />
+            <div class="mb-0" style="font-size: 25px; color: red">
+              Sorgulama işlemi devam etmektedir..
+            </div>
+          </template>
     <tebligat-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -24,13 +42,13 @@
       :trash="trash"
       :printClick="printClick"
       :sendClick="sendClick"
-      :pk="'MukellefID'"
+      :pk="MukellefID"
       :items="items"
       :totalRows="16"
       :title="'Tebligatlar'"
       :columns="columns"
       v-if="Gib"
-    />
+    />  
     <tebligat-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -39,13 +57,13 @@
       :trash="trash"
       :printClick="printClick"
       :sendClick="sendClick"
-      :pk="'MukellefID'"
+      :pk="MukellefID"
       :items="items"
       :totalRows="16"
       :title="'Tebligatlar'"
       :columns="columnsTib"
       v-if="Tib"
-    />
+    />   
        <tebligat-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -54,13 +72,14 @@
       :trash="trash"
       :printClick="printClick"
       :sendClick="sendClick"
-      :pk="'MukellefID'"
+      :pk="MukellefID"
       :items="items"
       :totalRows="16"
       :title="'Tebligatlar'"
       :columns="columnsVergi"
       v-if="Vergi"
     />
+            </b-overlay>
     <!-- Sorgula Popup -->
     <b-modal
       ref="queryPopup"
@@ -140,23 +159,34 @@
 
 <script>
 import TebligatTable from "@core/components/app-table/TebligatTable.vue";
-import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
+import { BRow, BCol, BFormGroup, BOverlay,
+  BSpinner, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 //import mockData from "../../../services/online/finance/service";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import vSelect from "vue-select";
 import { mapActions, mapGetters } from "vuex";
+import Ripple from "vue-ripple-directive";
+ 
 export default {
   components: {
     TebligatTable,
     BRow,
     vSelect,
+     BOverlay,
+  BSpinner,
     BCol,
     BFormGroup,
     BFormDatepicker,
   },
+   directives: {
+    Ripple,
+  },
   data() {
     return {
+        busy: false,
+      timeout: null,
+       MukellefID:'',
       selected2: [],
       unvanlar:[],
       books: [
@@ -217,36 +247,45 @@ export default {
         {
           dataField: "veri.birimAdi",
           caption: "Vergi Dairesi",
+          width:"300"
         },
         {
           dataField: "tckn",
           caption: "Vergi No",
+          width:"100"
         },
         {
           dataField: "veri.zarfKonu",
           caption: "Konu",
+          width:"300"
         },
         {
           dataField: "veri.zarfAciklama",
           caption: "Açıklama",
+               width:"340"
         },
         {
           dataField: "veri.vdGondermeTarihi",
           caption: "Tarih",
+               width:"100"
         },
         {
           dataField: "OkumaDurum",
           caption: "Okundu",
+               width:"120"
         },
         {
           dataField: "ZarfPdf",
           caption: "İşlem",
           cellTemplate: "beyanColumnTemplate",
+               width:"90"
         },
         {
           dataField: "ekdat",
           caption: "Ek",
+                 width:"90",
          cellTemplate:"EkdataColumnTemplate"
+       
 
         },
       ],
@@ -351,11 +390,39 @@ export default {
     };
   },
   methods: {
+    clearTimeout() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+        this.timeout = null
+      }
+    },
+    setTimeout(callback) {
+      this.clearTimeout()
+      this.timeout = setTimeout(() => {
+        this.clearTimeout()
+        callback()
+      }, 45000)
+    },
+    onHidden() {
+      // Return focus to the button
+      this.$refs.button.focus()
+    },
+    onClick() {
+      this.busy = true
+      // Simulate an async request
+      this.setTimeout(() => {
+        this.busy = false
+      })
+    },
     ...mapActions(["AddNewsTebligatSorgu"]),
         queryClick() {
       this.$refs.queryPopup.show();
     },
     inquireClick() {
+       this.busy = true 
+      this.setTimeout(() => {
+        this.busy = false
+      })
         let arr = [];     
         this.inquireRequest.title.forEach((el)=>{
         arr.push(el.value)
@@ -380,7 +447,15 @@ this.AddNewsTebligatSorgu(data);
 //           text: `Tebligat Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
 //         },
 //       });
-
+ this.$toast({
+        component: ToastificationContent,
+        position: "top-right",
+        props: {
+          icon: "SearchIcon",
+          variant: "success",
+          text: `Tebligat Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+        },
+      });
 
     },
         showPdfPopup(e, tck, is) {
@@ -414,7 +489,7 @@ this.AddNewsTebligatSorgu(data);
       console.log(this.listRequest.type);
     },
     income() {
-     this.SetData();
+     this.fecthtebligat();
        this.Gib=true;
       this.Tib=false;
             this.Vergi=false;

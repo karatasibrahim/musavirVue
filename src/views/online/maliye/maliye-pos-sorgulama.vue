@@ -1,5 +1,34 @@
 <template>
   <div>
+      <b-overlay
+      :show="busy"
+      rounded="lg"
+      opacity="0.6"
+      @hidden="onHidden"
+    >
+      <template v-slot:overlay>
+        <div class="d-flex justify-content-between">
+          <b-spinner
+            small
+            type="grow"
+            variant="info"
+          />
+          <b-spinner
+            type="grow"
+            variant="dark"
+          />
+          <b-spinner
+            small
+            type="grow"
+            variant="info"
+          />
+    
+        </div><br>  
+          <div class="mb-0"
+               style="font-size:25px; color:red">
+              Sorgulama işlemi devam etmektedir..
+            </div> 
+      </template>
     <pos-table
       :showPdfPopupClick="showPdfPopup"
       :inquireClick="queryClick"
@@ -13,7 +42,7 @@
       :title="'Pos Sorgulama'"
       :columns="columns"
     />
-
+ </b-overlay>
     <!-- Sorgula Popup -->
     <b-modal
       ref="queryPopup"
@@ -168,24 +197,31 @@
 
 <script>
 import PosTable from "@core/components/app-table/PosTable.vue";
-import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
+import { BRow, BCol, BFormGroup, BOverlay,BSpinner, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters, mapActions } from "vuex";
+ import Ripple from 'vue-ripple-directive' 
 export default {
   components: {
     PosTable,
-    BRow,
+    BRow, 
+    BOverlay,
+    BSpinner,
     vSelect,
     BCol,
     BFormGroup,
     BFormDatepicker,
   },
-
+directives: {
+    Ripple,
+  },
   data() {
     return {
-      //#region Sorgulama Popup
+      busy: false,
+    timeout: null,
       dateTimeLanguage: lng.dateTimeLanguage,
       id: "",
       inquireRequest: {
@@ -277,11 +313,39 @@ export default {
     },
   },
   methods: {
+      clearTimeout() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+        this.timeout = null
+      }
+    },
+    setTimeout(callback) {
+      this.clearTimeout()
+      this.timeout = setTimeout(() => {
+        this.clearTimeout()
+        callback()
+      }, 45000)
+    },
+    onHidden() {
+      // Return focus to the button
+      this.$refs.button.focus()
+    },
+    onClick() {
+      this.busy = true
+      // Simulate an async request
+      this.setTimeout(() => {
+        this.busy = false
+      })
+    },
     queryClick() {
       this.$refs.queryPopup.show();
     },
     ...mapActions(["AddPosSorgu", "fetchPosSorgu"]),
     inquireClick() {
+       this.busy = true 
+      this.setTimeout(() => {
+        this.busy = false
+      })
       let arr = [];
         this.inquireRequest.title.forEach(el=>{
         arr.push(el.tckn)
@@ -295,6 +359,17 @@ export default {
       };
 
       this.AddPosSorgu(data);
+
+
+       this.$toast({
+        component: ToastificationContent,
+        position: "top-right",
+        props: {
+          icon: "SearchIcon",
+          variant: "success",
+          text: `POS Sorgulama İşlemi Başlamıştır. Lütfen sorgulama işlemi tamamlanıncaya kadar bekleyiniz..!`,
+        },
+      });
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
@@ -353,7 +428,7 @@ export default {
       let bankarr = [];
       let pos = [];
       let detayArr = [];
-      console.log(this.PosSorguDataGet); 
+      
           this.Mukellefdataget.forEach((el) => {
         bankarr.push({ title: el.unvan, tckn: el.tckn });
         detayArr.push(el.BankaAdi);
@@ -365,12 +440,10 @@ export default {
           this.Mukellefdataget.find((b) => b.tckn == a.tckn)
         )
       );
-        console.log("KKKKKKKKKKKKKKKKKKKKKK");
-      console.log(expected);
-      console.log("KKKKKKKKKKKKKKKKKKKKKK");
+    
       let expected_alt = [];
       expected.forEach((ex) => {
-        console.log(ex.veri);
+  
         ex.veri.posBilgileriTable.map((ve) => {
           expected_alt.push(
             Object.assign(ve, {
@@ -415,4 +488,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+element.style {
+    text-align: left;
+    color: black;
+}
+.dx-datagrid-content .dx-datagrid-table .dx-row > td.dx-datagrid-group-space + td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td.dx-datagrid-group-space + td {
+    border-left: none;
+  
+    color: black;
+}
+</style>

@@ -49,7 +49,7 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" template="listTemplate" />
+        <!-- <DxItem location="before" template="listTemplate" /> -->
         <!-- <DxItem location="before" template="printTemplate" />
         <DxItem location="before" template="sendTemplate" /> -->
         <DxItem name="columnChooserButton" />
