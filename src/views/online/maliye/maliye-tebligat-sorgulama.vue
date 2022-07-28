@@ -308,6 +308,12 @@ export default {
           dataField: "unvan",
           caption: "Ünvan",
         },
+          {
+          dataField: "unvan",
+          caption: "Ünvan",
+            groupIndex: 0,
+      
+        },
         {
           dataField: "ZarfKonu",
           caption: "Vergi Dairesi",
@@ -354,6 +360,12 @@ export default {
         {
           dataField: "unvan",
           caption: "Ünvan",
+        },
+          {
+          dataField: "unvan",
+          caption: "Ünvan",
+            groupIndex: 0,
+      
         },
         {
           dataField: "ZarfKonu",
