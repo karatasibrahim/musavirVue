@@ -48,14 +48,14 @@
       :title="'Bildirge'"
       :columns="columns2"
     />
-    </div>
-
+    
+    </div> 
     <!-- <home-chart> </home-chart> -->
   </div>
 </template>
 
 <script>
-import stats from "./stats.vue";
+import stats from "./stats.vue"; 
 import HomeTable1 from "@core/components/app-table/HomeTable1.vue";
 import HomeTable2 from "@core/components/app-table/HomeTable2.vue";
 
@@ -67,7 +67,7 @@ import lng from "./utils/strings";
 
 export default {
     components: {
-        stats,
+        stats, 
         HomeTable1,
         HomeTable2,
         // HomeChart,

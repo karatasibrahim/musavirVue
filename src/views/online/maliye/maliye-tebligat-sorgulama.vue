@@ -240,9 +240,17 @@ export default {
           visible: false,
           showInColumnChooser: false,
         },
+         {
+          dataField: "unvan",
+          caption: "Ünvan",
+          
+      
+        },
         {
           dataField: "unvan",
           caption: "Ünvan",
+            groupIndex: 0,
+      
         },
         {
           dataField: "veri.birimAdi",

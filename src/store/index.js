@@ -354,9 +354,8 @@ export default new Vuex.Store({
        
         this.state.mukellef = []
         const q = onSnapshot(doc(db, "GelenFaturalar"),
-          where("KullaniciUid", "==", payload.uid)
-         );
-         // where("FaturaNo", "==", payload.no)
+          where("KullaniciUid", "==", payload.uid),
+          where("FaturaNo", "==", payload.no));
         const mukellefdata = getDocs(q);
         mukellefdata.then(res => {
 
