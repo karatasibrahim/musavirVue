@@ -280,7 +280,8 @@ export default {
         {
           dataField: "OkumaDurum",
           caption: "Okundu",
-               width:"120"
+               width:"120",
+               cellTemplate:"okunduDurumu"
         },
         {
           dataField: "ZarfPdf",

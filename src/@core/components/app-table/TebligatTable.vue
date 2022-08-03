@@ -172,6 +172,11 @@
           />
         </div>
       </template>
+            <template #okunduDurumu="{ data }">
+        <div class="text-center">
+            <img v-if="data.data.hasOwnProperty(data.data.veri.ekList.okunmaOptime)" height="18px" src="../../../images/wp_gond.png" alt=""/> 
+        </div>
+      </template>
 
       <template #tahakkukColumnTemplate="{ data }">
         <div class="text-center">

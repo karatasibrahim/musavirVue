@@ -10533,9 +10533,9 @@ vue-context@6.0.0:
     vue-clickaway "^2.2.2"
 
 vue-demi@latest:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.2.tgz#f6081c2feb5b698549729a81683ce029b8da289e"
-  integrity sha512-41ukrclEbMddAyP7PvxMSYqnOSzPV6r7GNnyTSKSCNTaz19GehxmTiXyP9kwHSUv2+Dr6hHqiUiF7L1VAw2KdQ==
+  version "0.13.6"
+  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.6.tgz"
+  integrity sha512-02NYpxgyGE2kKGegRPYlNQSL1UWfA/+JqvzhGCOYjhfbLWXU5QQX0+9pAm/R2sCOPKr5NBxVIab7fvFU0B1RxQ==
 
 vue-echarts@5.0.0-beta.0:
   version "5.0.0-beta.0"

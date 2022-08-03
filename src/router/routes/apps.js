@@ -4,7 +4,7 @@ export default [
     name: 'apps-calendar',
     component: () => import('@/views/calendar/Calendar.vue'),
   },
-
+   
   // *===============================================---*
   // *--------- EMAIL & IT'S FILTERS N LABELS -------------------------------*
   // *===============================================---*
@@ -184,21 +184,21 @@ export default [
 //   // *===============================================---*
 //   // *--------- USER ---- ---------------------------------------*
 //   // *===============================================---*
-//   {
-//     path: '/apps/users/list',
-//     name: 'apps-users-list',
-//     component: () => import('@/views/apps/user/users-list/UsersList.vue'),
-//   },
-//   {
-//     path: '/apps/users/view/:id',
-//     name: 'apps-users-view',
-//     component: () => import('@/views/apps/user/users-view/UsersView.vue'),
-//   },
-//   {
-//     path: '/apps/users/edit/:id',
-//     name: 'apps-users-edit',
-//     component: () => import('@/views/apps/user/users-edit/UsersEdit.vue'),
-//   },
+  { 
+    path: '/user/users/list',
+    name: 'user-users-list',
+    component: () => import('@/views/user/users-list/UsersList.vue'),
+  },
+  {
+    path: '/user/users/view/:id',
+    name: 'user-users-view',
+    component: () => import('@/views/user/users-view/UsersView.vue'),
+  },
+  {
+    path: '/user/users/edit/:id',
+    name: 'user-users-edit',
+    component: () => import('@/views/user/users-edit/UsersEdit.vue'),
+  },
 
 //   // Invoice
 //   {
