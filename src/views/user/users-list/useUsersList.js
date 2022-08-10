@@ -5,7 +5,7 @@ import { title } from '@core/utils/filter'
 // Notification
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-
+import { mapActions,mapGetters } from 'vuex'
 export default function useUsersList() {
   // Use toast
   const toast = useToast()

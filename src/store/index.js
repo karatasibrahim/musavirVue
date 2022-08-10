@@ -58,6 +58,7 @@ export default new Vuex.Store({
   },
   state: {
     person: "",
+    kulanicilar:[],
     mukellef: [],
     beyanname: [],
     posSorgu: [],
@@ -92,6 +93,9 @@ export default new Vuex.Store({
     },
     reMukellef(state) {
       return state.mukellef
+    },
+    reKullanicilar(state){
+      return state.kullanicilar
     },
      reKullaniciAyarlar(state){
       return state.KullaniciAyarlar
@@ -170,6 +174,9 @@ export default new Vuex.Store({
     },
     setMukkellef(state, payload) {
       return state.mukellef.push(payload)
+    },
+    setKullanicilar(state,payload){
+      return state.kullanicilar.push(payload)
     },
     setKullaniciAyarlar(state,payload){
 
@@ -295,7 +302,7 @@ export default new Vuex.Store({
       state.notification.push(payload)
     }
   },
-  actions: {
+  actions: { //////////////// AUTH VE KULLANİCİ TABLOSU İÇİN İNCELENECEK
     async fetch(context) {
       //LocalStorage'den email çektik
       const getEmail = JSON.parse(localStorage.getItem("userData"));
@@ -333,6 +340,16 @@ export default new Vuex.Store({
       });
 
       return mukellefdata
+    },
+    async fetchKullanicilar(context,payload)
+    {
+this.state.kullanicilar=[]
+const q=query(collection(db,"Kullanici"));
+const kullaniciData=await getDocs(q);
+kullanidiData.forEach((doc)=>{
+  context.commit("setKullanicilar", Object.assign(doc.data(),{id:doc.id}))
+});
+return kullaniciData
     },
     async fetchKullaniciAyarlar(context,payload){
 
@@ -378,7 +395,7 @@ export default new Vuex.Store({
     async fetchBeyanname(context, payload) {
      
       let ar = []
-     context.dispatch("actionArrBey", {
+     context.dispatch("actionArr", {
         dbName: "Beyanname",
         İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
@@ -790,6 +807,12 @@ export default new Vuex.Store({
       const Gelendata = await updateDoc(q, data.data);
      
     },
+    async AddNewKullanici(context,payload){
+let data=JSON.parse(JSON.stringify(payload))
+const q=doc(db,"Kullanici",data.id)
+delete data.data.id
+const gelen=await updateDoc(q,data.data)
+    },
     async uptadeSifre(context, payload) {
       
       const q = doc(db, "Sifreler", payload.SifreId.toString())
@@ -813,6 +836,11 @@ export default new Vuex.Store({
       const q = doc(db, "Mukellef", payload.MukellefId.toString())
       const Gelendata = await setDoc(q, payload);
     
+    },
+    async AddNewsKullanici(context,payload)
+    {
+      const q=doc(db,"Kullanici",payload.KullaniciUid.toString())
+      const gelen=await setDoc(q,payload);
     },
     async AddNewsBeyanSorgu(contex, payload) {
       //burada payload dediğimiz bizim diger taraftan gönderdiğimiz veriler emin olmak için burada konsola yazdıralım

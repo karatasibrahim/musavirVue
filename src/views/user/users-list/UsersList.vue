@@ -224,12 +224,14 @@ import UsersListFilters from './UsersListFilters.vue'
 import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
+import { mapActions,mapGetters } from 'vuex'
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+
 
 export default {
   components: {
     UsersListFilters,
     UserListAddNew,
-
     BCard,
     BRow,
     BCol,
@@ -243,8 +245,16 @@ export default {
     BDropdown,
     BDropdownItem,
     BPagination,
-
     vSelect,
+  },
+  computed:{
+...mapGetters(["reKullanicilar"]),
+
+getKullanicilar()
+{
+return this.reKullanicilar;
+}
+
   },
   setup() {
     const USER_APP_STORE_MODULE_NAME = 'app-user'
@@ -340,6 +350,10 @@ export default {
       planFilter,
       statusFilter,
     }
+  },
+
+  data:{
+    kullanicilar:[],
   },
 }
 </script>

@@ -31,9 +31,10 @@
       </template>
     <pos-table
       :showPdfPopupClick="showPdfPopup"
-      :inquireClick="queryClick"
+      :inquireClick="inquireClick"
       :downloadClick="downloadClick"
       :listClick="listClick"
+      :mukellefData="mukellefler"
       :printClick="printClick"
       :sendClick="sendClick"
       :pk="id"
@@ -41,10 +42,13 @@
       :totalRows="50"
       :title="'Pos Sorgulama'"
       :columns="columns"
+      @selected-tckn="gettckn"
+            @sendEndDate="sendEndDate"
+            @sendStartDate="sendStartDate"
     />
  </b-overlay>
     <!-- Sorgula Popup -->
-    <b-modal
+    <!-- <b-modal
       ref="queryPopup"
       title="Mükellef Pos Sorgulama"
       ok-title="Sorgula"
@@ -69,7 +73,7 @@
           </b-form-group>
         </b-col>
 
-        <!-- <b-col cols="12">
+         <b-col cols="12">
           <b-form-group label="Pos Bilgisi" label-for="h-type" label-cols-md="4">
             <v-select
               v-model="listRequest.type"
@@ -79,7 +83,7 @@
             />
           </b-form-group>
         </b-col> -->
-        <b-col cols="12">
+        <!-- <b-col cols="12">
           <b-form-group
             label="Tarih Seçiniz"
             label-for="h-start-date"
@@ -94,7 +98,7 @@
               class="mb-1"
             />
           </b-form-group>
-        </b-col>
+        </b-col> -->
         <!-- <b-col cols="12">
           <b-form-group label="Detay" label-for="h-type" label-cols-md="4">
             <v-select
@@ -105,10 +109,10 @@
             />
           </b-form-group>
         </b-col> -->
-      </b-row>
-    </b-modal>
+      <!-- </b-row>
+    </b-modal> -->
 
-    <b-modal
+    <!-- <b-modal
       ref="pdfPopup"
       title="Görüntüle"
       size="xl"
@@ -124,7 +128,7 @@
         frameborder="0"
       >
       </iframe>
-    </b-modal>
+    </b-modal>  -->
 
     <b-modal
       ref="listPopup"
@@ -224,25 +228,24 @@ directives: {
     timeout: null,
       dateTimeLanguage: lng.dateTimeLanguage,
       id: "",
-      inquireRequest: {
+        inquireRequest:{
+        startDate: "",
+        endDate: "",
+        type: null,
+        title: [],
+      },
+      //focusdate: false,
+      //#endregion
+     listRequest:  {
         startDate: {
-          title: null,
-          startDate: {
-            month: "",
-            year: "",
-          },
+          month: "",
+          year: "",
         },
         endDate: {
           month: "",
           year: "",
         },
-      },
-      focusdate: false,
-      //#endregion
-      listRequest: {
-        startDate: new Date(),
-        endDate: new Date(),
-        type: [],
+        type: null,
         title: [],
       },
       activePdfUrl:
@@ -308,9 +311,9 @@ directives: {
     };
   },
   watch: {
-    "listRequest.startDate"() {
-      this.focusdate = true;
-    },
+    // "listRequest.startDate"() {
+    //   this.focusdate = true;
+    // },
   },
   methods: {
       clearTimeout() {
@@ -318,6 +321,15 @@ directives: {
         clearTimeout(this.timeout)
         this.timeout = null
       }
+    },
+     sendStartDate(e) {
+      this.inquireRequest.startDate = e;
+    },
+    sendEndDate(e) {
+      this.inquireRequest.endDate = e;
+    },
+    gettckn(e){
+      this.SelectedTckn=e;
     },
     setTimeout(callback) {
       this.clearTimeout()
@@ -338,7 +350,7 @@ directives: {
       })
     },
     queryClick() {
-      this.$refs.queryPopup.show();
+      //this.$refs.queryPopup.show();
     },
     ...mapActions(["AddPosSorgu", "fetchPosSorgu"]),
     inquireClick() {
@@ -346,19 +358,20 @@ directives: {
       this.setTimeout(() => {
         this.busy = false
       })
-      let arr = [];
-        this.inquireRequest.title.forEach(el=>{
-        arr.push(el.tckn)
-        })
+      // let arr = [];
+      //   this.inquireRequest.title.forEach(el=>{
+      //   arr.push(el.tckn)
+      //   })
       const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: this.listRequest.startDate.replace("-", "").substr(0, 6), //Ay bilgisi
+        baslangic: this.inquireRequest.startDate.replace("-", "").substr(0, 6), //Ay bilgisi
 
-        tckn: arr,
+        tckn: this.SelectedTckn,
         SorguDurumu: 0,
       };
-
-      this.AddPosSorgu(data);
+   console.log("TARİH",data.baslangic);
+console.log(data);
+       this.AddPosSorgu(data);
 
 
        this.$toast({
@@ -428,11 +441,21 @@ directives: {
       let bankarr = [];
       let pos = [];
       let detayArr = [];
+      let arr=[];
       
-          this.Mukellefdataget.forEach((el) => {
+            this.Mukellefdataget.forEach((el) => {            
         bankarr.push({ title: el.unvan, tckn: el.tckn });
         detayArr.push(el.BankaAdi);
       });
+
+        this.Mukellefdataget.forEach((el) => {
+            arr.push({title:el.unvan,tckn:el.tckn});   
+
+this.mukellefler=[...new Set(arr)]
+
+        
+      });
+
       this.mukelellefler = [...new Set(bankarr)];
       var expected = this.PosSorguDataGet.map((a) =>
         Object.assign(
