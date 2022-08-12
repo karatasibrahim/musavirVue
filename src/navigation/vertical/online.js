@@ -19,6 +19,10 @@ export default [
         title: 'EArşiv Fatura',
         route: { name: 'online-mukellef-fatura', params: { id: 4987 } },
       },
+        {
+            title: 'Vergi Levhaları',
+            route: 'online-mukellef-vergi-levhalari',
+          },
       // {
       //   title: 'Mükellef Özeti',
       //   route: { name: 'online-mükellef-özeti', params: { id: 4987 } },

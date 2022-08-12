@@ -60,11 +60,11 @@ export default [
   //   name: "online-mükellef-mevcut-araçlarım",
   //   component: () => import("@/views/online/mükellef/mükellef-mevcut-araçlarım"),
   // },
-  // {
-  //   path: "/mükellef/mükellef-vergi-levhaları",
-  //   name: "online-mükellef-vergi-levhaları",
-  //   component: () => import("@/views/online/mükellef/mükellef-vergi-levhaları"),
-  // },
+  {
+    path: "/mukellef/mukellef-vergi-levhalari",
+    name: "online-mukellef-vergi-levhalari",
+    component: () => import("@/views/online/mukellef/mukellef-vergi-levhalari"),
+  },
   // {
   //   path: "/mükellef/mükellef-denetim",
   //   name: "online-mükellef-denetim",

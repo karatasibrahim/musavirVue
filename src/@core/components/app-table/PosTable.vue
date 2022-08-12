@@ -77,8 +77,7 @@
               key-expr="tckn"
              :select-by-click="true"
               :select-nodes-recursive="false"
-              selection-mode="multiple"
-              
+              selection-mode="multiple"              
               show-check-boxes-mode="normal"
               display-expr="title"
               width="400"

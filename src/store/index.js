@@ -888,6 +888,11 @@ const gelen=await updateDoc(q,data.data)
       const veri = collection(db, "MukellefPosSorgu")
       const veriSon = await addDoc(veri, payload)
     },
+    async AddVergiLevhasiSorgu(context,payload)
+    {
+       const veri =collection(db,"VergiLevhalariSorgu")
+       const veriSon=await addDoc(veri,payload)
+    },
     async AddGelenFaturaSorgu(context, payload) {
     
       const veri = collection(db, "GelenFaturaSorgu")

@@ -48,47 +48,47 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
+           <DxItem location="before" template="mukellef" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" template="printTemplate" />
-        <DxItem location="before" template="sendTemplate" />
+        <!-- <DxItem location="before" template="printTemplate" />
+        <DxItem location="before" template="sendTemplate" /> -->
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
       </DxToolbar>
 
-      <template #sendTemplate>
-        <DxDropDownButton
-          width="150"
-          ref="sendDrop"
-          :split-button="false"
-          :use-select-mode="false"
-          :items="sendSettings"
-          @item-click="sendClick"
-          display-expr="name"
-          key-expr="id"
-          text="Gönder"
-          icon="share"
-        />
-      </template>
+ 
 
-      <template #printTemplate>
-        <DxDropDownButton
-          width="150"
-          :split-button="false"
-          :use-select-mode="false"
-          :items="printSettings"
-          @itemClick="printClick"
-          display-expr="name"
-          key-expr="id"
-          text="Yazdır"
-          icon="print"
-        />
-      </template>
-
+  
+<template #mukellef>
+<DxDropDownBox
+  type="success"
+        :data-source="mukellefData" 
+      placeholder="Lütfen Mükellef Seçiniz"
+      display-expr="title"
+      value-expr="tckn"
+         width="410"
+        >
+          <template #content>
+            <DxTreeView   
+       ref="treeViewRefName"
+              :data-source="mukellefData"
+      @item-selection-changed="treeView_itemSelectionChanged($event)"
+              key-expr="tckn"
+             :select-by-click="true"
+              :select-nodes-recursive="false"
+              selection-mode="multiple"              
+              show-check-boxes-mode="normal"
+              display-expr="title"
+              width="400"
+            />
+          </template>
+</DxDropDownBox>
+</template>
       <template #inquireTemplate>
         <DxButton
-          type="normal"
-          text="Sorgula"
+          type="danger"
+          text="Gib'ten Sorgula"
           icon="search"
           @click="inquireClick"
         />
@@ -194,9 +194,11 @@ import {
   DxExport,
 } from "devextreme-vue/data-grid";
 import { BButton } from "bootstrap-vue";
-import DxButton from "devextreme-vue/button";
-import DxDropDownButton from "devextreme-vue/drop-down-button";
+import DxButton from "devextreme-vue/button"; 
 import Ripple from "vue-ripple-directive";
+import DxTreeView from 'devextreme-vue/tree-view';
+import DxDropDownButton from "devextreme-vue/drop-down-button";
+import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { exportDataGrid as exportDataGridToPdf } from "devextreme/pdf_exporter";
@@ -220,7 +222,9 @@ export default {
     DxSorting,
     DxFilterRow,
     DxHeaderFilter,
+    DxDropDownBox,
     DxDropDownButton,
+    DxTreeView,
     DxFilterPanel,
     DxColumn,
     DxSelection,
@@ -259,6 +263,9 @@ export default {
       type: String,
       default: "multiple",
     },
+    mukellefData:{
+      type:Array
+    },
     showPdfPopupClick: Function,
     inquireClick: Function,
     downloadClick: Function,
@@ -295,6 +302,10 @@ export default {
     },
   },
   methods: {
+     treeView_itemSelectionChanged(e) {
+      console.log(e.component.getSelectedNodeKeys()); 
+  this.$emit("selected-tckn",e.component.getSelectedNodeKeys())
+    },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;

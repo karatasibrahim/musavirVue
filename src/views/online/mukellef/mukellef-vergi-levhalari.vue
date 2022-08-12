@@ -2,8 +2,9 @@
   <div>
     <app-table9
       :showPdfPopupClick="showPdfPopup"
-      :inquireClick="queryClick"
+      :inquireClick="inquireClick"
       :downloadClick="downloadClick"
+      :mukellefData="mukellefler"
       :printClick="printClick"
       :sendClick="sendClick"
       :pk="'id'"
@@ -11,10 +12,11 @@
       :totalRows="16"
       :title="'Vergi Levhaları'"
       :columns="columns"
+      @selected-tckn="gettckn"
     />
 
     <!-- Sorgula Popup -->
-    <b-modal
+    <!-- <b-modal
       ref="queryPopup"
       title="Vergi Levhaları"
       ok-title="Sorgula"
@@ -34,7 +36,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-    </b-modal>
+    </b-modal> -->
 
     <b-modal
       ref="pdfPopup"
@@ -57,11 +59,12 @@
 </template>
 
 <script>
-import AppTable9 from "@core/components/app-table/AppTable9.vue";
+import AppTable9 from "@core/components/app-table/vergiLevhalariTable.vue";
 import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -114,6 +117,7 @@ export default {
       items: mockData.beyannameDatasi,
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
+      mukellefler:[],
       columns: [
         {
           dataField: "id",
@@ -162,10 +166,24 @@ export default {
     };
   },
   methods: {
+     ...mapActions(["AddVergiLevhasiSorgu"]),
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {},
+    gettckn(e)
+    {
+this.SelectedTckn=e;
+    },
+    inquireClick() {
+      const data={
+KullaniciUid:JSON.parse(localStorage.getItem("userData")).userId,
+tckn:this.SelectedTckn,
+SorguDurumu:0,
+      };
+
+      console.log("GİDECEK DATA",data);
+      this.AddVergiLevhasiSorgu(data);
+    },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -176,9 +194,35 @@ export default {
     listClick() {
       this.$refs.listPopup.show();
     },
+    
     listRunClick() {
       console.log(this.listRequest.type);
     },
+    vergiDataGet(){
+ 
+this.setOption();
+    },
+  setOption()
+  {
+    let arr=[];
+    this.Mukellefdataget.forEach((el)=>{
+      arr.push({title:el.unvan,tckn:el.tckn})
+      this.mukellefler=[...new Set(arr)];
+    
+
+    });
+
+  },
+  },
+  computed:{
+...mapGetters(["reMukellef"]),
+Mukellefdataget(){
+  return this.reMukellef;
+
+},
+  },
+  mounted(){
+    this.vergiDataGet();
   },
 };
 </script>
