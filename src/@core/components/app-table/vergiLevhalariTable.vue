@@ -104,7 +104,7 @@
         <DxButton type="normal" icon="exportpdf" @click="exportPdf" />
       </template>
 
-      <template #panelColumnTemplate="{ data }">
+      <!-- <template #panelColumnTemplate="{ data }">
         <div class="text-center">
           <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
@@ -120,27 +120,28 @@
             @click="showTaxPayerInfoClick(data.data.beyan_pdf)"
           />
         </div>
-      </template>
+      </template> -->
 
       <template #beyanColumnTemplate="{ data }">
         <div class="text-center">
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
-            @click="showPdfPopupClick(data.data.beyan_pdf)"
+            @click="showPdfPopupClick(data.data.tckn,
+            data.data.veri.ceEVergiLevhaTcknTx,)"
           />
         </div>
       </template>
 
-      <template #tahakkukColumnTemplate="{ data }">
+      <!-- <template #tahakkukColumnTemplate="{ data }">
         <div class="text-center">
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
             @click="showPdfPopupClick(data.data.tahak_pdf)"
           />
         </div>
-      </template>
+      </template> -->
 
-      <template #sgkGosterimColumnTemplate="{ data }">
+      <!-- <template #sgkGosterimColumnTemplate="{ data }">
         <div class="text-left">
           <img
             src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
@@ -159,7 +160,7 @@
             @click="deleteInsuranceClick(data.data)"
           />
         </div>
-      </template>
+      </template> -->
     </DxDataGrid>
   </b-card>
 </template>
@@ -310,6 +311,17 @@ export default {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;
+    },
+    showPdfPopup(tckn, e) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tckn +
+        "%2FVERGILEVHALARI%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
+      this.$refs.pdfPopup.show();
+      console.log(tckn, e);
     },
     saveLayout(state) {
       state.columns.forEach((element) => {

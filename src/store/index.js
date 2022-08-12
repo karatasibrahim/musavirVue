@@ -69,6 +69,7 @@ export default new Vuex.Store({
     TibTebligat: [],
     TibTebligatEk: [],
     VergiTebligat: [],
+    VergiLevhalari:[],
     SgkBildirge: [],
     SgkFirmalar: [],
     TicaretSicilGazetesi: [],
@@ -109,6 +110,9 @@ export default new Vuex.Store({
     },
     reGelenArsiv(state) {
       return state.GelenFatura
+    },
+    reVergiLevhalari(state){
+return state.VergiLevhalari
     },
     reGidenArsiv(state) {
       return state.GidenFatura
@@ -199,6 +203,11 @@ export default new Vuex.Store({
         
         return state.GelenFatura.push(el.data())
       })
+    },
+    setVergiLevhalari(state,payload){
+payload.forEach(el=>{
+  return state.VergiLevhalari.push(el.data())
+})
     },
     setGidenFatura(state, payload) {
       payload.forEach(el => {
@@ -456,6 +465,16 @@ return kullaniciData
         payload: payload,
         MutName: "setGelenFatura"
       })
+    },
+    fetchVergiLevhalari(context,payload){
+this.state.VergiLevhalari=[]
+context.dispatch("actionArr",{
+  dbName:"VergiLevhalari",
+  İtemName:"KullaniciUid",
+  payload:payload,
+  MutName:"setVergiLevhalari"
+
+})   
     },
     async fetchGidenEarsiv(context, payload) {
       this.state.GidenFatura = []

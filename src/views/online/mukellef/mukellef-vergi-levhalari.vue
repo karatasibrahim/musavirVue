@@ -7,7 +7,7 @@
       :mukellefData="mukellefler"
       :printClick="printClick"
       :sendClick="sendClick"
-      :pk="'id'"
+      :pk="id"
       :items="items"
       :totalRows="16"
       :title="'Vergi Levhaları'"
@@ -101,6 +101,7 @@ export default {
           new Date().getDate()
         ),
       },
+      id:"",
       //#endregion
       listRequest: {
         startDate: new Date(),
@@ -118,6 +119,7 @@ export default {
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
       mukellefler:[],
+      items:[],
       columns: [
         {
           dataField: "id",
@@ -126,49 +128,57 @@ export default {
           showInColumnChooser: false,
         },
         {
-          dataField: "Ünvan",
+          dataField: "veri.ceEVergiLevhaAdSoyadUnvanTx",
           caption: "Ünvan",
         },
         {
-          dataField: "VergiDairesi",
+          dataField: "veri.ceEVergiLevhaVdTx",
           caption: "Vergi Dairesi",
         },
         {
-          dataField: "VergiNo",
+          dataField: "tckn",
           caption: "Vergi No",
         },
         {
-          dataField: "OnayTarih",
+          dataField: "veri.ceEVergiLevhaOnayZamanTx",
           caption: "Onay Tarih",
         },
         {
-          dataField: "Takvim",
+          dataField: "veri.ceEVergiLevhaVergiTur",
           caption: "Takvim",
         },
         {
-          dataField: "BeyanOlunanMatrah",
-          caption: "Beyan Olunan Matrah",
+          dataField: "veri.ceEVergiLevhaOnayKoduTx",
+          caption: "Onay Kodu",
         },
         {
-          dataField: "TahakkukEdenVergi",
-          caption: "Tahakkuk Eden Vergi",
+          dataField: "veri.ceEVergiLevhaTcknTx",
+          caption: "Vergi Levha No",
         },
         {
-          dataField: "Durum",
+          dataField: "veri.message",
           caption: "Durum",
         },
         {
-          dataField: "PDF",
+          dataField: "İçerik",
           caption: "PDF",
+          alignment: "center",
+          width: "80",
           cellTemplate: "beyanColumnTemplate",
         },
       ],
     };
   },
   methods: {
-     ...mapActions(["AddVergiLevhasiSorgu"]),
+     ...mapActions(["AddVergiLevhasiSorgu","fetchVergiLevhalari"]),
     queryClick() {
       this.$refs.queryPopup.show();
+    },
+    fetchVergiLevha()
+    {this.items=[];
+    this.fetchVergiLevhalari(this.Mukellefdataget[0].musavirUid);
+    this.items=this.VergiLevhalariDataget;
+console.log(this.items);
     },
     gettckn(e)
     {
@@ -184,9 +194,16 @@ SorguDurumu:0,
       console.log("GİDECEK DATA",data);
       this.AddVergiLevhasiSorgu(data);
     },
-    showPdfPopup(pdfUrl) {
-      //this.activePdfUrl=pdfUrl;
+     showPdfPopup(tckn, e) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tckn +
+        "%2FVERGILEVHALARI%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
       this.$refs.pdfPopup.show();
+      console.log(tckn, e);
     },
     downloadClick(e) {},
     printClick(e) {},
@@ -215,14 +232,20 @@ this.setOption();
   },
   },
   computed:{
-...mapGetters(["reMukellef"]),
+...mapGetters(["reMukellef","reVergiLevhalari"]),
 Mukellefdataget(){
   return this.reMukellef;
 
 },
+VergiLevhalariDataget()
+{
+  return this.reVergiLevhalari;
+ 
+},
   },
   mounted(){
     this.vergiDataGet();
+    this.fetchVergiLevha();
   },
 };
 </script>
