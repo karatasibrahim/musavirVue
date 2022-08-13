@@ -86,7 +86,7 @@
           type="normal"
           text="Sorgula"
           icon="search"
-          @click="inquireClick"
+          @click="inquireClick()"
         />
       </template>
 

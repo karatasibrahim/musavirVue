@@ -2,7 +2,7 @@
   <div>
     <app-table3
       :showPdfPopupClick="showPdfPopup"
-      :inquireClick="queryClick"
+      :inquireClick="inquireClick"
       :printClick="printClick"
       :sendClick="sendClick"
       :trash="trash"
@@ -113,25 +113,19 @@ export default {
       id:"",
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
-      inquireRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
+    inquireRequest: {
+        startDate: "",
+        endDate: "",
+        type: null,
+        title: [],
       },
       mükelellefler:[],
       //#endregion
-      listRequest: {
-        startDate: new Date(),
-        endDate: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth() + 1,
-          new Date().getDate()
-        ),
+    listRequest: {
+       startDate: "",
+        endDate: "",
         type: null,
-        title: null,
+        title: [],
       },
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
@@ -214,7 +208,22 @@ export default {
     queryClick() {
       this.$refs.queryPopup.show();
     },
-    inquireClick() {},
+    inquireClick() {
+
+      const data = {
+        KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
+        baslangic: "2020",
+        bitis: "2022",
+       IsyeriSifresi:"13LtgG06",
+       kullaniciAdi:"17782831838",
+       SistemSifresi:"90FedI71",
+       isyeriKodu:"4",
+        tckn: "1090432226",
+        SorguDurumu: 0,
+      };
+      console.log("GİDEN VERİ",data);
+      this.AddViziteSorgu(data);
+    },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
@@ -228,7 +237,7 @@ export default {
     listRunClick() {
       console.log(this.listRequest.type);
     },
-    ...mapActions(['fetchCalisan','fetchSgkVizite']),
+    ...mapActions(['fetchCalisan','fetchSgkVizite','AddViziteSorgu']),
     fetchdata(){
       let arr =[]
     this.getfirma.forEach(element => {
