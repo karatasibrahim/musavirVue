@@ -114,6 +114,7 @@ export default new Vuex.Store({
     reVergiLevhalari(state){
 return state.VergiLevhalari
     },
+    
     reGidenArsiv(state) {
       return state.GidenFatura
     },
@@ -668,7 +669,7 @@ context.dispatch("actionArr",{
       this.state.sgkVizite.length > 0 ? console.log("data var") :
         context.dispatch("actionArr", {
           dbName: "Vizite",
-          İtemName: "CalisanId",
+          İtemName: "KullaniciUid",
           payload: payload,
           MutName: "SetSgkVizite"
         })

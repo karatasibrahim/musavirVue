@@ -6,11 +6,11 @@
       :printClick="printClick"
       :sendClick="sendClick"
       :trash="trash"
-      :pk="'id'"
+      :pk="id"
       :items="items"
       :totalRows="16"
       :title="'Vizite Sorgulama'"
-      :columns="columns"
+      :columns="columns" 
     />
 
     <!-- Sorgula Popup -->
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import AppTable3 from "@core/components/app-table/AppTable3.vue";
+import AppTable3 from "@core/components/app-table/vizitelerTable.vue";
 import { BRow, BCol, BFormGroup, BFormDatepicker } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
@@ -139,55 +139,49 @@ export default {
           visible: false,
           showInColumnChooser: false,
         },
+            {
+          dataField: "MukUnvan",
+          caption: "Mükellef Adı",
+          groupIndex:0
+        },
+          {
+          dataField: "AdSoyad",
+          caption: "Ad Soyad",
+        },
+      
         {
-          dataField: "TakipNo",
+          dataField: "RaporTakipNo",
           caption: "Takip No",
         },
-        {
-          dataField: "SiraNo",
-          caption: "Sıra No",
-        },
+      
         {
           dataField: "Vaka",
           caption: "Vaka",
         },
         {
-          dataField: "TC",
+          dataField: "TcNo",
           caption: "TC",
         },
+      
         {
-          dataField: "Unvan",
-          caption: "Ad Soyad",
-        },
-        {
-          dataField: "RaporBaşlangıç",
+          dataField: "RaporBasTarihi",
           caption: "Rapor Başlangıç",
         },
         {
-          dataField: "Kontrol",
+          dataField: "KontrolTarihi",
           caption: "Kontrol",
         },
         {
-          dataField: "Durum",
+          dataField: "OnayDurum",
           caption: "Durum",
+      
           
         }
       ],
     };
   },
   computed: {
-    inquireMinDate() {
-      return this.inquireRequest.startDate;
-    },
-    inquireMaxDate() {
-      return this.inquireRequest.endDate;
-    },
-    listMinDate() {
-      return this.listRequest.startDate;
-    },
-    listMaxDate() {
-      return this.listRequest.endDate;
-    },
+    
     ...mapGetters(['reMukellef','reSgkFirmalar','reCalisan','reSgkVizite']),
     getfirma(){
       return this.reSgkFirmalar
@@ -212,13 +206,12 @@ export default {
 
       const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: "2020",
+        baslangic: "2019",
         bitis: "2022",
-       IsyeriSifresi:"13LtgG06",
-       kullaniciAdi:"17782831838",
-       SistemSifresi:"90FedI71",
-       isyeriKodu:"4",
-        tckn: "1090432226",
+       IsyeriSifresi:"62424625",
+       kullaniciAdi:"18457834178", 
+       isyeriKodu:"3",
+        tckn: "2720107645",
         SorguDurumu: 0,
       };
       console.log("GİDEN VERİ",data);
@@ -239,30 +232,60 @@ export default {
     },
     ...mapActions(['fetchCalisan','fetchSgkVizite','AddViziteSorgu']),
     fetchdata(){
-      let arr =[]
+      this.items=[];
+this.fetchSgkVizite(this.Mukellefdataget[0].musavirUid);
+this.items=this.SgkVizitelerDataget;
+
+setTimeout(() => {
+  this.items=this.SgkVizitelerDataget.map((a)=>{
+  return Object.assign(a,{
+    MukUnvan:this.Mukellefdataget.find((b)=>a.tckn.includes(b.tckn)).unvan,
+     
+  });
+
+});
+console.log("UNVAN",this.MukUnvan);
+}, 1000);
+
+  console.log("UNVAN", MukUnvan);
+console.log("GELEN DATA", this.items);
+
+
     this.getfirma.forEach(element => {
     arr.push(element.SubeId) 
       });
       this.fetchCalisan(arr);
-      setTimeout(()=>{
-     let caalisanİd=[]
-     this.getCalisan.forEach(data=>{
-       caalisanİd.push(data.CalisanID) 
-     })
-     console.log(caalisanİd);
-     this.fetchSgkVizite(caalisanİd)
-      },800)
-      setTimeout(()=>{
-        console.log("Vizite",this.getCalisan);
-let unvan=[]
-var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b => b.MukellefId == a.MukellefId)));
-var expected2 = this.getCalisan.map(a => Object.assign(a,expected.find(b => b.SubeId == a.SubeId)));
-var expected3 = this.getVizite.map(a => Object.assign(a,expected2.find(b => b.CalisanID == a.CalisanId)));
-expected3.forEach(a=>{ this.items.push({Munvan:a.Unvan,Unvan:a.CalisanUnvan, TC:a.TC, TakipNo:a.TakipNo, SiraNo:a.SiraNo,Vaka:a.Vaka,KontrolTarihi:a.KontrolTarihi,OnayDurumu:a.OnayDurumu})})
-console.log(this.items,expected3);
-this.mükelellefler=[...new Set(unvan)]
-      },2000)
-    }
+    // setTimeout(()=>{
+    //  let caalisanİd=[]
+    //  this.getCalisan.forEach(data=>{
+    //    caalisanİd.push(data.CalisanID) 
+    //  })
+    //  console.log(caalisanİd);
+    //  this.fetchSgkVizite(caalisanİd)
+    //   },800)
+    // setTimeout(()=>{
+    //   console.log("Vizite",this.getCalisan);
+    //   let unvan=[]
+    //   var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.MukellefId == a.MukellefId)));
+    //   var expected2 = this.getCalisan.map(a => Object.assign(a,expected.find(b => b.        SubeId == a.SubeId)));
+      //   var expected3 = this.getVizite.map(a => Object.assign(a,expected2.find(b => b.        CalisanID == a.CalisanId)));
+      //   expected3.forEach(a=>{ this.items.push({Munvan:a.Unvan,Unvan:a.CalisanUnvan,         TC:a.TC, TakipNo:a.TakipNo, SiraNo:a.SiraNo,Vaka:a.Vaka,KontrolTarihi:a.        KontrolTarihi,OnayDurumu:a.OnayDurumu})})
+      //   console.log(this.items,expected3);
+      //   this.mükelellefler=[...new Set(unvan)]
+      // },2000)
+    //}
+  },
+  },
+  computed:{
+...mapGetters(["reMukellef","reSgkVizite"]),
+Mukellefdataget()
+{
+return this.reMukellef;
+},
+SgkVizitelerDataget()
+{
+return this.reSgkVizite;
+},
   },
   mounted(){
     this.fetchdata()

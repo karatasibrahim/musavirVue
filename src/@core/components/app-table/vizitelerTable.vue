@@ -3,6 +3,7 @@
     <DxDataGrid
       style="margin-left: 10px; margin-right: 10px; margin-top: 15px"
       :key-expr="pk"
+      :columns="columns"
       :show-borders="true"
       ref="appGrid"
       :allow-column-reordering="true"
@@ -47,25 +48,25 @@
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
         <DxItem location="before" template="inquireTemplate" />
-        <DxItem location="before" template="printTemplate" />
-        <DxItem location="before" template="trash" />
+        <!-- <DxItem location="before" template="printTemplate" />
+        <DxItem location="before" template="trash" /> -->
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
       </DxToolbar>
-            <DxColumn data-field="TakipNo" caption="Takip No"/>
+      <!-- <DxColumn data-field="RaporTakipNo" caption="Takip No"/>
       <DxColumn data-field="SiraNo" caption="Sıra No"/>
       <DxColumn data-field="Vaka" caption="Vaka"/>
       <DxColumn data-field="TC" caption= "TC"/>
-      <DxColumn data-field="Unvan" caption= "Ad Soyad"/>
+      <DxColumn data-field="AdSoyad" caption= "Ad Soyad"/>
       <DxColumn data-field="RaporBaşlangıç" caption="Rapor Başlangıç"/>
-      <DxColumn data-field="Kontrol" caption="Kontrol"/>
-      <DxColumn data-field="Durum" caption="Durum" />
+      <DxColumn data-field="KontrolTarihi" caption="Kontrol"/>
+      <DxColumn data-field="OnayDurum" caption="Durum" />
       <DxColumn
         :group-index="0"
         data-field="Munvan"
        
-      /> 
+      />  -->
 
       <template #printTemplate>
         <DxDropDownButton
@@ -83,7 +84,7 @@
 
       <template #inquireTemplate>
         <DxButton
-          type="normal"
+          type="danger"
           text="Sorgula"
           icon="search"
           @click="inquireClick()"

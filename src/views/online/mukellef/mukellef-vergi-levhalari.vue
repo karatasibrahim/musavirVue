@@ -175,10 +175,11 @@ export default {
       this.$refs.queryPopup.show();
     },
     fetchVergiLevha()
-    {this.items=[];
+    {
+      this.items=[];
     this.fetchVergiLevhalari(this.Mukellefdataget[0].musavirUid);
     this.items=this.VergiLevhalariDataget;
-console.log(this.items);
+    console.log(this.items);
     },
     gettckn(e)
     {
