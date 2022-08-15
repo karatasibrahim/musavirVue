@@ -11,6 +11,7 @@
       :totalRows="16"
       :title="'Vizite Sorgulama'"
       :columns="columns" 
+      :mukellefData="mukellefler"
     />
 
     <!-- Sorgula Popup -->
@@ -46,7 +47,7 @@
             <b-form-datepicker
               id="h-start-date"
               v-model="inquireRequest.startDate"
-              :max="inquireMaxDate"
+             
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
@@ -61,8 +62,7 @@
           >
             <b-form-datepicker
               id="h-end-date"
-              v-model="inquireRequest.endDate"
-              :min="inquireMinDate"
+              v-model="inquireRequest.endDate" 
               v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
               :locale="dateTimeLanguage.locale"
               class="mb-1"
@@ -132,6 +132,7 @@ export default {
       items: [],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
+      mukellefler:[],
       columns: [
         {
           dataField: "id",
@@ -178,8 +179,10 @@ export default {
           
         }
       ],
+      SelectedTckn: [],
     };
   },
+ 
   computed: {
     
     ...mapGetters(['reMukellef','reSgkFirmalar','reCalisan','reSgkVizite']),
@@ -194,15 +197,46 @@ export default {
     },
     getMükellef(){
       return this.reMukellef
-    }
+    },
+    Mukellefdataget()
+{
+return this.reMukellef;
+},
+SgkVizitelerDataget()
+{
+return this.reSgkVizite;
+}
   },
  
   methods: {
+      gettckn(e) {
+      this.SelectedTckn = e;
+    },
     trash(){},
+    sendStartDate(e) {
+      this.inquireRequest.startDate = e;
+    },
+    sendEndDate(e) {
+      this.inquireRequest.endDate = e;
+    },
     queryClick() {
       this.$refs.queryPopup.show();
     },
     inquireClick() {
+
+ var arr = [];
+
+      e.forEach((element) => {
+        let data = this.firmaDataget.find((el) => {
+          return element.Tckn == el.Tckn;
+        });
+        console.log(data, element);
+        arr.push(Object.assign(element, data));
+      });
+
+console.log("ARRR",arr);
+
+
 
       const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
@@ -215,7 +249,7 @@ export default {
         SorguDurumu: 0,
       };
       console.log("GİDEN VERİ",data);
-      this.AddViziteSorgu(data);
+      //this.AddViziteSorgu(data);
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
@@ -230,31 +264,40 @@ export default {
     listRunClick() {
       console.log(this.listRequest.type);
     },
-    ...mapActions(['fetchCalisan','fetchSgkVizite','AddViziteSorgu']),
+    ...mapActions(['fetchCalisan','fetchSgkVizite','AddViziteSorgu','fetchSgkFirmaalar']),
     fetchdata(){
+      let arr=[];
       this.items=[];
 this.fetchSgkVizite(this.Mukellefdataget[0].musavirUid);
+ 
 this.items=this.SgkVizitelerDataget;
-
+this.Mukellefdataget.forEach((el)=>{
+  arr.push({title:el.unvan,tckn:el.tckn});
+});
+ 
+this.mukellefler=[...new Set(arr)];
+ 
 setTimeout(() => {
   this.items=this.SgkVizitelerDataget.map((a)=>{
   return Object.assign(a,{
-    MukUnvan:this.Mukellefdataget.find((b)=>a.tckn.includes(b.tckn)).unvan,
-     
+    MukUnvan:this.Mukellefdataget.find((b)=>a.tckn.includes(b.tckn)).unvan,      
   });
+}); 
 
-});
-console.log("UNVAN",this.MukUnvan);
+ var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.tckn == a.Tckn)));
+ console.log("aaaa",expected);
 }, 1000);
 
-  console.log("UNVAN", MukUnvan);
-console.log("GELEN DATA", this.items);
+ 
 
-
+ 
     this.getfirma.forEach(element => {
-    arr.push(element.SubeId) 
+    arr.push(element.Tckn) 
       });
-      this.fetchCalisan(arr);
+       
+    //   this.fetchCalisan(arr);
+
+
     // setTimeout(()=>{
     //  let caalisanİd=[]
     //  this.getCalisan.forEach(data=>{
@@ -276,17 +319,7 @@ console.log("GELEN DATA", this.items);
     //}
   },
   },
-  computed:{
-...mapGetters(["reMukellef","reSgkVizite"]),
-Mukellefdataget()
-{
-return this.reMukellef;
-},
-SgkVizitelerDataget()
-{
-return this.reSgkVizite;
-},
-  },
+
   mounted(){
     this.fetchdata()
   }

@@ -47,6 +47,9 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
+          <DxItem location="before" template="mukellef" /> 
+            <DxItem location="before" template="dataFirsts"/>
+                 <DxItem location="before" template="dataLasts"/>
         <DxItem location="before" template="inquireTemplate" />
         <!-- <DxItem location="before" template="printTemplate" />
         <DxItem location="before" template="trash" /> -->
@@ -91,6 +94,55 @@
         />
       </template>
 
+      <template #mukellef>
+       <DxDropDownBox
+  type="success"
+        :data-source="mukellefData" 
+      placeholder="Lütfen Mükellef Seçiniz"
+      display-expr="title"
+      value-expr="tckn"
+         width="410"
+        >
+          <template #content>
+            <DxTreeView
+   
+       ref="treeViewRefName"
+              :data-source="mukellefData"
+      @item-selection-changed="treeView_itemSelectionChanged($event)"
+              key-expr="tckn"
+             :select-by-click="true"
+              :select-nodes-recursive="false"
+              selection-mode="multiple"              
+              show-check-boxes-mode="normal"
+              display-expr="title"
+              width="400"
+            />
+          </template>
+</DxDropDownBox>
+      </template>
+<template #dataFirsts>
+ <b-form-datepicker
+              v-model="startdate"
+            type="date"
+            width="150"
+            placeholder="Başlangıç Tarihi"
+             apply-value-mode="useButtons"
+
+          />
+
+</template>
+<template #dataLasts>
+ <b-form-datepicker
+  ref="endDate"
+             v-model="endDate"
+            type="date"
+            width="150"
+            placeholder="Bitiş Tarihi"
+                       
+          />
+
+ 
+</template>
       <template #trash>
         <DxButton
           type="normal"
@@ -177,6 +229,7 @@ import {
   BCardBody,
   BCardTitle,
   BCardText,
+     BFormDatepicker
 } from "bootstrap-vue";
 
 import {
@@ -197,12 +250,15 @@ import {
   DxToolbar,
   DxItem,
   DxLoadPanel,
-  DxExport,
+  DxExport, 
 
 } from "devextreme-vue/data-grid";
 import { BButton } from "bootstrap-vue";
 import DxButton from "devextreme-vue/button";
 import DxDropDownButton from "devextreme-vue/drop-down-button";
+import DxDateBox from 'devextreme-vue/date-box';
+import DxTreeView from 'devextreme-vue/tree-view'; 
+import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import Ripple from "vue-ripple-directive";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -217,8 +273,14 @@ export default {
     BCard,
     BCardBody,
     BCardTitle,
+    DxDateBox,
+     DxTreeView,
     BCardText,
+    BFormDatepicker,
     DxDataGrid,
+    DxDateBox,
+    DxTreeView,
+     DxDropDownBox,
     DxScrolling,
     DxPager,
     BCardHeader,
@@ -266,6 +328,9 @@ export default {
       type: String,
       default: "multiple",
     },
+    mukellefData:{
+      type:Array
+    },
     showPdfPopupClick: Function,
     inquireClick: Function,
     downloadClick: Function,
@@ -278,6 +343,8 @@ export default {
   },
   data() {
     return {
+        startdate: new Date(),
+ endDate: new Date(),
       pageSizes: [10, 20, 50, "all"],
       selectedRowKeys: [],
       downloadSettings: [
@@ -302,6 +369,10 @@ export default {
     },
   },
   methods: {
+    treeView_itemSelectionChanged(e) {
+      console.log(e.component.getSelectedNodeKeys()); 
+  this.$emit("selected-tckn",e.component.getSelectedNodeKeys())
+    },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;

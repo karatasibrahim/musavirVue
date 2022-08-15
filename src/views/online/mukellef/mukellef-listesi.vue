@@ -19,16 +19,14 @@
       :columns="columns"
     />
 
-  
-
     <b-modal
       ref="taxPayerPopup"
       title="Mükellef Kartı"
       size="lg"
       centered
       no-close-on-backdrop
-       ok-title="Kaydet"
-         ok-only
+      ok-title="Kaydet"
+      ok-only
       @ok.prevent="inquireClick"
     >
       <template>
@@ -54,19 +52,19 @@
             <i class="gg-track"> </i>
             Sgk
           </li>
-  <li
+          <li
             :class="popupSection == 'hızlı' ? 'active' : 'false'"
             @click="popupSection = 'hızlı'"
           >
             <i class="gg-track"> </i>
             Hızlı Girişler
           </li>
-            <li
+          <li
             :class="popupSection == 'pass' ? 'active' : 'false'"
             @click="popupSection = 'pass'"
           >
             <i class="gg-track"> </i>
-           Şifreler
+            Şifreler
           </li>
         </ul>
 
@@ -78,7 +76,7 @@
           ]"
         >
           <h2>{{ popup.unvan }}</h2>
-          <hr>
+          <hr />
 
           <div class="m-flex-row">
             <div class="m-input">
@@ -93,109 +91,146 @@
 
             <div class="s-input">
               <label><b>İl</b> </label>
-                          <b-form-select  
-                          v-model="popup.selectedil"
-             :options="getIl" 
-            
-             />
+              <b-form-select v-model="popup.selectedil" :options="getIl" />
               <label><b>İlçe</b> </label>
-                          <b-form-select  
-                           v-model="popup.selectedilce"
-             :options="getIlce" 
-            
-             />
+              <b-form-select v-model="popup.selectedilce" :options="getIlce" />
             </div>
           </div>
 
           <div class="m-flex-row">
             <div class="m-input">
               <label>Vergi Dairesi</label>
-              <input type="text"   v-model="popup.VergiDairesi" />
+              <input type="text" v-model="popup.VergiDairesi" />
               <label>Vergi No</label>
-              <input type="text"   v-model="popup.VergiNo" />
+              <input type="text" v-model="popup.VergiNo" />
               <label>Vergi T.c.</label>
-              <input type="text"   v-model="popup.MukellefKimlik" />
+              <input type="text" v-model="popup.MukellefKimlik" />
             </div>
             <div class="m-input">
               <label>Durumu</label>
-              <div style="display: flex; align-items: center; gap: 5px; height: 30px;">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 5px;
+                  height: 30px;
+                "
+              >
                 <input type="checkbox" v-model="popup.Durum" />
                 <label>Kart Aktif</label>
               </div>
-                <label>Mük. Tip</label>
-                <input type="text"   />
-                <label>Mük. Kodu</label>
-                <input type="text"   v-model="popup.MukellefKodu" />
+              <label>Mük. Tip</label>
+              <input type="text" />
+              <label>Mük. Kodu</label>
+              <input type="text" v-model="popup.MukellefKodu" />
             </div>
           </div>
-      <div class="m-flex-row button-table" id="m-table">
+          <div class="m-flex-row button-table" id="m-table">
+            <b-table
+              responsive="sm"
+              thead-tr-class="main-row-style"
+              tbody-tr-class="row-style"
+              :bordered="true"
+              :items="faaliyetdata"
+              :fields="fields"
+            >
+              <template #cell(FaaliyetKodu)="data">
+                <span class="text-nowrap">
+                  <input
+                    type="text"
+                    v-model="data.item.FaaliyetKodu"
+                    @keyup.enter="faaliyetget"
+                  />
+                </span>
+              </template>
+              <template #cell(FaaliyetAciklama)="data">
+                <span class="text-nowrap faaliyetaciklama">
+                  <input type="text" v-model="data.item.FaaliyetAciklama" />
+                </span>
+              </template>
+              <template #cell(Sil)="data">
+                <span class="text-nowrap" @click="getFaaliyetData(data)">
+                  <feather-icon icon="Trash2Icon" />
+                </span>
+              </template>
+            </b-table>
 
-  <b-table responsive="sm" thead-tr-class="main-row-style" tbody-tr-class="row-style" :bordered=true :items="faaliyetdata" :fields="fields">
-     <template #cell(FaaliyetKodu)=data>
-      <span class="text-nowrap">
-     <input type="text" v-model="data.item.FaaliyetKodu"  @keyup.enter="faaliyetget"  />
-      </span>
-    </template>
- <template #cell(FaaliyetAciklama)=data >
-      <span class="text-nowrap faaliyetaciklama" >
-        <input type="text" v-model="data.item.FaaliyetAciklama">
-      </span>
-    </template>
-    <template  #cell(Sil)=data>
-      <span  class="text-nowrap" @click="getFaaliyetData(data)">
-<feather-icon icon="Trash2Icon"/>
-      </span>
-    </template>
-  </b-table>
-
-   <b-button variant="gradient-success" @click="AddNewFaaliyet">
-            <feather-icon icon="PlusCircleIcon"/>
-          </b-button>
-          </div> 
-
-          <div class="m-flex-row button-table"  id="m-table">
- <b-table responsive="sm" style="overflow-x: hidden;" thead-tr-class="main-row-style-hitap" tbody-tr-class="row-style-hitap"  :bordered=true :items="iletisimdata" :fields="hitapField">
-     <template #cell(HitapŞekli)=data>
-      <span class="text-nowrap">
-     <input type="text" @focusout="iletisimget($event.target,data.item.id)" class="hitap" v-model="data.item.HitapŞekli"/>
-      </span>
-    </template>
- <template #cell(Telefon)=data >
-      <span class="text-nowrap faaliyetaciklama" >
-        <input type="tel"  @focusout="iletisimget($event.target,data.item.id)" class="tel" size="20" minlength="9"  inputmode="numaratic" maxlength="10" v-model="data.item.Telefon" name="" id="">
-      </span>
-    </template>
-    <template  #cell(Mail)=data>
-      <span  class="text-nowrap" >
-<input type="text" class="mail" @focusout="iletisimget($event.target,data.item.id)"  v-model="data.item.Mail"/>
-      </span>
-    </template>
-     <template #cell(GönderimYapılsın)=data >
-      <span class="text-nowrap faaliyetaciklama" >
-      <b-form-checkbox
-      v-model="data.item.GönderimYapılsın"
-      class="mailgnderim"
-      @focusout="iletisimget($event.target,data.item.id)"
-    >
-    </b-form-checkbox>
-      </span>
-    </template>
-        <template  #cell(Sil)=data>
-      <span  class="text-nowrap" @click="deletedata(data)">
-<feather-icon icon="Trash2Icon"/>
-      </span>
-    </template>
-  </b-table>
-
-            <b-button variant="gradient-success" @click="AddNewhitap">
-            <feather-icon icon="PlusCircleIcon"/>
-          </b-button>
+            <b-button variant="gradient-success" @click="AddNewFaaliyet">
+              <feather-icon icon="PlusCircleIcon" />
+            </b-button>
           </div>
 
+          <div class="m-flex-row button-table" id="m-table">
+            <b-table
+              responsive="sm"
+              style="overflow-x: hidden"
+              thead-tr-class="main-row-style-hitap"
+              tbody-tr-class="row-style-hitap"
+              :bordered="true"
+              :items="iletisimdata"
+              :fields="hitapField"
+            >
+              <template #cell(HitapŞekli)="data">
+                <span class="text-nowrap">
+                  <input
+                    type="text"
+                    @focusout="iletisimget($event.target, data.item.id)"
+                    class="hitap"
+                    v-model="data.item.HitapŞekli"
+                  />
+                </span>
+              </template>
+              <template #cell(Telefon)="data">
+                <span class="text-nowrap faaliyetaciklama">
+                  <input
+                    type="tel"
+                    @focusout="iletisimget($event.target, data.item.id)"
+                    class="tel"
+                    size="20"
+                    minlength="9"
+                    inputmode="numaratic"
+                    maxlength="10"
+                    v-model="data.item.Telefon"
+                    name=""
+                    id=""
+                  />
+                </span>
+              </template>
+              <template #cell(Mail)="data">
+                <span class="text-nowrap">
+                  <input
+                    type="text"
+                    class="mail"
+                    @focusout="iletisimget($event.target, data.item.id)"
+                    v-model="data.item.Mail"
+                  />
+                </span>
+              </template>
+              <template #cell(GönderimYapılsın)="data">
+                <span class="text-nowrap faaliyetaciklama">
+                  <b-form-checkbox
+                    v-model="data.item.GönderimYapılsın"
+                    class="mailgnderim"
+                    @focusout="iletisimget($event.target, data.item.id)"
+                  >
+                  </b-form-checkbox>
+                </span>
+              </template>
+              <template #cell(Sil)="data">
+                <span class="text-nowrap" @click="deletedata(data)">
+                  <feather-icon icon="Trash2Icon" />
+                </span>
+              </template>
+            </b-table>
+
+            <b-button variant="gradient-success" @click="AddNewhitap">
+              <feather-icon icon="PlusCircleIcon" />
+            </b-button>
+          </div>
         </div>
 
         <!-- SECTION PASSWORDS -->
-         <div
+        <div
           class="m-popup"
           :style="[
             popupSection == 'passwords'
@@ -231,14 +266,14 @@
                   v-focus
                   :options="beyandata.aylık"
                   v-model="beyanDataValue.KDV1"
-                  @change="setBeyan('KDV1','1', $event)"
+                  @change="setBeyan('KDV1', '1', $event)"
                 />
               </div>
 
               <div class="m-input">
                 <label>Kdv 2 </label>
                 <b-form-select
-                  @change="setBeyan('KDV2','2', $event)"
+                  @change="setBeyan('KDV2', '2', $event)"
                   v-focus
                   v-model="beyanDataValue.KDV2"
                   :options="beyandata.aylık"
@@ -248,7 +283,7 @@
               <div class="m-input">
                 <label>Kdv 4 </label>
                 <b-form-select
-                  @change="setBeyan('KDV4','4', $event)"
+                  @change="setBeyan('KDV4', '4', $event)"
                   v-model="beyanDataValue.KDV4"
                   v-focus
                   :options="beyandata.aylık"
@@ -258,7 +293,7 @@
               <div class="m-input">
                 <label>GGeçici </label>
                 <b-form-select
-                  @change="setBeyan('GGECICI','5', $event)"
+                  @change="setBeyan('GGECICI', '5', $event)"
                   v-focus
                   :options="beyandata.üçaylık"
                   v-model="beyanDataValue.GGECICI"
@@ -267,7 +302,7 @@
               <div class="m-input">
                 <label>KGeçici </label>
                 <b-form-select
-                  @change="setBeyan('KGECICI','6', $event)"
+                  @change="setBeyan('KGECICI', '6', $event)"
                   value="false"
                   v-model="beyanDataValue.KGECICI"
                   v-focus
@@ -280,7 +315,7 @@
               <div class="m-input">
                 <label>Muhsgk </label>
                 <b-form-select
-                  @change="setBeyan('MUHSGK','7', $event)"
+                  @change="setBeyan('MUHSGK', '7', $event)"
                   v-model="beyanDataValue.MUHSGK"
                   v-focus
                   :options="beyandata.aylıkÜçaylık"
@@ -290,7 +325,7 @@
               <div class="m-input">
                 <label>Ba </label>
                 <b-form-select
-                  @change="setBeyan('FORMBA','8', $event)"
+                  @change="setBeyan('FORMBA', '8', $event)"
                   v-model="beyanDataValue.FORMBA"
                   v-focus
                   :options="beyandata.aylık"
@@ -300,7 +335,7 @@
               <div class="m-input">
                 <label>Bs </label>
                 <b-form-select
-                  @change="setBeyan('FORMBS','9', $event)"
+                  @change="setBeyan('FORMBS', '9', $event)"
                   v-model="beyanDataValue.FORMBS"
                   v-focus
                   :options="beyandata.aylık"
@@ -310,7 +345,7 @@
               <div class="m-input">
                 <label>Poşet </label>
                 <b-form-select
-                  @change="setBeyan('POSET','10', $event)"
+                  @change="setBeyan('POSET', '10', $event)"
                   v-model="beyanDataValue.POSET"
                   v-focus
                   :options="beyandata.üçaylık"
@@ -320,7 +355,7 @@
               <div class="m-input">
                 <label>Turizm </label>
                 <b-form-select
-                  @change="setBeyan('TURIZM','11', $event)"
+                  @change="setBeyan('TURIZM', '11', $event)"
                   v-model="beyanDataValue.TURIZM"
                   v-focus
                   :options="beyandata.aylık"
@@ -332,7 +367,7 @@
               <div class="m-input">
                 <label>Yıllık Gelir </label>
                 <b-form-select
-                  @change="setBeyan('GELIR','13', $event)"
+                  @change="setBeyan('GELIR', '13', $event)"
                   v-model="beyanDataValue.GELIR"
                   v-focus
                   :options="beyandata.yıllık"
@@ -342,7 +377,7 @@
               <div class="m-input">
                 <label>Gelir 1001E</label>
                 <b-form-select
-                  @change="setBeyan('GELIR1001E','14', $event)"
+                  @change="setBeyan('GELIR1001E', '14', $event)"
                   v-model="beyanDataValue.GELIR1001E"
                   v-focus
                   :options="beyandata.yıllık"
@@ -352,7 +387,7 @@
               <div class="m-input">
                 <label>Kurumlar </label>
                 <b-form-select
-                  @change="setBeyan('KURUMLAR','15', $event)"
+                  @change="setBeyan('KURUMLAR', '15', $event)"
                   v-focus
                   :options="beyandata.yıllık"
                 />
@@ -361,7 +396,7 @@
               <div class="m-input">
                 <label>Basit Usül </label>
                 <b-form-select
-                  @change="setBeyan('BASIT','16', $event)"
+                  @change="setBeyan('BASIT', '16', $event)"
                   v-focus
                   :options="beyandata.yıllık"
                 />
@@ -370,7 +405,7 @@
               <div class="m-input">
                 <label>Öiv </label>
                 <b-form-select
-                  @change="setBeyan('OIV','17', $event)"
+                  @change="setBeyan('OIV', '17', $event)"
                   v-focus
                   :options="beyandata.aylık"
                 />
@@ -381,7 +416,7 @@
               <div class="m-input">
                 <label>Ötv </label>
                 <b-form-select
-                  @change="setBeyan('OTV','18', $event)"
+                  @change="setBeyan('OTV', '18', $event)"
                   v-focus
                   :options="beyandata.aylık"
                 />
@@ -390,7 +425,7 @@
               <div class="m-input">
                 <label>Gmsi </label>
                 <b-form-select
-                  @change="setBeyan('GMSI','19', $event)"
+                  @change="setBeyan('GMSI', '19', $event)"
                   v-focus
                   :options="beyandata.yıllık"
                 />
@@ -399,18 +434,17 @@
               <div class="m-input">
                 <label>Damga </label>
                 <b-form-select
-                  @change="setBeyan('DAMGA','20', $event)"
+                  @change="setBeyan('DAMGA', '20', $event)"
                   v-focus
                   :options="beyandata.aylık"
                 />
               </div>
             </div>
           </div>
-         </div>
+        </div>
 
- 
         <div
-v-if="uptadeActive"
+          v-if="uptadeActive"
           class="m-popup"
           :style="[
             popupSection == 'branch'
@@ -418,8 +452,8 @@ v-if="uptadeActive"
               : { display: 'none' },
           ]"
         >
-        <h2>{{popup.Unvan}}</h2>
-        <hr>
+          <h2>{{ popup.Unvan }}</h2>
+          <hr />
 
           <b-button variant="gradient-success">
             <feather-icon icon="PlusCircleIcon" class="mr-50" />
@@ -455,125 +489,137 @@ v-if="uptadeActive"
               : { display: 'none' },
           ]"
         >
-           
-             <b-button class="btn-icon rounded-circle" variant="gradient-success" @click="uptadeActive=!uptadeActive">
-            <feather-icon icon="ArrowLeftIcon"  style="font-size:50px"/>
+          <b-button
+            class="btn-icon rounded-circle"
+            variant="gradient-success"
+            @click="uptadeActive = !uptadeActive"
+          >
+            <feather-icon icon="ArrowLeftIcon" style="font-size: 50px" />
           </b-button>
-       
+
           <div class="m-flex-row">
             <div class="m-input">
               <label>SicilNo </label>
-              <input type="text"   v-model="sgkPerson.SicilNo" />
+              <input type="text" v-model="sgkPerson.SicilNo" />
             </div>
 
             <div class="m-input">
               <label>Durumu </label>
               <b-form-select v-model="sgkPerson.Durum" :options="İnputDurum" />
             </div>
-               <div class="m-input">
+            <div class="m-input">
               <label>Şube Adi</label>
-              <input type="text"   v-model="sgkPerson.SubeAdi" />
+              <input type="text" v-model="sgkPerson.SubeAdi" />
             </div>
           </div>
 
-            <div class="m-flex-row">
-         
-
+          <div class="m-flex-row">
             <div class="m-input">
               <label>Kullanıcı Adi </label>
-              <input type="text"   v-model="sgkPerson.SubeKullanicAdi" />
+              <input type="text" v-model="sgkPerson.SubeKullanicAdi" />
             </div>
-                <div class="m-input">
+            <div class="m-input">
               <label>Kullanıcı Kodu </label>
-              <input type="text"   v-model="sgk.SubeKullaniciKodu" />
+              <input type="text" v-model="sgk.SubeKullaniciKodu" />
             </div>
           </div>
 
-             <div class="m-flex-row">
+          <div class="m-flex-row">
             <div class="m-input">
               <label>Sistem Şifresi </label>
-              <input type="text"   v-model="sgkPerson.SistemSifresi" />
+              <input type="text" v-model="sgkPerson.SistemSifresi" />
             </div>
 
             <div class="m-input">
               <label>İş Yeri Şifresi </label>
-              <input type="text"   v-model="sgkPerson.İsyeriSifresi" />
+              <input type="text" v-model="sgkPerson.İsyeriSifresi" />
             </div>
           </div>
 
-                <div class="m-flex-row">
+          <div class="m-flex-row">
             <div class="m-input">
               <label>MetreKare </label>
-              <input type="text"   v-model="sgkPerson.MetreKare" />
+              <input type="text" v-model="sgkPerson.MetreKare" />
             </div>
 
             <div class="m-input">
               <label>Birim Maliyet </label>
-              <input type="text"   v-model="sgkPerson.BirimMaliyet" />
+              <input type="text" v-model="sgkPerson.BirimMaliyet" />
             </div>
           </div>
 
-               <div class="m-flex-row">
+          <div class="m-flex-row">
             <div class="m-input">
               <label>Şube Açilişi </label>
-              <input type="text"   v-model="sgkPerson.SubeAcilis" />
+              <input type="text" v-model="sgkPerson.SubeAcilis" />
             </div>
 
             <div class="m-input">
               <label>Şube Kapanışı </label>
-              <input type="text"   v-model="sgkPerson.SubeKapanis" />
+              <input type="text" v-model="sgkPerson.SubeKapanis" />
             </div>
           </div>
-            <div class="m-flex-row">
+          <div class="m-flex-row">
             <div class="m-input">
               <label>Şube Notu </label>
-              <input type="text"   v-model="sgkPerson.SubeNot" />
+              <input type="text" v-model="sgkPerson.SubeNot" />
             </div>
           </div>
-<b-button variant="gradient-success" @click="sgkuptade">
+          <b-button variant="gradient-success" @click="sgkuptade">
             <feather-icon icon="PlusCircleIcon" class="mr-50" />
-            <span class="align-middle" >Kaydet</span>
+            <span class="align-middle">Kaydet</span>
           </b-button>
         </div>
 
-
-<!------FAALİYET TABLOSU------->
-    <div
+        <!------FAALİYET TABLOSU------->
+        <div
           class="m-popup"
           :style="[
-            popupSection == 'hızlı'
-              ? { display: 'flex' }
-              : { display: 'none' },
+            popupSection == 'hızlı' ? { display: 'flex' } : { display: 'none' },
           ]"
         >
-             <h2>{{popup.Unvan}}</h2>
-<hr>
-  <div class="m-flex-row button-row"> 
-<button class="m-btn"><img src="../../../images/internet-vergi-dairesi.jpeg" alt=""></button>
-<button class="m-btn"><img src="../../../images/vergi-dairesi.jpeg" alt=""></button>
-   <button class="m-btn"><img src="../../../images/e-beyanname.jpeg" alt=""></button>
-
- </div>
+          <h2>{{ popup.Unvan }}</h2>
+          <hr />
           <div class="m-flex-row button-row">
-<button class="m-btn"><img src="../../../images/sgk-ise-giris.jpeg" alt=""></button>
-<button class="m-btn"><img src="../../../images/ise-çıkıs.jpeg" alt=""></button>
-<button class="m-btn"><img src="../../../images/e-bildrige.jpeg" alt=""></button>
-
+            <button class="m-btn">
+              <img src="../../../images/internet-vergi-dairesi.jpeg" alt="" />
+            </button>
+            <button class="m-btn">
+              <img src="../../../images/vergi-dairesi.jpeg" alt="" />
+            </button>
+            <button class="m-btn">
+              <img src="../../../images/e-beyanname.jpeg" alt="" />
+            </button>
           </div>
- <div class="m-flex-row button-row"> 
-<button class="m-btn"><img src="../../../images/e-portal.jpeg" alt=""></button>
-<button class="m-btn"><img src="../../../images/tsg.jpeg" alt=""></button>
-<button class="m-btn"><img src="../../../images/e-birlik.jpeg" alt=""></button>
- </div>
-    </div>
+          <div class="m-flex-row button-row">
+            <button class="m-btn">
+              <img src="../../../images/sgk-ise-giris.jpeg" alt="" />
+            </button>
+            <button class="m-btn">
+              <img src="../../../images/ise-çıkıs.jpeg" alt="" />
+            </button>
+            <button class="m-btn">
+              <img src="../../../images/e-bildrige.jpeg" alt="" />
+            </button>
+          </div>
+          <div class="m-flex-row button-row">
+            <button class="m-btn">
+              <img src="../../../images/e-portal.jpeg" alt="" />
+            </button>
+            <button class="m-btn">
+              <img src="../../../images/tsg.jpeg" alt="" />
+            </button>
+            <button class="m-btn">
+              <img src="../../../images/e-birlik.jpeg" alt="" />
+            </button>
+          </div>
+        </div>
 
-     <div
+        <div
           class="m-popup"
-          v-if="  popupSection == 'pass'"
+          v-if="popupSection == 'pass'"
           :style="[
-            popupSection == 'pass'
-              ? { display: 'flex' }
-              : { display: 'none' },
+            popupSection == 'pass' ? { display: 'flex' } : { display: 'none' },
           ]"
         >
           <h2>{{ popup.Unvan }}</h2>
@@ -588,9 +634,8 @@ v-if="uptadeActive"
               <label>Panel Şifre</label>
               <input type="text" v-model="popup.PanelSifre" />
             </div>
-
           </div>
-                   <div class="m-flex-row">
+          <div class="m-flex-row">
             <div class="m-input">
               <label>Edevlet TC</label>
               <input type="text" v-model="popup.EdevletTc" />
@@ -600,11 +645,8 @@ v-if="uptadeActive"
               <label>Edevlet Şifre</label>
               <input type="text" v-model="popup.eDevletSifre" />
             </div>
-
-
           </div>
-         </div>
-               
+        </div>
       </template>
     </b-modal>
   </div>
@@ -622,22 +664,23 @@ import {
   BButton,
   BFormSelect,
   BFormTextarea,
-  BTable ,
-    BFormInput,
-        BForm,
-         BInputGroupPrepend, BInputGroup,
+  BTable,
+  BFormInput,
+  BForm,
+  BInputGroupPrepend,
+  BInputGroup,
 } from "bootstrap-vue";
-import Cleave from 'vue-cleave-component'
+import Cleave from "vue-cleave-component";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
-import 'cleave.js/dist/addons/cleave-phone.us'
+import "cleave.js/dist/addons/cleave-phone.us";
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     AppTable,
     BRow,
-    BTable ,
+    BTable,
     BFormCheckbox,
     vSelect,
     BCol,
@@ -647,18 +690,19 @@ export default {
     BFormDatepicker,
     BFormRadio,
     BFormTextarea,
-       BFormInput,
-        BForm,
-         BInputGroupPrepend, BInputGroup,
-         Cleave
+    BFormInput,
+    BForm,
+    BInputGroupPrepend,
+    BInputGroup,
+    Cleave,
   },
 
   data() {
     return {
       options: {
-              phone: {
+        phone: {
           phone: true,
-          phoneRegionCode: 'TR',
+          phoneRegionCode: "TR",
         },
       },
       dateTimeLanguage: lng.dateTimeLanguage,
@@ -670,12 +714,12 @@ export default {
         { value: false, text: "Pasif" },
         { value: true, text: "Aktif" },
       ],
-iletisimdata:[],
+      iletisimdata: [],
       İnputDurumdata: null,
       popup: {},
       sgk: [],
-      sgkPerson:{},
-  
+      sgkPerson: {},
+
       inquireRequest: {
         startDate: new Date(),
         endDate: new Date(),
@@ -686,7 +730,7 @@ iletisimdata:[],
         active: true,
         passive: false,
       },
-      faaliyetkodu:"",
+      faaliyetkodu: "",
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/AL%C4%B0%20%C3%9CZ%C3%9CMC%C3%9C%2F1ukxyryp3t1xhp.pdf?alt=media",
       months: [
@@ -704,9 +748,9 @@ iletisimdata:[],
         "Aralık",
       ],
       years: ["2018", "2019", "2020", "2021", "2022"],
-      items: [ ],
-      il:[],
-      ilce:[],
+      items: [],
+      il: [],
+      ilce: [],
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
       columns: [
@@ -774,69 +818,78 @@ iletisimdata:[],
         },
       ],
       person: [],
-      uptadeActive:true,
-      beyandata:{
-        aylık:[{value:true,text:"Aylık"},{value:false,text:' '}],
-        yıllık:[{value:true,text:"Yıllık"},{value:false,text:' '}],
-        üçaylık:[{value:true,text:"Üç Aylık"},{value:false,text:' '}],
-        aylıkÜçaylık:[{value:false,text:"Üç Aylık"},{value:true,text:'Aylık'}]
+      uptadeActive: true,
+      beyandata: {
+        aylık: [
+          { value: true, text: "Aylık" },
+          { value: false, text: " " },
+        ],
+        yıllık: [
+          { value: true, text: "Yıllık" },
+          { value: false, text: " " },
+        ],
+        üçaylık: [
+          { value: true, text: "Üç Aylık" },
+          { value: false, text: " " },
+        ],
+        aylıkÜçaylık: [
+          { value: false, text: "Üç Aylık" },
+          { value: true, text: "Aylık" },
+        ],
       },
-            beyanDataValue:{
-KDV1:null,
-KDV2:null,
-KDV4:null,
-GGECICI:null,
-KGECICI:null,
-MUHSGK:null,
-FORMBA:null,
-FORMBS:null,
-POSET:null,
-TURIZM:null,
-GELIR:null,
-GELIR1001E:null,
-KURUMLAR:null,
-BASIT:null,
-OIV:null,
-OTV:null,
-GMSI:null,
-DAMGA:null,
+      beyanDataValue: {
+        KDV1: null,
+        KDV2: null,
+        KDV4: null,
+        GGECICI: null,
+        KGECICI: null,
+        MUHSGK: null,
+        FORMBA: null,
+        FORMBS: null,
+        POSET: null,
+        TURIZM: null,
+        GELIR: null,
+        GELIR1001E: null,
+        KURUMLAR: null,
+        BASIT: null,
+        OIV: null,
+        OTV: null,
+        GMSI: null,
+        DAMGA: null,
       },
-      beyanalldata:{},
-       fields: ['FaaliyetKodu', 'FaaliyetAciklama', 'Sil'],
-   faaliyetdata:[],
-   hitapField:['HitapŞekli','Telefon','Mail','GönderimYapılsın',"Sil"]
+      beyanalldata: {},
+      fields: ["FaaliyetKodu", "FaaliyetAciklama", "Sil"],
+      faaliyetdata: [],
+      hitapField: ["HitapŞekli", "Telefon", "Mail", "GönderimYapılsın", "Sil"],
     };
   },
   directives: {
-  focus: {
-    componentUpdated: function (el, binding, vnode) {
-      console.log(el.value);
-       if(el.value=="true"){
-    el.style.background="#28c76f7d"
-  }else{
-        el.style.background="#ea5455ab"
-
-  }
-document.addEventListener("change",()=>{
-  el.style.color="#ffffffe6"
-  if(el.value=="true"){
-    el.style.background="#28c76f7d"
-  }else{
-        el.style.background="#ea5455ab"
-
-  }
-})
-
-    }
-  },
-  input:{
-inserted:function (el,) {
-  document.addEventListener('focusout',()=>{
- let space=el.value;
-faaliyetget(space)
-  })
-}
-  }
+    focus: {
+      componentUpdated: function (el, binding, vnode) {
+        console.log(el.value);
+        if (el.value == "true") {
+          el.style.background = "#28c76f7d";
+        } else {
+          el.style.background = "#ea5455ab";
+        }
+        document.addEventListener("change", () => {
+          el.style.color = "#ffffffe6";
+          if (el.value == "true") {
+            el.style.background = "#28c76f7d";
+          } else {
+            el.style.background = "#ea5455ab";
+          }
+        });
+      },
+    },
+    input: {
+      inserted: function (el) {
+        document.addEventListener("focusout", () => {
+          let space = el.value;
+          faaliyetget(space);
+        });
+      },
+    },
   },
   computed: {
     // inquireMinDate() {
@@ -851,21 +904,29 @@ faaliyetget(space)
     // listMaxDate() {
     //   return this.listRequest.endDate;
     // },
-    ...mapGetters(["reilce","reil","reFaaliyet","reKalanBeyanname","reBeyanTakipProperties","reMukellef", "reSgkFirmalar", "reTicaretSicilGazetesi"]),
+    ...mapGetters([
+      "reilce",
+      "reil",
+      "reFaaliyet",
+      "reKalanBeyanname",
+      "reBeyanTakipProperties",
+      "reMukellef",
+      "reSgkFirmalar",
+      "reTicaretSicilGazetesi",
+    ]),
 
-    getIl(){
-      return this.reil.map(el=>{
-     return {value:el.SehirId,text:el.SehirAdi}
-    })
-      },
-      getIlce(){
-        return this.reilce.map(el=>{
-          return {value:el.IlceId,text:el.IlceAdi}
-        })
-      },
+    getIl() {
+      return this.reil.map((el) => {
+        return { value: el.SehirId, text: el.SehirAdi };
+      });
+    },
+    getIlce() {
+      return this.reilce.map((el) => {
+        return { value: el.IlceId, text: el.IlceAdi };
+      });
+    },
     getMukellefData() {
       return this.reMukellef;
-     
     },
     getFirmadata() {
       return this.reSgkFirmalar;
@@ -879,8 +940,8 @@ faaliyetget(space)
     getBeyanTakipProperties() {
       return this.reBeyanTakipProperties;
     },
-    filterfaaliyet(){
-return this.reFaaliyet
+    filterfaaliyet() {
+      return this.reFaaliyet;
     },
   },
   methods: {
@@ -905,59 +966,77 @@ return this.reFaaliyet
     //#endregion
 
     //#region SAYFA ICIN
-    showPanelClick(kod,sifre,id) {
-      console.log(kod,sifre);
-       window.open("http://mukellef.emusavirim.com/?cid="+kod+ "&pwd="+ sifre+"&asd="+id, "_blank");
+    showPanelClick(kod, sifre, id) {
+      console.log(kod, sifre);
+      window.open(
+        "http://mukellef.emusavirim.com/?cid=" +
+          kod +
+          "&pwd=" +
+          sifre +
+          "&asd=" +
+          id,
+        "_blank"
+      );
     },
     showTaxPayerInfoClicks(e, v, y) {
       this.$refs.taxPayerPopup.show();
-      this.person=[]
+      this.person = [];
       this.person = this.getMukellefData.filter((el) => {
         return el.tckn == v;
       });
-
-  this.popup=this.person[0]
  
-  console.log(this.popup.FaaliyetAlani, this.faaliyetdata);
+      this.popup = this.person[0];
+
+      console.log(this.popup.FaaliyetAlani, this.faaliyetdata);
     },
-    ...mapActions(["uptadeSifre","fetchsifreler","AddNewBeyanTakip","AddNewMükellef","DeleteSgkData","fetchİlce","fetchİller","fetchFaaliyet","fetchKalanBeyanname","fetchBeyanTakipProperties","uptadeSgkFirma","fetchSgkFirmaalar", "AddNewSgkData"]),
-        inquireClick() {
-console.log(this.popup)
-      this.popup.iletisim=this.iletisimdata
-      this.popup.FaaliyetAlani=this.faaliyetdata
-console.log(this.popup);
+    ...mapActions([
+      "uptadeSifre",
+      "fetchsifreler",
+      "AddNewBeyanTakip",
+      "AddNewMükellef",
+      "DeleteSgkData",
+      "fetchİlce",
+      "fetchİller",
+      "fetchFaaliyet",
+      "fetchKalanBeyanname",
+      "fetchBeyanTakipProperties",
+      "uptadeSgkFirma",
+      "fetchSgkFirmaalar",
+      "AddNewSgkData",
+    ]),
+    inquireClick() {
+      console.log(this.popup);
+      this.popup.iletisim = this.iletisimdata;
+      this.popup.FaaliyetAlani = this.faaliyetdata;
+      console.log(this.popup);
 
+      let id = this.popup.id;
 
- let id=this.popup.id
-
-console.log({data:this.popup,id:id});
-  this.AddNewMükellef({data:this.popup,id:id})
-
+      console.log({ data: this.popup, id: id });
+      this.AddNewMükellef({ data: this.popup, id: id });
     },
     fetch(data) {
-       
       let arr = [];
-      console.log(this.sgk=[]);
+      console.log((this.sgk = []));
       let subeıd = [];
       for (let i = 0; i < this.getMukellefData.length; i++) {
         const element = this.getMukellefData[i];
         arr.push(element.MukellefId);
       }
-    
-     console.log(subeıd);
+
+      console.log(subeıd);
       //* Sgk Tab
       if (data == "branch") {
-  this.sgk=[]
+        this.sgk = [];
 
         console.log(this.getFirmadata.length);
-this.fetchSgkFirmaalar(arr)
-
+        this.fetchSgkFirmaalar(arr);
 
         console.log(data);
         setTimeout(() => {
           const sgk = this.getFirmadata.filter((fil) => {
             console.log("filter in", data);
-            return this.person[0].MukellefId == fil.MukellefId;
+            return this.person[0].tckn == fil.tckn;
           });
           this.sgk = [];
           this.sgk = sgk;
@@ -965,204 +1044,210 @@ this.fetchSgkFirmaalar(arr)
       }
 
       //* Beyan Takip Tab
-    else if(data=="passwords"){
-this.fetchKalanBeyanname([this.person[0].MukellefId]);
+      else if (data == "passwords") {
+        this.fetchKalanBeyanname([this.person[0].MukellefId]);
 
-setTimeout(()=>{
-
-  this.getKalanBeyanname.forEach(el=>{
-    console.log(el)
-    if(el.TurPropId==1){
-this.beyanDataValue.KDV1=el.beyantakip
-    }
-     if(el.TurPropId==10){
-this.beyanDataValue.POSET=el.beyantakip
-    }
-     if(el.TurPropId==11){
-this.beyanDataValue.TURIZM=el.beyantakip
-    }
-     if(el.TurPropId==13){
-this.beyanDataValue.GELIR=el.beyantakip
-    }
-     if(el.TurPropId==14){
-this.beyanDataValue.GELIR1001E=el.beyantakip
-    }
-     if(el.TurPropId==15){
-this.beyanDataValue.KURUMLAR=el.beyantakip
-    }
-     if(el.TurPropId==16){
-this.beyanDataValue.BASIT=el.beyantakip
-    }
-     if(el.TurPropId==17){
-this.beyanDataValue.OIV=el.beyantakip
-    }
-     if(el.TurPropId==18){
-this.beyanDataValue.OTV=el.beyantakip
-    }
-      if(el.TurPropId==19){
-this.beyanDataValue.GMSI=el.beyantakip
-    }
-      if(el.TurPropId==2){
-this.beyanDataValue.KDV2=el.beyantakip
-    }
-      if(el.TurPropId==20){
-this.beyanDataValue.DAMGA=el.beyantakip
-    }
-      if(el.TurPropId==4){
-this.beyanDataValue.KDV4=el.beyantakip
-    }
-      if(el.TurPropId==5){
-this.beyanDataValue.GGECICI=el.beyantakip
-    }
-      if(el.TurPropId==6){
-this.beyanDataValue.KGECICI=el.beyantakip
-    }
-      if(el.TurPropId==7){
-        console.log(el);
-this.beyanDataValue.MUHSGK=el.beyantakip
-    }
-     if(el.TurPropId==8){
-this.beyanDataValue.FORMBA=el.beyantakip
-    }
-     if(el.TurPropId==9){
-this.beyanDataValue.FORMBS=el.beyantakip
-    }
-  })
-  console.log(this.beyanDataValue);
-},400)
-       }
-else if(data=="pass"){
-  setTimeout(()=>{
-    console.log(this.sifre );
-    
-  },100)
-}
+        setTimeout(() => {
+          this.getKalanBeyanname.forEach((el) => {
+            console.log(el);
+            if (el.TurPropId == 1) {
+              this.beyanDataValue.KDV1 = el.beyantakip;
+            }
+            if (el.TurPropId == 10) {
+              this.beyanDataValue.POSET = el.beyantakip;
+            }
+            if (el.TurPropId == 11) {
+              this.beyanDataValue.TURIZM = el.beyantakip;
+            }
+            if (el.TurPropId == 13) {
+              this.beyanDataValue.GELIR = el.beyantakip;
+            }
+            if (el.TurPropId == 14) {
+              this.beyanDataValue.GELIR1001E = el.beyantakip;
+            }
+            if (el.TurPropId == 15) {
+              this.beyanDataValue.KURUMLAR = el.beyantakip;
+            }
+            if (el.TurPropId == 16) {
+              this.beyanDataValue.BASIT = el.beyantakip;
+            }
+            if (el.TurPropId == 17) {
+              this.beyanDataValue.OIV = el.beyantakip;
+            }
+            if (el.TurPropId == 18) {
+              this.beyanDataValue.OTV = el.beyantakip;
+            }
+            if (el.TurPropId == 19) {
+              this.beyanDataValue.GMSI = el.beyantakip;
+            }
+            if (el.TurPropId == 2) {
+              this.beyanDataValue.KDV2 = el.beyantakip;
+            }
+            if (el.TurPropId == 20) {
+              this.beyanDataValue.DAMGA = el.beyantakip;
+            }
+            if (el.TurPropId == 4) {
+              this.beyanDataValue.KDV4 = el.beyantakip;
+            }
+            if (el.TurPropId == 5) {
+              this.beyanDataValue.GGECICI = el.beyantakip;
+            }
+            if (el.TurPropId == 6) {
+              this.beyanDataValue.KGECICI = el.beyantakip;
+            }
+            if (el.TurPropId == 7) {
+              console.log(el);
+              this.beyanDataValue.MUHSGK = el.beyantakip;
+            }
+            if (el.TurPropId == 8) {
+              this.beyanDataValue.FORMBA = el.beyantakip;
+            }
+            if (el.TurPropId == 9) {
+              this.beyanDataValue.FORMBS = el.beyantakip;
+            }
+          });
+          console.log(this.beyanDataValue);
+        }, 400);
+      } else if (data == "pass") {
+        setTimeout(() => {
+          console.log(this.sifre);
+        }, 100);
+      }
     },
     //#endregion
-   getsgkdata(data){
-     console.log(data);
-this.sgkPerson=data;
-this.uptadeActive=false
+    getsgkdata(data) {
+      console.log(data);
+      this.sgkPerson = data;
+      this.uptadeActive = false;
     },
-    sgkuptade(){
+    sgkuptade() {
       console.log(this.sgkPerson);
-this.uptadeSgkFirma(this.sgkPerson)
+      this.uptadeSgkFirma(this.sgkPerson);
     },
-    sgkdelete(e){
-console.log(e);
-this.DeleteSgkData(e.SubeId)
-let dat=this.sgk.indexOf(e);
-this.sgk.splice(dat,1)
+    sgkdelete(e) {
+      console.log(e);
+      this.DeleteSgkData(e.SubeId);
+      let dat = this.sgk.indexOf(e);
+      this.sgk.splice(dat, 1);
     },
-    AddNewhitap(){
-      let id=Math.floor((Math.random() * 100) + 1)
-    let obj={
- HitapŞekli:"" , Telefon: '', Mail: '', GönderimYapılsın: true,id:id
-    }
- console.log(this.iletisimdata);
-    this.iletisimdata.push(obj)
+    AddNewhitap() {
+      let id = Math.floor(Math.random() * 100 + 1);
+      let obj = {
+        HitapŞekli: "",
+        Telefon: "",
+        Mail: "",
+        GönderimYapılsın: true,
+        id: id,
+      };
+      console.log(this.iletisimdata);
+      this.iletisimdata.push(obj);
     },
-        AddNewSube() {
-     const data=  this.getFirmadata.sort((a,b)=>{return a.SubeId - b.SubeId})
-     console.log(data);
-          let obj = {
-            BirimMaliyet: "",
-            Durum: false,
-            MetreKare: "",
-            MukellefId: this.person[0].MukellefId,
-            SicilNo: "",
-            SistemSifresi: "081491",
-            SubeAcilis: null,
-            SubeAdi: "ökk",
-            SubeId:Math.floor((Math.random() * 10000) + 559),
-            SubeKapanis: null,
-            SubeKodu: null,
-            SubeKullanicAdi: "",
-            SubeKullaniciKodu: "",
-            SubeNot: null,
-            İsyeriSifresi: "",
-          };
-         this.AddNewSgkData(obj)
-         console.log(this.getFirmadata);
-         this.sgk.push(obj)
-        },
-  AddNewFaaliyet(){
-     let obj={      
-FaaliyetAciklama :"",
+    AddNewSube() {
+      const data = this.getFirmadata.sort((a, b) => {
+        return a.SubeId - b.SubeId;
+      });
+      console.log("YENİ ŞUBE", data);
+      let musavirUid=JSON.parse(localStorage.getItem("userData")).userId;
+      let datas = {
+        KullaniciUid:musavirUid,
+        BirimMaliyet: "",
+        Durum: false,
+        MetreKare: "",
+        Tckn:this.person[0].tckn , 
+        SicilNo: "",
+        SistemSifresi: "**",
+        SubeAcilis: null,
+        SubeAdi: "Şube Adı",
+        SubeId: Math.floor(Math.random() * 10000 + 559),
+        SubeKapanis: null,
+        SubeKodu: null,
+        SubeKullanicAdi: "",
+        SubeKullaniciKodu: "",
+        SubeNot: null,
+        İsyeriSifresi: "",
+      };
+      console.log("PERSON", this.getMukellefData);
+      console.log("SEÇİLİ",this.sgkPerson.tckn );
+      this.AddNewSgkData(datas);
+      console.log(this.getFirmadata);
+      this.sgk.push(datas);
+    },
+    AddNewFaaliyet() {
+      let obj = {
+        FaaliyetAciklama: "",
       };
       console.log(this.faaliyetdata);
-      this.faaliyetdata.push(obj)
-  },
-fetchIlAndIlce(){
-this.fetchİller()
-},
-faaliyetget(){
-let arr=document.querySelectorAll('.row-style') 
-let elİnput=arr[arr.length-1].children[0].children[0].children[0].value;
-let elİnpust=arr[arr.length-1];
-  let space=`${elİnput+"              "}`
-  console.log(space);
-this.fetchFaaliyet(space)
-setTimeout(()=>{
- 
-console.log( this.filterfaaliyet);
-this.faaliyetdata.push(this.filterfaaliyet)
+      this.faaliyetdata.push(obj);
+    },
+    fetchIlAndIlce() {
+      this.fetchİller();
+    },
+    faaliyetget() {
+      let arr = document.querySelectorAll(".row-style");
+      let elİnput =
+        arr[arr.length - 1].children[0].children[0].children[0].value;
+      let elİnpust = arr[arr.length - 1];
+      let space = `${elİnput + "              "}`;
+      console.log(space);
+      this.fetchFaaliyet(space);
+      setTimeout(() => {
+        console.log(this.filterfaaliyet);
+        this.faaliyetdata.push(this.filterfaaliyet);
 
-console.log(this.faaliyetdata);
+        console.log(this.faaliyetdata);
+      }, 400);
+      setTimeout(() => {
+        let index = this.faaliyetdata.findIndex((el) => {
+          return el.FaaliyetAciklama == "";
+        });
+        this.faaliyetdata.splice(index, 1);
+        console.log(this.faaliyetdata);
+      }, 500);
+    },
+    iletisimget(e, id) {
+      let index = this.iletisimdata.findIndex((el) => {
+        return id == el.id;
+      });
+      console.log(index, id);
+      let obj = this.iletisimdata[index];
+      if (e.classList.value == "hitap") {
+        console.log(e.value);
+        obj.HitapŞekli = e.value;
+      }
+      if (e.classList.value == "mail") {
+        console.log(e.value);
+        obj.Mail = e.value;
+      }
+      if (e.classList.value == "mailgnderim") {
+        console.log(e.value);
+        obj.GönderimYapılsın = e.value;
+      }
+      if (e.classList.value == "tel") {
+        console.log(e.value);
+        obj.Telefon = e.value;
+      }
+      console.log(obj);
+    },
+    getFaaliyetData(e) {
+      console.log(e);
+      let deleteitem = this.faaliyetdata.indexOf(e.item);
+      this.faaliyetdata.splice(deleteitem, 1);
+    },
+    deletedata(e) {
+      let deleteitem = this.iletisimdata.indexOf(e.item);
+      this.iletisimdata.splice(deleteitem, 1);
+    },
+    setBeyan(name, tur, value) {
+      console.log(name);
+      let dataa = this.getKalanBeyanname.filter((el) => {
+        return el.TurPropId == tur;
+      });
 
-},400)
-setTimeout(()=>{
-
-
-let index = this.faaliyetdata.findIndex(el=>{
- return el.FaaliyetAciklama==''
-})
-this.faaliyetdata.splice(index,1)
-console.log(this.faaliyetdata);
-},500)
-},
-iletisimget(e,id){
-let index=this.iletisimdata.findIndex(el=>{
- return id==el.id
-})
-console.log(index,id);
-let obj=this.iletisimdata[index]
-if(e.classList.value=="hitap"){
-  console.log(e.value);
-  obj.HitapŞekli=e.value
-}
-if(e.classList.value=="mail"){
-  console.log(e.value);
-  obj.Mail=e.value
-}
-if(e.classList.value=="mailgnderim"){
-  console.log(e.value);
-  obj.GönderimYapılsın=e.value
-}
-if(e.classList.value=="tel"){
-  console.log(e.value);
-  obj.Telefon=e.value
-}
-console.log(obj);
-},
-getFaaliyetData(e){
-  console.log(e);
-  let deleteitem=this.faaliyetdata.indexOf(e.item);
-  this.faaliyetdata.splice(deleteitem,1)
-},
-deletedata(e){
-  let deleteitem=this.iletisimdata.indexOf(e.item);
-  this.iletisimdata.splice(deleteitem,1)
-},
-  setBeyan(name,tur, value,) {
-       
-       console.log(name);
-   let dataa= this.getKalanBeyanname.filter(el=>{
-return el.TurPropId==tur
-     })
-  
-let id = dataa.length==0?Math.floor(Math.random() * 10000 + 1):dataa[0].KalanId
-console.log(dataa);
+      let id =
+        dataa.length == 0
+          ? Math.floor(Math.random() * 10000 + 1)
+          : dataa[0].KalanId;
+      console.log(dataa);
       let obj = {
         KalanId: id,
         KontrolAraligi: 0,
@@ -1171,69 +1256,68 @@ console.log(dataa);
         beyandurumu: false,
         beyantakip: value,
       };
-      console.log(obj,this.beyanDataValue);
-     this.AddNewBeyanTakip(obj);
+      console.log(obj, this.beyanDataValue);
+      this.AddNewBeyanTakip(obj);
     },
   },
 
   watch: {
     popupSection() {
       console.log(this.popupSection == "branch");
-  this.fetch(this.popupSection);
+      this.fetch(this.popupSection);
     },
-    person(newValue,OldValue){
-if(newValue[0]!=OldValue[0]){
-   this.beyanDataValue={
-KDV1:null,
-KDV2:null,
-KDV4:null,
-GGECICI:null,
-KGECICI:null,
-MUHSGK:null,
-FORMBA:null,
-FORMBS:null,
-POSET:null,
-TURIZM:null,
-GELIR:null,
-GELIR1001E:null,
-KURUMLAR:null,
-BASIT:null,
-OIV:null,
-OTV:null,
-GMSI:null,
-DAMGA:null,
-      };
-  this.faaliyetdata=[]
-   this.fetchFaaliyet([this.person[0].MukellefId]);
-   this.iletisimdata=[]
-   this.popup.hasOwnProperty("iletisim")?this.iletisimdata=this.popup.iletisim: console.log("data yok")
-this.popup.hasOwnProperty("FaaliyetAlani")?this.faaliyetdata=this.popup.FaaliyetAlani: console.log("data yok")
-
-    
-
-}
-   
+    person(newValue, OldValue) {
+      if (newValue[0] != OldValue[0]) {
+        this.beyanDataValue = {
+          KDV1: null,
+          KDV2: null,
+          KDV4: null,
+          GGECICI: null,
+          KGECICI: null,
+          MUHSGK: null,
+          FORMBA: null,
+          FORMBS: null,
+          POSET: null,
+          TURIZM: null,
+          GELIR: null,
+          GELIR1001E: null,
+          KURUMLAR: null,
+          BASIT: null,
+          OIV: null,
+          OTV: null,
+          GMSI: null,
+          DAMGA: null,
+        };
+        this.faaliyetdata = [];
+        this.fetchFaaliyet([this.person[0].MukellefId]);
+        this.iletisimdata = [];
+        this.popup.hasOwnProperty("iletisim")
+          ? (this.iletisimdata = this.popup.iletisim)
+          : console.log("data yok");
+        this.popup.hasOwnProperty("FaaliyetAlani")
+          ? (this.faaliyetdata = this.popup.FaaliyetAlani)
+          : console.log("data yok");
+      }
     },
-    'popup.selectedil'(){
-      this.fetchİlce([this.popup.selectedil])
+    "popup.selectedil"() {
+      this.fetchİlce([this.popup.selectedil]);
     },
   },
 
-  mounted(){
-    this.fetchIlAndIlce()
-    
-  }
+  mounted() {
+    this.fetchIlAndIlce();
+  },
 };
 </script>
 
 <style>
-.modal-header{
-  background: #ff503c!important;
+.modal-header {
+  background: #ff503c !important;
 }
-.feather-trash-2{
+.feather-trash-2 {
   color: #ff4e4f;
   width: 16px;
-height: 16px;
+  height: 16px;
 }
 .m-popup {
   display: flex;
@@ -1282,25 +1366,25 @@ height: 16px;
   justify-content: space-between;
 }
 
-  .button-table{
-  justify-content: flex-end!important;
-  gap:5px
-  }
-  .button-table > .btn{
-  width: 33px;
-height: 26px;
-padding: 0px;
-  }
-  .button-row{
-    justify-content: space-evenly!important;
-  }
-.button-row > button{
-background: #ffff;
-border: none;
-box-shadow: 1px 6px 8px 0px #918989;
+.button-table {
+  justify-content: flex-end !important;
+  gap: 5px;
 }
-.button-row > button >img{
- width: 100px;
+.button-table > .btn {
+  width: 33px;
+  height: 26px;
+  padding: 0px;
+}
+.button-row {
+  justify-content: space-evenly !important;
+}
+.button-row > button {
+  background: #ffff;
+  border: none;
+  box-shadow: 1px 6px 8px 0px #918989;
+}
+.button-row > button > img {
+  width: 100px;
 }
 .m-flex-row > .m-input {
   display: flex;
@@ -1308,11 +1392,11 @@ box-shadow: 1px 6px 8px 0px #918989;
   gap: 5px;
   width: 80%;
 }
-h2{
-  margin-bottom: 0px!important;
+h2 {
+  margin-bottom: 0px !important;
 }
-h2 + hr{
-  margin-top: 0px!important;
+h2 + hr {
+  margin-top: 0px !important;
 }
 .m-flex-row > .m-input > label {
   font-size: 15px;
@@ -1323,7 +1407,7 @@ h2 + hr{
 .m-flex-row > .m-input > input {
   border: 1px solid #d8d6de;
   border-radius: 0.357rem;
-  
+
   padding: 4px 8px;
 }
 
@@ -1647,40 +1731,39 @@ h2 + hr{
 .gg-close::after {
   transform: rotate(-45deg);
 }
-.table-responsive-sm{
+.table-responsive-sm {
   width: 100%;
   font-size: 15px;
 }
-hr{
+hr {
   width: 100%;
-  border: 0.3px solid!important;
+  border: 0.3px solid !important;
 }
-.main-row-style th:nth-child(3){
+.main-row-style th:nth-child(3) {
   width: 23px;
-  padding-inline:10px;
-
+  padding-inline: 10px;
 }
-.faaliyetaciklama input{
+.faaliyetaciklama input {
   width: 100%;
 }
-.text-nowrap input{
-border-radius: 5px;
-border: none;
-box-shadow: 0px 1px 3px 0px #717070;
-padding: 5px;
-margin: 5px;
+.text-nowrap input {
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0px 1px 3px 0px #717070;
+  padding: 5px;
+  margin: 5px;
 }
-.text-nowrap input:focus-visible{
-  border: 1px solid #28c76f!important;
+.text-nowrap input:focus-visible {
+  border: 1px solid #28c76f !important;
   outline: none;
 }
-.main-row-style-hitap th:nth-child(3){
-width: 31%;
+.main-row-style-hitap th:nth-child(3) {
+  width: 31%;
 }
-.row-style-hitap td:nth-child(3) span input{
+.row-style-hitap td:nth-child(3) span input {
   width: 100%;
 }
-.main-row-style-hitap th:nth-child(4){
+.main-row-style-hitap th:nth-child(4) {
   padding-inline: 2px;
 }
 </style>

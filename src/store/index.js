@@ -568,7 +568,7 @@ context.dispatch("actionArr",{
 
       context.dispatch("actionArr", {
         dbName: "Firma",
-        İtemName: "MukellefId",
+        İtemName: "KullaniciUid",
         payload: payload,
         MutName: "setSgkFirma"
       })
@@ -666,7 +666,7 @@ context.dispatch("actionArr",{
       })
     },
     async fetchSgkVizite(context, payload) {
-      this.state.sgkVizite.length > 0 ? console.log("data var") :
+      this.state.sgkVizite=[];
         context.dispatch("actionArr", {
           dbName: "Vizite",
           İtemName: "KullaniciUid",
@@ -675,6 +675,12 @@ context.dispatch("actionArr",{
         })
     },
     
+ 
+
+
+
+
+
     async beyannameAyGetir(context, data) {
       var buAy = (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear() + "-" + (new Date().getMonth() < 10 ? "0" + new Date().getMonth() : new Date().getMonth()) + "/" + new Date().getFullYear()
 
@@ -797,13 +803,14 @@ context.dispatch("actionArr",{
     },
     async uptadeSgkFirma(context, payload) {
   
-      const q = doc(db, "Firma", `${payload.SubeId}`)
+      const q = doc(db, "Firma/", `${payload.SubeId}`)
 
-      const Gelendata = await updateDoc(q, {
+      const Gelendata = await setDoc(q, {
+        KullaniciUid:payload.KullaniciUid,
         BirimMaliyet: payload.BirimMaliyet,
         Durum: payload.Durum,
         MetreKare: payload.MetreKare,
-        MukellefId: payload.MukellefId,
+        Tckn: payload.Tckn,
         SicilNo: payload.SicilNo,
         SistemSifresi: payload.SistemSifresi,
         SubeAcilis: payload.SubeAcilis,
@@ -840,11 +847,17 @@ const gelen=await updateDoc(q,data.data)
   
     },
     //! ADD DATA
+    // async AddVergiLevhasiSorgu(context,payload)
+    // {
+    //    const veri =collection(db,"VergiLevhalariSorgu")
+    //    const veriSon=await addDoc(veri,payload)
+    // },
+  
     async AddNewSgkData(context, payload) {
       // await setDoc(doc(db, "Firma", payload.SubeId ), payload);
- 
-      const res = await setDoc(doc(db, "Firma", payload.SubeId.toString()), payload)
- 
+      const res = await setDoc(doc(db, "Firma/", payload.SubeId.toString()), payload)
+//       const res = collection(db, "Firma/",payload.SubeId)
+//  const veriSon=await addDoc(res,payload)
     },
     async AddNewBeyanTakip(contex, payload) {
 
