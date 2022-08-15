@@ -370,7 +370,7 @@ export default {
   },
   methods: {
     treeView_itemSelectionChanged(e) {
-      console.log(e.component.getSelectedNodeKeys()); 
+      console.log("Muk",e.component.getSelectedNodeKeys()); 
   this.$emit("selected-tckn",e.component.getSelectedNodeKeys())
     },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {

@@ -224,18 +224,17 @@ return this.reSgkVizite;
     },
     inquireClick() {
 
- var arr = [];
+  
 
-      e.forEach((element) => {
-        let data = this.firmaDataget.find((el) => {
-          return element.Tckn == el.Tckn;
-        });
-        console.log(data, element);
-        arr.push(Object.assign(element, data));
-      });
+      // e.forEach((element) => {
+      //   let data = this.firmaDataget.find((el) => {
+      //     return element.tckn == this.SelectedTckn;
+      //   });
+ 
+      //   arr.push(Object.assign(element, data));
+      // });
 
-console.log("ARRR",arr);
-
+  
 
 
       const data = {
@@ -245,7 +244,7 @@ console.log("ARRR",arr);
        IsyeriSifresi:"62424625",
        kullaniciAdi:"18457834178", 
        isyeriKodu:"3",
-        tckn: "2720107645",
+        tckn: this.SelectedTckn,
         SorguDurumu: 0,
       };
       console.log("GİDEN VERİ",data);
