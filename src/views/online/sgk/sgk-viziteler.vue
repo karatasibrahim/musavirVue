@@ -12,83 +12,15 @@
       :title="'Vizite Sorgulama'"
       :columns="columns" 
       :mukellefData="mukellefler"
+       @selected-tckn="gettckn"
+       @sendEndDate="sendEndDate"
+            @sendStartDate="sendStartDate"
+
     />
 
-    <!-- Sorgula Popup -->
-    <b-modal
-      ref="queryPopup"
-      title="Vizite Sorgula"
-      ok-title="Sorgula"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="inquireClick"
-    >
-      <b-row>
-        <b-col cols="12">
-          <b-form-group
-            label="Mükellef Seçimi"
-            label-for="h-type"
-            label-cols-md="4"
-          >
-            <v-select
-              v-model="listRequest.title"
-              :options="mükelellefler"
-              placeholder="Mükellef Seçiniz"
-              label="MükellefSeçimi"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="İlk Dönem"
-            label-for="h-start-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-start-date"
-              v-model="inquireRequest.startDate"
-             
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols="12">
-          <b-form-group
-            label="Son Dönem"
-            label-for="h-end-date"
-            label-cols-md="4"
-          >
-            <b-form-datepicker
-              id="h-end-date"
-              v-model="inquireRequest.endDate" 
-              v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-              :locale="dateTimeLanguage.locale"
-              class="mb-1"
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </b-modal>
+  
 
-    <b-modal
-      ref="pdfPopup"
-      title="Görüntüle"
-      size="xl"
-      scrollable
-      ok-only
-      ok-title="Kapat"
-      no-stacking
-    >
-      <iframe
-        :src="this.activePdfUrl"
-        width="100%"
-        height="700"
-        frameborder="0"
-      >
-      </iframe>
-    </b-modal>
+    
   </div>
 </template>
 
@@ -179,7 +111,7 @@ export default {
           
         }
       ],
-      SelectedTckn: [],
+
     };
   },
  
@@ -212,43 +144,95 @@ return this.reSgkVizite;
       gettckn(e) {
       this.SelectedTckn = e;
     },
-    trash(){},
     sendStartDate(e) {
       this.inquireRequest.startDate = e;
     },
     sendEndDate(e) {
       this.inquireRequest.endDate = e;
     },
+    trash(){},
+  
     queryClick() {
       this.$refs.queryPopup.show();
     },
     inquireClick() {
 
-  
-
-      // e.forEach((element) => {
-      //   let data = this.firmaDataget.find((el) => {
-      //     return element.tckn == this.SelectedTckn;
-      //   });
+      this.firmaverileri=[];
+ let tc=[];
+ tc=this.SelectedTckn;
  
-      //   arr.push(Object.assign(element, data));
-      // });
+ setTimeout(()=>{
+      
+      let unvan=[]
+      var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.tckn == a.tc)));
+      expected.forEach(a=>{
+        this.firmaverileri.push({SistemSifresi:a.SistemSifresi,SubeKodu:a.SubeKodu,SubeKullanicAdi:a.SubeKullanicAdi })
+      })
+     
+      //var expected2 = this.getCalisan.map(a => Object.assign(a,expected.find(b => b.        SubeId == a.SubeId)));
+       //var expected3 = this.getVizite.map(a => Object.assign(a,expected2.find(b => b.        CalisanID == a.CalisanId)));
+     
+       // expected3.forEach(a=>{ this.items.push({Mukunvan:a.Unvan,Unvan:a.CalisanUnvan,TC:a.TC,TakipNo:a.TakipNo, SiraNo:a.SiraNo,Vaka:a.Vaka,KontrolTarihi:a.KontrolTarihi,OnayDurumu:a.OnayDurumu})})
+        
+        this.mükelellefler=[...new Set(unvan)]
 
-  
-
-
-      const data = {
+          const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: "2019",
-        bitis: "2022",
-       IsyeriSifresi:"62424625",
-       kullaniciAdi:"18457834178", 
-       isyeriKodu:"3",
+        baslangic: this.inquireRequest.startDate,
+        bitis: this.inquireRequest.endDate,
+       SgkBilgileri:this.firmaverileri[0],
+      //  kullaniciAdi:this.firmaverileri[2],
+      //  isyeriKodu:this.firmaverileri[1],
         tckn: this.SelectedTckn,
         SorguDurumu: 0,
       };
-      console.log("GİDEN VERİ",data);
-      //this.AddViziteSorgu(data);
+  
+ 
+   
+     
+       
+       this.AddViziteSorgu(data);
+      },500)
+
+
+// setTimeout(() => {
+//   var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.tckn == a.Tckn)));
+//  console.log("DOĞRU",expected,this.SelectedTckn);
+
+// this.getMükellef.forEach((elemns)=>{
+//   let bilgi=this.SelectedTckn.map((eln)=>{
+//     return elemns.tckn==eln.Tckn;
+//   });
+//   console.log("2DAT",bilgi);
+// });
+
+
+// this.SelectedTckn.forEach((element)=>{
+//   let data=this.getMükellef.map((el)=>{
+//     return element.Tckn==el.tckn;
+//   });
+//   console.log("BİLGİ", data);
+// });
+
+// }, 3000);
+
+  
+    //  const data = {
+    //     KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
+    //     baslangic: "2019",
+    //     bitis: "2022",
+    //    IsyeriSifresi:firmaverileri.IsyeriSifresi,
+    //    kullaniciAdi:firmaverileri.kullaniciAdi,
+    //    isyeriKodu:firmaverileri.SubeKodu,
+    //     tckn: this.SelectedTckn,
+    //     SorguDurumu: 0,
+    //   };
+  
+ 
+   
+     
+    //  // console.log("GİDEN VERİ",data);
+    //    this.AddViziteSorgu(data);
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
@@ -268,7 +252,7 @@ return this.reSgkVizite;
       let arr=[];
       this.items=[];
 this.fetchSgkVizite(this.Mukellefdataget[0].musavirUid);
- 
+ this.fetchSgkFirmaalar(this.Mukellefdataget[0].musavirUid);
 this.items=this.SgkVizitelerDataget;
 this.Mukellefdataget.forEach((el)=>{
   arr.push({title:el.unvan,tckn:el.tckn});
@@ -283,39 +267,36 @@ setTimeout(() => {
   });
 }); 
 
- var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.tckn == a.Tckn)));
- console.log("aaaa",expected);
-}, 1000);
+  
+}, 2000);
 
  
-
  
-    this.getfirma.forEach(element => {
-    arr.push(element.Tckn) 
-      });
+    // this.getfirma.forEach(element => {
+    // arr.push(element.Tckn) 
+    //   });
        
     //   this.fetchCalisan(arr);
 
-
-    // setTimeout(()=>{
-    //  let caalisanİd=[]
-    //  this.getCalisan.forEach(data=>{
-    //    caalisanİd.push(data.CalisanID) 
-    //  })
-    //  console.log(caalisanİd);
-    //  this.fetchSgkVizite(caalisanİd)
-    //   },800)
+    //  setTimeout(()=>{
+    //   let caalisanİd=[]
+    //   this.getCalisan.forEach(data=>{
+    //     caalisanİd.push(data.CalisanID) 
+    //   })
+    //   console.log(caalisanİd);
+    //   this.fetchSgkVizite(caalisanİd)
+    //    },800)
     // setTimeout(()=>{
     //   console.log("Vizite",this.getCalisan);
     //   let unvan=[]
     //   var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.MukellefId == a.MukellefId)));
     //   var expected2 = this.getCalisan.map(a => Object.assign(a,expected.find(b => b.        SubeId == a.SubeId)));
-      //   var expected3 = this.getVizite.map(a => Object.assign(a,expected2.find(b => b.        CalisanID == a.CalisanId)));
-      //   expected3.forEach(a=>{ this.items.push({Munvan:a.Unvan,Unvan:a.CalisanUnvan,         TC:a.TC, TakipNo:a.TakipNo, SiraNo:a.SiraNo,Vaka:a.Vaka,KontrolTarihi:a.        KontrolTarihi,OnayDurumu:a.OnayDurumu})})
-      //   console.log(this.items,expected3);
-      //   this.mükelellefler=[...new Set(unvan)]
-      // },2000)
-    //}
+    //     var expected3 = this.getVizite.map(a => Object.assign(a,expected2.find(b => b.        CalisanID == a.CalisanId)));
+    //     expected3.forEach(a=>{ this.items.push({Munvan:a.Unvan,Unvan:a.CalisanUnvan,TC:a.TC,TakipNo:a.TakipNo, SiraNo:a.SiraNo,Vaka:a.Vaka,KontrolTarihi:a.KontrolTarihi,OnayDurumu:a.OnayDurumu})})
+    //     console.log(this.items,expected3);
+    //     this.mükelellefler=[...new Set(unvan)]
+    //   },2000)
+     
   },
   },
 

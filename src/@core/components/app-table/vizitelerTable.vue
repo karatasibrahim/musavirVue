@@ -363,6 +363,15 @@ export default {
       ],
     };
   },
+      watch:{
+startdate(){
+  this.$emit('sendStartDate',this.startdate)
+},
+endDate(){
+
+  this.$emit('sendEndDate',this.endDate)
+}
+  },
   computed: {
     dataGrid() {
       return this.$refs.appGrid.instance;
@@ -430,6 +439,7 @@ export default {
       e.cancel = true;
     },
   },
+
 };
 </script>
 <style scoped>

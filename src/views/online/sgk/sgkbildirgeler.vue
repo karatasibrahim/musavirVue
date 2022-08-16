@@ -403,7 +403,7 @@ export default {
     printClick(e) {},
     sendClick(e) {
       var arr = [];
-      
+      console.log("deneme",e);
       e.forEach((element) => {
         let data = this.getMukellefdata.find((el) => {
           return element.tckn == el.tckn;
@@ -413,11 +413,6 @@ export default {
 
         console.log(arr);
       });
-
-
-
-
-
       arr.forEach((iletim) => {
         iletim.iletisim.forEach((tel) => {
           //   let phone = tel.Telefon;
