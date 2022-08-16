@@ -2,17 +2,17 @@
   <div style="width: 100%">
     <stats />
     <div class="respon">
-    <home-table1
+    <!-- <home-table1
       :inquireClick="queryClick"
       :pk="'id'"
       :items="items"
       :totalRows="16"
       :title="'Beyanname'"
       :columns="columns"
-    />
+    /> -->
 
     <!-- Sorgula Popup -->
-    <b-modal
+    <!-- <b-modal
       ref="queryPopup"
       title="Tarih Seç"
       ok-title="Sorgula"
@@ -38,9 +38,9 @@
           </b-form-group>
         </b-col>
       </b-row>
-    </b-modal>
+    </b-modal> -->
 
-    <home-table2
+    <!-- <home-table2
       :inquireClick="queryClick"
       :pk="'id'"
       :items="items"
@@ -48,7 +48,7 @@
       :title="'Bildirge'"
       :columns="columns2"
     />
-    
+     -->
     </div> 
     <!-- <home-chart> </home-chart> -->
   </div>

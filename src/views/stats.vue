@@ -1,4 +1,4 @@
-<template>
+<template #code>
   <div>
     <!-- <section>
       <article class="card">
@@ -293,10 +293,153 @@
         </div>
       </article>
     </section> -->
+    <div class="row">
+      
+       
+  <div class="col-6">
+
+     <b-card-code title="EMÜŞAVİRİM YAZILIM MODÜLÜ GÜNCELLEMELERİ">
+  <app-timeline>
+        <app-timeline-item
+        
+      title="Sgk Vizite Modülü"
+      subtitle="Sgk vizite sorgulama sayfası aktif edildi."
+      time="1 saat önce"
+
+      variant="warning"
+    />
+    <app-timeline-item
+      title="Pos Sorgulama Modülü"
+      subtitle="Mükellef pos sorgulama sayfası aktif edildi."
+      time="1 hafta önce"
+      variant="success"
+    /> 
+    <app-timeline-item
+      title="Gib Tebligat Modülü"
+      subtitle="Tebligat sorgulama sayfası aktif edildi. Vergi Tebligat ve Ticaret Tebligat sorgulama işlemleri güncelleme ile aktif edilecek."
+      time="2 hafta önce"
+      variant="info"
+    />
+
+    <app-timeline-item
+      title="Vergi Levhaları Modülü"
+      subtitle="Mükellef vergi levhaları sorgulama ve listeleme aktif edildi."
+      time="3 hafta önce"
+      variant="warning"
+    />
+
+    <app-timeline-item
+      title="EArşiv Fatura Modülü"
+      subtitle="EArşiv gelen fatura ve giden fatura sayfaları güncellendi."
+      time="1 ay önce"
+    />
+
+    <app-timeline-item
+      title="EArşiv Fatura Modülü"
+      subtitle="Earşiv fatura modülü aktif edildi."
+      time="5 hafta önce"
+      variant="secondary"
+    />
+     <app-timeline-item
+      title="Beyanname ve Sgk Bildirgeler Modülü"
+      subtitle="Gönderim seçenekleri entegre edilerek aktif edildi."
+      time="6 hafta önce"
+      variant="success"
+    /> 
+    <app-timeline-item
+      title="Whatsapp, Email, Sms Modülü"
+      subtitle="Gönderim seçenekleri aktif edildi."
+      time="7 hafta önce"
+      variant="info"
+    />
+
+    <app-timeline-item
+      title="Mükellef Modülü"
+      subtitle="Mükellef listesi güncellendi"
+      time="2 ay önce"
+      variant="warning"
+    />
+
+    <app-timeline-item
+      title="Mükellef Modülü"
+      subtitle="Mükellef takip işlemleri ve mükellef kart güncelleme işlemleri aktif edildi."
+      time="9 hafta önce"
+    />
+
+    <app-timeline-item
+      title="Beyanname Sorgulama Modülü"
+      subtitle="Beyanname sorgulama ve sgk bildirge sorgulama işlemi güncellendi."
+      time="10 hafta önce"
+      variant="secondary"
+    />
+     <app-timeline-item
+      title="SGK Sorgulama Modülü"
+      subtitle="Sgk bildirge listelem sayfası aktif edildi."
+      time="11 hafta önce"
+      variant="success"
+    /> 
+    <app-timeline-item
+      title="Beyanname Sorgulama Modülü"
+      subtitle="Toplu beyanname sorgulama sayfası aktif edildi."
+      time="3 ay önce"
+      variant="info"
+    />
+
+ 
+  </app-timeline>
+  </b-card-code>
   </div>
+  <div class="col-6">
+ <b-card-code title="GELECEK GÜNCELLEMELER">
+  <app-timeline>
+        <app-timeline-item
+        
+      title="Yoklama Denetim Modülü"
+      subtitle="Yoklama denetim sorgulama sayfası aktif edilecek."  
+
+      variant="warning"
+    />
+    <app-timeline-item
+      title="Naylon Fatura Sorgulama Modülü"
+      subtitle="Mükellef naylon fatura sorgulama sayfası aktif edilecek."
+     
+      variant="success"
+    /> 
+    <app-timeline-item
+      title="Ticaret Sicil Gazetesi Modülü"
+      subtitle="Ticaret sicil gazetesi sorgulama sayfası aktif edilecek."
+    
+      variant="info"
+    />
+
+    <app-timeline-item
+      title="Kalan Beyannameler Modülü"
+      subtitle="Beyanname takip işlemleri aktif edilecek."
+      
+      variant="warning"
+    />
+
+    <app-timeline-item
+      title="Mükellef Modülü"
+      subtitle="Borcu yoktur yazısı sorgulama sayfası aktif edilecektir."
+     
+    />
+
+ 
+
+ 
+  </app-timeline>
+  </b-card-code></div>
+ </div>
+ 
+ </div>
 </template>
 
 <script>
+import AppTimeline from '@core/components/app-timeline/AppTimeline.vue'
+import { BCard } from 'bootstrap-vue'
+import BCardCode from '@core/components/b-card-code'
+import AppTimelineItem from '@core/components/app-timeline/AppTimelineItem.vue'
 import {
   UsersIcon,
   FileIcon,
@@ -306,7 +449,11 @@ import {
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
+        AppTimeline,
+    AppTimelineItem,
     UsersIcon,
+    BCard,
+      BCardCode,
     FileIcon,
     FileTextIcon,
     ArrowRightCircleIcon,
@@ -336,7 +483,11 @@ export default {
     
      },
   },
-
+ data() {
+    return {
+      codeBasic,
+    }
+  },
   computed: {
     ...mapGetters(["reMukellef", "reBeyanname"]),
     beyannameData() {

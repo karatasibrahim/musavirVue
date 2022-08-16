@@ -25,7 +25,7 @@
       <slot />
 
       <!-- Code Content -->
-      <b-collapse
+      <!-- <b-collapse
         :id="parentID"
         v-model="code_visible"
         class="card-code"
@@ -36,7 +36,7 @@
             <slot name="code" />
           </prism>
         </b-card-body>
-      </b-collapse>
+      </b-collapse> -->
     </template>
 
     <b-card-body v-else>
@@ -44,7 +44,7 @@
       <slot />
 
       <!-- Code Content -->
-      <b-collapse
+      <!-- <b-collapse
         :id="parentID"
         v-model="code_visible"
         class="card-code"
@@ -54,7 +54,7 @@
         <prism :language="codeLanguage">
           <slot name="code" />
         </prism>
-      </b-collapse>
+      </b-collapse> -->
     </b-card-body>
   </b-card>
 </template>

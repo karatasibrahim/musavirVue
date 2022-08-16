@@ -317,7 +317,7 @@ export default {
       default: "multiple",
     },
     mukellefData:{
-      type:Array
+      type:Array, 
     },
     showPdfPopupClick: Function,
     inquireClick: Function,
