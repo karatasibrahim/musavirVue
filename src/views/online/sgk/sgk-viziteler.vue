@@ -160,38 +160,55 @@ return this.reSgkVizite;
       this.firmaverileri=[];
  let tc=[];
  tc=this.SelectedTckn;
+  this.sgkinfo=[];
  
  setTimeout(()=>{
       
       let unvan=[]
-      var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.tckn == a.tc)));
+     
+      var expected = this.getfirma.map(a => Object.assign(a,this.getMükellef.find(b=> b.tckn == a.Tckn)));
+      console.log(expected);
       expected.forEach(a=>{
         this.firmaverileri.push({SistemSifresi:a.SistemSifresi,SubeKodu:a.SubeKodu,SubeKullanicAdi:a.SubeKullanicAdi })
       })
-     
+     var expected2 =this.getfirma.map(a=>Object.assign(a,expected.find(b=>b.Tckn==tc)));
+    expected2.forEach(a=>{
+      this.sgkinfo.push({SistemSifresi:a.SistemSifresi,SubeKodu:a.SubeKodu,SubeKullanicAdi:a.SubeKullanicAdi })
+    })
+     console.log("EŞLEŞEN",expected2);
       //var expected2 = this.getCalisan.map(a => Object.assign(a,expected.find(b => b.        SubeId == a.SubeId)));
        //var expected3 = this.getVizite.map(a => Object.assign(a,expected2.find(b => b.        CalisanID == a.CalisanId)));
      
        // expected3.forEach(a=>{ this.items.push({Mukunvan:a.Unvan,Unvan:a.CalisanUnvan,TC:a.TC,TakipNo:a.TakipNo, SiraNo:a.SiraNo,Vaka:a.Vaka,KontrolTarihi:a.KontrolTarihi,OnayDurumu:a.OnayDurumu})})
         
         this.mükelellefler=[...new Set(unvan)]
+this.sgkinfo.forEach(veri=>{
+  let Kadi=veri.SubeKullanicAdi;
+  let subeKodu=veri.SubeKodu;
+  let sistemSifre=veri.SistemSifresi;
 
-          const data = {
+  const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,
-        baslangic: this.inquireRequest.startDate,
-        bitis: this.inquireRequest.endDate,
-       SgkBilgileri:this.firmaverileri[0],
+        baslangic: this.inquireRequest.startDate.substr(0,4),
+        bitis: this.inquireRequest.endDate.substr(0,4),
+       SubeKullaniciAdi:Kadi,
+       SubeKodu:subeKodu,
+       sistemSifresi:sistemSifre,
+
       //  kullaniciAdi:this.firmaverileri[2],
       //  isyeriKodu:this.firmaverileri[1],
         tckn: this.SelectedTckn,
         SorguDurumu: 0,
       };
+ 
+ this.AddViziteSorgu(data);
+})
+        
   
  
-   
-     
+
        
-       this.AddViziteSorgu(data);
+       
       },500)
 
 

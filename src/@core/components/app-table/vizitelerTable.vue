@@ -71,19 +71,7 @@
        
       />  -->
 
-      <template #printTemplate>
-        <DxDropDownButton
-          width="150"
-          :split-button="false"
-          :use-select-mode="false"
-          :items="printSettings"
-          @itemClick="printClick"
-          display-expr="name"
-          key-expr="id"
-          text="Yazdır"
-          icon="print"
-        />
-      </template>
+    
 
       <template #inquireTemplate>
         <DxButton
@@ -111,7 +99,7 @@
       @item-selection-changed="treeView_itemSelectionChanged($event)"
               key-expr="tckn"
              :select-by-click="true"
-              :select-nodes-recursive="false"
+              :select-nodes-recursive="false" 
               selection-mode="multiple"              
               show-check-boxes-mode="normal"
               display-expr="title"
