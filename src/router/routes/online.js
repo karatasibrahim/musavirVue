@@ -65,11 +65,11 @@ export default [
     name: "online-mukellef-vergi-levhalari",
     component: () => import("@/views/online/mukellef/mukellef-vergi-levhalari"),
   },
-  // {
-  //   path: "/mükellef/mükellef-denetim",
-  //   name: "online-mükellef-denetim",
-  //   component: () => import("@/views/online/mükellef/mükellef-denetim"),
-  // },
+    {
+      path: "/mukellef/mukellef-yoklama-denetim",
+      name: "online-mukellef-yoklama-denetim",
+      component: () => import("@/views/online/mukellef/mukellef-yoklama-denetim"),
+    },
 
   //Maliye İşlemleri Menüsü
   {
@@ -92,16 +92,16 @@ export default [
   //   name: "online-maliye-mükellef-yazısı",
   //   component: () => import("@/views/online/maliye/maliye-mükellef-yazısı"),
   // },
-  // {
-  //   path: "/maliye/maliye-ödenen-ggeçici",
-  //   name: "online-maliye-ödenen-ggeçici",
-  //   component: () => import("@/views/online/maliye/maliye-ödenen-ggeçici"),
-  // },
-  // {
-  //   path: "/maliye/maliye-ödenen-kgeçici",
-  //   name: "online-maliye-ödenen-kgeçici",
-  //   component: () => import("@/views/online/maliye/maliye-ödenen-kgeçici"),
-  // },
+    {
+    path: "/maliye/maliye-ödenen-ggeçici",
+    name: "online-maliye-ödenen-ggeçici",
+    component: () => import("@/views/online/maliye/maliye-ödenen-ggeçici"),
+  },
+  {
+    path: "/maliye/maliye-ödenen-kgeçici",
+    name: "online-maliye-ödenen-kgeçici",
+    component: () => import("@/views/online/maliye/maliye-ödenen-kgeçici"),
+  },
   {
     path: "/maliye/maliye-pos-sorgulama",
     name: "online-maliye-pos-sorgulama",

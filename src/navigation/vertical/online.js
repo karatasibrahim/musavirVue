@@ -23,6 +23,10 @@ export default [
             title: 'Vergi Levhaları',
             route: 'online-mukellef-vergi-levhalari',
           },
+           {
+             title: 'Yoklama Denetim',
+             route: 'online-mukellef-yoklama-denetim',
+           },
       // {
       //   title: 'Mükellef Özeti',
       //   route: { name: 'online-mükellef-özeti', params: { id: 4987 } },
@@ -42,14 +46,7 @@ export default [
           //   title: 'Geçmiş Araçlarım',
           //   route: 'online-mükellef-geçmiş-araçlarım',
           // },
-          // {
-          //   title: 'Gelen E-Arşiv Fatura',
-          //   route: 'online-mukellef-gelen-earşiv-fatura',
-          // },
-          // {
-          //   title: 'Giden E-Arşiv Fatura',
-          //   route: 'online-mukellef-giden-earşiv-fatura',
-          // },
+          // 
           // {
           //   title: 'Kesintiler (Stopaj)',
           //   route: 'online-mükellef-stopaj',
@@ -66,10 +63,7 @@ export default [
           //   title: 'Vergi Levhaları',
           //   route: 'online-mükellef-vergi-levhaları',
           // },
-          // {
-          //   title: 'Yoklama Denetim',
-          //   route: 'online-mükellef-denetim',
-          // },
+          
       //   ],
       // },
     ],
@@ -95,14 +89,14 @@ export default [
       //   title: 'Mükellefiyet Yazısı',
       //   route: { name: 'online-maliye-mükellef-yazısı' },
       // },
-      // {
-      //   title: 'Ödenen G-Geçici',
-      //   route: { name: 'online-maliye-ödenen-ggeçici' },
-      // },
-      // {
-      //   title: 'Ödenen K-Geçici',
-      //   route: { name: 'online-maliye-ödenen-kgeçici' },
-      // },
+      {
+        title: 'Ödenen G-Geçici',
+        route: { name: 'online-maliye-ödenen-ggeçici' },
+      },
+      {
+        title: 'Ödenen K-Geçici',
+        route: { name: 'online-maliye-ödenen-kgeçici' },
+      },
       {
         title: 'Pos Sorgulama',
         route: { name: 'online-maliye-pos-sorgulama' },
