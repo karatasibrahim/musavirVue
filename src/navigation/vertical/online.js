@@ -77,13 +77,13 @@ export default [
         title: 'Beyannameler',
         route: 'online-maliye-beyannameler',
       },
-      // {
-      //   title: 'Borcu Yoktur',
-      //   route: { name: 'online-maliye-borcu-yoktur', params: { id: 4987 } },
-      // },
+      {
+        title: 'Borcu Yoktur',
+        route: { name: 'online-maliye-borcu-yoktur' },
+      },
       {
         title: 'Kalan Beyannameler',
-        route: { name: 'online-maliye-kalan-beyannameler', params: { id: 4987 } },
+        route: { name: 'online-maliye-kalan-beyannameler' },
       },
       // {
       //   title: 'Mükellefiyet Yazısı',

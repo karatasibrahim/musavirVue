@@ -77,11 +77,11 @@ export default [
     name: "online-maliye-beyannameler",
     component: () => import("@/views/online/maliye/beyannameler"),
   },
-  // {
-  //   path: "/maliye/maliye-borcu-yoktur",
-  //   name: "online-maliye-borcu-yoktur",
-  //   component: () => import("@/views/online/maliye/maliye-borcu-yoktur"),
-  // },
+  {
+    path: "/maliye/maliye-borcu-yoktur", 
+    name: "online-maliye-borcu-yoktur",
+    component: () => import("@/views/online/maliye/maliye-borcu-yoktur"),
+  },
    {
     path: "/maliye/maliye-kalan-beyannameler",
     name: "online-maliye-kalan-beyannameler",
