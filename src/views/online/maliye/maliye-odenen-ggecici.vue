@@ -1,36 +1,23 @@
 <template>
   <div>
     <app-table8
+     :showPdfPopupClick="showPdfPopup"
+      :inquireClick="inquireClick"
       :listClick="listClick"
+      :mukellefData="mukellefler"
       :pk="'EbildId'"
       :items="items"
       :totalRows="16"
-      :title="'Ödenen K-Geçici'"
+      :title="'Ödenen G-Geçici'"
       :columns="columns"
+       @selected-tckn="gettckn"
     />
-    <!-- Listele Popup -->
-    <b-modal
-      ref="listPopup"
-      title="Ödenen G-Geçici"
-      no-close-on-backdrop
-      ok-title="Listele"
-      cancel-title="Kapat"
-      cancel-variant="outline-secondary"
-      @ok="listRunClick"
-    >
-      <b-row style="display: flex; justify-content: center">
-          <v-select
-            v-model="listRequest.startDate.month"
-            placeholder="Seç"
-            style="width: 70%"
-          />
-      </b-row>
-    </b-modal>
+  
   </div>
 </template>
 
 <script>
-import AppTable8 from "@core/components/app-table/AppTable8.vue";
+import AppTable8 from "@core/components/app-table/odenenGTable.vue";
 import {
   BRow,
   BCol,
@@ -41,6 +28,7 @@ import {
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -101,6 +89,8 @@ export default {
       items: mockData.bildirgeler,
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
+       mukellefler:[],
+      items:[],
       columns: [
         {
           dataField: "EbildId",
@@ -128,6 +118,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions([""]),
     //#region Ust Bar Butonları
     queryClick() {
       this.$refs.queryPopup.show();
@@ -139,8 +130,22 @@ export default {
     listClick() {
       this.$refs.listPopup.show();
     },
+     gettckn(e)
+    {
+this.SelectedTckn=e;
+    },
     listRunClick() {
       console.log(this.listRequest.type);
+    },
+    odenenDataGet(){
+this.setOption();
+    },
+    setOption(){
+let arr=[];
+this.Mukellefdataget.forEach((el)=>{
+  arr.push({title:el.unvan,tckn:el.tckn})
+  this.mukellefler=[...new Set(arr)];
+});
     },
     //#endregion
 
@@ -156,6 +161,17 @@ export default {
     },
     //#endregion
   },
+  computed:{
+    ...mapGetters(["reMukellef"]),
+    Mukellefdataget(){
+  return this.reMukellef;
+
+},
+
+  },
+  mounted(){
+this.odenenDataGet();
+},
 };
 </script>
 

@@ -1,93 +1,27 @@
 <template>
   <div>
     <app-table5
-      :inquireClick="queryClick"
+      :inquireClick="inquireClick"
       :pk="'id'"
       :items="items"
       :totalRows="16"
       :title="'GİB Borcu Yoktur'"
       :columns="columns"
+      :mukellefData="mukellefler"
+       @selected-tckn="gettckn"
     />
 
-    <!-- Sorgula Popup -->
-    <b-modal
-      ref="queryPopup"
-      title="Talep Gönder"
-      ok-title="Talep Gönder"
-      cancel-title="İptal"
-      cancel-variant="outline-secondary"
-      @ok="inquireClick"
-    >
-      <b-col style="display: flex; gap: 10px; flex-direction: column">
-          <b-form-checkbox
-            v-model="selected"
-            class="custom-control-primary"
-          >
-            Mükellefiyet Yazısı
-          </b-form-checkbox>
-
-          <v-select
-            placeholder="Seç"
-            :disabled="selected ? disabled : ''"
-          />
-
-          <v-select
-            :options="konular"
-            placeholder="Seç"
-            :disabled="selected ? disabled : ''"
-          />
-
-          <b-form-input
-            id="basicInput"
-            placeholder="Kurum Adı"
-          />
-
-          <v-select
-            placeholder="Seç"
-            :disabled="selected ? disabled : ''"
-          />
-
-          <v-select
-            :options="info"
-            placeholder="Seç"
-            :disabled="selected ? disabled : ''"
-          />
-
-          <b-form-datepicker
-            id="h-start-date"
-            v-model="inquireRequest.startDate"
-            :max="inquireMaxDate"
-            v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-            :locale="dateTimeLanguage.locale"
-            :disabled="selected ? disabled : ''"
-          />
-          
-          <b-form-datepicker
-            id="h-end-date"
-            v-model="inquireRequest.endDate"
-            :min="inquireMinDate"
-            v-bind="dateTimeLanguage.labels[dateTimeLanguage.locale]"
-            :locale="dateTimeLanguage.locale"
-            :disabled="selected ? disabled : ''"
-          /> 
-
-          <b-form-input
-            id="basicInput"
-            placeholder="Email"
-          />
-          
-      </b-col>
-    </b-modal>
+ 
   </div>
 </template>
 
 <script>
-import AppTable5 from "@core/components/app-table/AppTable5.vue";
+import AppTable5 from "@core/components/app-table/borcuYokturTable.vue";
 import { BRow, BCol, BFormGroup, BFormDatepicker, BFormInput, BFormCheckbox } from "bootstrap-vue";
 import lng from "../../utils/strings";
 import mockData from "../../../services/online/finance/service";
 import vSelect from "vue-select";
-
+import { mapActions,mapGetters } from 'vuex';
 export default {
   components: {
     AppTable5,
@@ -116,23 +50,7 @@ export default {
   data() {
     return {
       selected: false,
-      konular: [
-        "Kredi Garanti Fonuna",
-        "İlgili Belediye Başkanlığına",
-        "KOSGEB’e",
-        "Gıda Tarım ve Hayvancılık Bakanlığına",
-        "Çevre ve Şehircilik Bakanlığına",
-        "Orman ve Su İşleri Bakanlığına",
-        "Emniyet Genel Müdürlüğüne",
-        "Çalışma ve Sosyal Güvenlik Bakanlığına",
-        "Enerji ve Tabi Kaynaklar Bakanlığına",
-        "Diğer Kurum Kuruluşlara",
-      ],
-      info: [
-          "Güncel",
-          "Belirtilen Tarihten Önceki Borç Bilgisi",
-          "Belirtilen Tarih Aralığındaki Borç Bilgisi"
-      ],
+    
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
@@ -159,6 +77,8 @@ export default {
       items: mockData.beyannameDatasi,
       unvanlar: mockData.unvanlar,
       turler: mockData.turler,
+       mukellefler:[],
+      items:[],
       columns: [
         {
           dataField: "id",
@@ -186,15 +106,30 @@ export default {
     };
   },
   methods: {
+     ...mapActions([""]),
     queryClick() {
       this.$refs.queryPopup.show();
     },
     inquireClick() {
-        console.log(this.selected2);
+        
+    },
+        gettckn(e)
+    {
+this.SelectedTckn=e;
     },
     showPdfPopup(pdfUrl) {
       //this.activePdfUrl=pdfUrl;
       this.$refs.pdfPopup.show();
+    },borcDataGet()
+    {
+      this.setOption();
+    },
+      setOption(){
+let arr=[];
+this.Mukellefdataget.forEach((el)=>{
+  arr.push({title:el.unvan,tckn:el.tckn})
+  this.mukellefler=[...new Set(arr)];
+});
     },
     downloadClick(e) {},
     printClick(e) {},
@@ -205,6 +140,15 @@ export default {
     listRunClick() {
       console.log(this.listRequest.type);
     },
+  },
+  computed:{
+    ...mapGetters(["reMukellef"]),
+    Mukellefdataget(){
+      return this.reMukellef;
+    },
+  },
+  mounted(){
+    this.borcDataGet();
   },
 };
 </script>

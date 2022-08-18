@@ -339,7 +339,7 @@ payload.forEach(el=>{
     
     //let user= JSON.parse(localStorage.getItem("userData")).userId
       const q = query(collection(db, "Mukellef"),
-        where("musavirUid", "==", payload));
+        where("musavirUid", "==", payload),orderBy("unvan","asc"));
       const mukellefdata = await getDocs(q);
       mukellefdata.forEach((doc) => {
       
@@ -923,8 +923,14 @@ const gelen=await updateDoc(q,data.data)
     },
     async AddVergiLevhasiSorgu(context,payload)
     {
+    
        const veri =collection(db,"VergiLevhalariSorgu")
        const veriSon=await addDoc(veri,payload)
+    },
+    async AddNewYoklamaDenetimSorgu(context,payload)
+    {  console.log(payload);
+const veri=collection(db,"YoklamaDenetimSorgu")
+const veriSon=await addDoc(veri,payload);
     },
     async AddGelenFaturaSorgu(context, payload) {
     

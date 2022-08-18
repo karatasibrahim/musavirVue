@@ -91,11 +91,11 @@ export default [
       // },
       {
         title: 'Ödenen G-Geçici',
-        route: { name: 'online-maliye-ödenen-ggeçici' },
+        route: { name: 'online-maliye-odenen-ggecici' },
       },
       {
         title: 'Ödenen K-Geçici',
-        route: { name: 'online-maliye-ödenen-kgeçici' },
+        route: { name: 'online-maliye-odenen-kgecici' },
       },
       {
         title: 'Pos Sorgulama',

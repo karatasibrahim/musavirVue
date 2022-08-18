@@ -48,19 +48,43 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
-        <DxItem location="before" template="listTemplate" />
+        <DxItem location="before" template="mukellef" />
+        <DxItem location="before" template="inquireTemplate" />
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
         <DxItem name="exportButton" />
       </DxToolbar>
-
-
-      <template #listTemplate>
+<template #mukellef>
+<DxDropDownBox
+  type="success"
+        :data-source="mukellefData" 
+      placeholder="Lütfen Mükellef Seçiniz"
+      display-expr="title"
+      value-expr="tckn"
+         width="410"
+        >
+          <template #content>
+            <DxTreeView   
+       ref="treeViewRefName"
+              :data-source="mukellefData"
+      @item-selection-changed="treeView_itemSelectionChanged($event)"
+              key-expr="tckn"
+             :select-by-click="true"
+              :select-nodes-recursive="false"
+              selection-mode="multiple"              
+              show-check-boxes-mode="normal"
+              display-expr="title"
+              width="400"
+            />
+          </template>
+</DxDropDownBox>
+</template>
+      <template #inquireTemplate>
         <DxButton
-          type="normal"
-          text="Listele"
-          icon="detailslayout"
-          @click="listClick"
+          type="danger"
+          text="Gib'ten Sorgula"
+          icon="search"
+          @click="inquireClick"
         />
       </template>
 
@@ -79,6 +103,54 @@
           <img
             src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/logo_20px.png"
             @click="showPanelClick(data.data.beyan_pdf)"
+          />
+        </div>
+      </template>
+
+      <template #mukellefColumnTemplate="{ data }">
+        <div class="text-center">
+          <img
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/edit_20px.png"
+            @click="showTaxPayerInfoClick(data.data.beyan_pdf)"
+          />
+        </div>
+      </template>
+
+      <template #beyanColumnTemplate="{ data }">
+        <div class="text-center">
+          <img
+            src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
+            @click="showPdfPopupClick(data.data.beyan_pdf)"
+          />
+        </div>
+      </template>
+
+      <template #tahakkukColumnTemplate="{ data }">
+        <div class="text-center">
+          <img
+            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+            @click="showPdfPopupClick(data.data.tahak_pdf)"
+          />
+        </div>
+      </template>
+
+      <template #sgkGosterimColumnTemplate="{ data }">
+        <div class="text-left">
+          <img
+            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+            @click="showPdfPopupClick(data.data.tahak_pdf)"
+          />
+          <span> &nbsp; &nbsp; &nbsp;</span>
+          <img
+            src="https://i.ibb.co/mGfSXHG/tahakkuk.jpg"
+            @click="showPdfPopupClick(data.data.tahak_pdf)"
+          />
+
+          <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
+          <img
+            class="text-right"
+            src="https://musavir.tacminyazilim.com/app-assets/images/tacmin/sil_20px.png"
+            @click="deleteInsuranceClick(data.data)"
           />
         </div>
       </template>
@@ -118,6 +190,8 @@ import {
 import { BButton } from "bootstrap-vue";
 import DxButton from "devextreme-vue/button";
 import DxDropDownButton from "devextreme-vue/drop-down-button";
+import DxDropDownBox from 'devextreme-vue/drop-down-box';
+import DxTreeView from 'devextreme-vue/tree-view';
 import Ripple from "vue-ripple-directive";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -143,6 +217,8 @@ export default {
     DxFilterRow,
     DxHeaderFilter,
     DxDropDownButton,
+     DxDropDownBox, 
+    DxTreeView,
     DxFilterPanel,
     DxColumn,
     DxSelection,
@@ -181,6 +257,9 @@ export default {
       type: String,
       default: "multiple",
     },
+    mukellefData:{
+      type:Array,
+    },
     showPdfPopupClick: Function,
     inquireClick: Function,
     downloadClick: Function,
@@ -217,6 +296,10 @@ export default {
     },
   },
   methods: {
+     treeView_itemSelectionChanged(e) {
+      console.log(e.component.getSelectedNodeKeys()); 
+  this.$emit("selected-tckn",e.component.getSelectedNodeKeys())
+    },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
       console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;

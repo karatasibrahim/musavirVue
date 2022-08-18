@@ -93,14 +93,14 @@ export default [
   //   component: () => import("@/views/online/maliye/maliye-mükellef-yazısı"),
   // },
     {
-    path: "/maliye/maliye-ödenen-ggeçici",
-    name: "online-maliye-ödenen-ggeçici",
-    component: () => import("@/views/online/maliye/maliye-ödenen-ggeçici"),
+    path: "/maliye/maliye-odenen-ggecici",
+    name: "online-maliye-odenen-ggecici",
+    component: () => import("@/views/online/maliye/maliye-odenen-ggecici"),
   },
   {
-    path: "/maliye/maliye-ödenen-kgeçici",
-    name: "online-maliye-ödenen-kgeçici",
-    component: () => import("@/views/online/maliye/maliye-ödenen-kgeçici"),
+    path: "/maliye/maliye-odenen-kgecici",
+    name: "online-maliye-odenen-kgecici",
+    component: () => import("@/views/online/maliye/maliye-odenen-kgecici"),
   },
   {
     path: "/maliye/maliye-pos-sorgulama",

@@ -1,4 +1,4 @@
-<template #code>
+<template  >
   <div>
     <!-- <section>
       <article class="card">
@@ -485,7 +485,7 @@ export default {
   },
  data() {
     return {
-      codeBasic,
+     
     }
   },
   computed: {
