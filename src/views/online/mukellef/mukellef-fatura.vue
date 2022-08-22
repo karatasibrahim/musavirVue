@@ -408,10 +408,7 @@ export default {
 
     //     },
 
-    // showPdfPopup(pdfUrl) {
-    //   //this.activePdfUrl=pdfUrl;
-    //   this.$refs.pdfPopup.show();
-    // },
+    
     downloadClick(e) {},
     printClick(e) {},
     sendClick(e) {},

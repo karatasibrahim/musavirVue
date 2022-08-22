@@ -5,19 +5,66 @@
       :inquireClick="inquireClick"
       :listClick="listClick"
       :mukellefData="mukellefler"
-      :pk="'EbildId'"
-      :items="items"
+      :pk="EbildId"
+      :items="GelenDataItems"
       :totalRows="16"
-      :title="'Yoklama Denetim'"
+      :title="'Yoklama Evrakları'"
       :columns="columns"
        @selected-tckn="gettckn"
     />
+       <app-table9
+     :showPdfPopupClick="showPdfPopup"
+      :inquireClick="inquireClick"
+      :listClick="listClick"
+      :mukellefData="mukellefler"
+      :pk="EbildId"
+      :items="yoklamaDataItems"
+      :totalRows="16"
+      :title="'Denetim Evrakları'"
+      :columns="columns2"
   
+    />
+ 
+    <b-modal
+      ref="pdfPopup"
+      title="Görüntüle"
+      size="xl"
+      scrollable
+      ok-only
+      ok-title="Kapat"
+      no-stacking
+    >
+      <iframe
+        :src="this.activePdfUrl"
+        width="100%"
+        height="700"
+        frameborder="0"
+      >
+      </iframe>
+    </b-modal>
+     <b-modal
+      ref="pdfPopup2"
+      title="Görüntüle"
+      size="xl"
+      scrollable
+      ok-only
+      ok-title="Kapat"
+      no-stacking
+    >
+      <iframe
+        :src="this.activePdfUrl"
+        width="100%"
+        height="700"
+        frameborder="0"
+      >
+      </iframe>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import AppTable8 from "@core/components/app-table/yoklamaDenetimTable.vue";
+import AppTable9 from "@/@core/components/app-table/denetimTable.vue";
 import {
   BRow,
   BCol,
@@ -33,6 +80,7 @@ import { mapActions,mapGetters } from 'vuex';
 export default {
   components: {
     AppTable8,
+    AppTable9,
     BRow,
     BFormCheckbox,
     vSelect,
@@ -56,6 +104,7 @@ export default {
   },
   data() {
     return {
+    EbildId:"",
       //#region Sorgulama Popup
       dateTimeLanguage: lng.dateTimeLanguage,
       inquireRequest: {
@@ -91,6 +140,8 @@ export default {
       turler: mockData.turler,
        mukellefler:[],
       items:[],
+      GelenDataItems:[],
+      yoklamaDataItems:[],
       columns: [
         {
           dataField: "EbildId",
@@ -99,30 +150,107 @@ export default {
           showInColumnChooser: false,
         },
         {
-          dataField: "Ünvan",
+          dataField: "unvan",
           caption: "Ünvan",
+          groupIndex:0
+        },
+          {
+          dataField: "tarih",
+          caption: "Tarih",
         },
         {
-          dataField: "VergiNo",
+          dataField: "tckn",
           caption: "VergiNo",
         },
         {
-          dataField: "VergiDairesi",
+          dataField: "vergiDairesi",
           caption: "VergiDairesi",
+        },
+         {
+          dataField: "ykodu",
+          caption: "Kodu",
         },
         {
           dataField: "GİB",
-          caption: "GİB'den Gelen Tutar",
+          caption: "Evraklar",
+          cellTemplate:"yoklamaTemplate"
+        },
+      ],
+      columns2:[
+{
+          dataField: "EbildId",
+          caption: "Id",
+          visible: false,
+          showInColumnChooser: false,
+        },
+        {
+          dataField: "unvans",
+          caption: "Ünvan",
+           groupIndex:0
+          
+        },
+        {
+          dataField: "0.kadi",
+          caption: "DKM",
+        },
+          {
+          dataField: "0.dtarih",
+          caption: "Tarih",
+        },
+        
+        {
+          dataField: "0.dkodu",
+          caption: "Denetim Kodu",
+        },
+         {
+          dataField: "0.bkodu",
+          caption: "Kodu",
+        },
+        {
+          dataField: "GİB",
+          caption: "Evraklar",
+          cellTemplate:"denetimTemplate"
         },
       ],
     };
   },
   methods: {
-    ...mapActions(["AddNewYoklamaDenetimSorgu"]),
+    ...mapActions(["AddNewYoklamaDenetimSorgu","fetchYoklamaDenetim"]),
     //#region Ust Bar Butonları
     queryClick() {
       this.$refs.queryPopup.show();
     },
+    fetchYoklama()
+    {
+   this.items=[];
+    this.fetchYoklamaDenetim(this.Mukellefdataget[0].musavirUid);
+this.GelenDataItems=this.yoklamDenetimData;
+this.yoklamaDataItems=this.yoklamDenetimData;
+
+    },
+   showPdfPopup(tckn, e) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tckn +
+        "%2FYOKLAMADENETIM%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
+      this.$refs.pdfPopup.show();
+      console.log(tckn, e);
+    },
+      showPdfPopup(tckn, e) {
+      this.activePdfUrl = `${
+        "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
+        tckn +
+        "%2FYOKLAMADENETIM%2F" +
+        e +
+        ".pdf?alt=media"
+      }`;
+      this.$refs.pdfPopup2.show();
+      console.log(tckn, e);
+    },
+     
     inquireClick() {
 
 let musavir=JSON.parse(localStorage.getItem("userData")).userId;
@@ -156,10 +284,38 @@ this.setOption();
     },
     setOption(){
 let arr=[];
+ 
 this.Mukellefdataget.forEach((el)=>{
   arr.push({title:el.unvan,tckn:el.tckn})
+  
   this.mukellefler=[...new Set(arr)];
+ setTimeout(() => {
+      this.GelenDataItems=this.yoklamDenetimData.map((a)=>{
+        return Object.assign(a,{
+            unvan:this.Mukellefdataget.find((b)=>a.tckn.includes(b.tckn)).unvan,
+        });
+         
+      });
+
+      this.yoklamaDataItems=this.yoklamDenetimData.map((a=>{
+        return Object.assign(a,{
+            unvans:this.Mukellefdataget.find((b)=>a.tckn.includes(b.tckn)).unvan,
+        })
+      }))
+    
+ }, 1000);
+ 
+ 
+
 });
+
+ 
+ 
+
+
+
+
+
     },
     //#endregion
 
@@ -169,14 +325,17 @@ this.Mukellefdataget.forEach((el)=>{
 
     //#region SAYFA ICIN
     deleteInsuranceClick() {},
-    showPdfPopup(pdfUrl) {
-      //this.activePdfUrl=pdfUrl;
-      this.$refs.pdfPopup.show();
-    },
+  
     //#endregion
   },
   computed:{
-    ...mapGetters(["reMukellef"]),
+    ...mapGetters(["reMukellef","reYoklamaDenetim"]),
+
+    yoklamDenetimData()
+    {
+return this.reYoklamaDenetim;
+
+    },
     Mukellefdataget(){
   return this.reMukellef;
 
@@ -184,6 +343,7 @@ this.Mukellefdataget.forEach((el)=>{
 
   },
   mounted(){
+    this.fetchYoklama();
 this.odenenDataGet();
 },
 };

@@ -48,8 +48,8 @@
       <DxFilterRow :visible="true" />
       <DxToolbar>
         <DxItem location="before" template="headerTemplate" />
-        <DxItem location="before" template="mukellef" />
-             <DxItem location="before" template="inquireTemplate" />
+        <!-- <DxItem location="before" template="mukellef" />
+             <DxItem location="before" template="inquireTemplate" /> -->
         <!-- <DxItem location="before" template="listTemplate" /> -->
         <DxItem name="columnChooserButton" />
         <DxItem template="exportPdfTemplate" />
@@ -97,7 +97,7 @@
           @click="listClick"
         />
       </template>
-  <template #yoklamaTemplate="{ data }">
+  <template #denetimTemplate="{ data }">
         <div class="text-left">
           &nbsp; &nbsp;
           <img
@@ -105,7 +105,7 @@
              @click="
               showPdfPopupClick(
                 data.data.tckn,
-                data.data.ykodu,
+                data.data[0].bkodu,
                
               )"
           />

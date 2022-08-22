@@ -300,6 +300,13 @@
 
      <b-card-code title="EMÜŞAVİRİM YAZILIM MODÜLÜ GÜNCELLEMELERİ">
   <app-timeline>
+          <app-timeline-item
+        
+      title="Yoklama Denetim Modülü"
+      subtitle="Yoklama denetim sorgulama sayfası aktif edildi."  
+
+      variant="danger"
+    />
         <app-timeline-item
         
       title="Sgk Vizite Modülü"
@@ -392,13 +399,7 @@
   <div class="col-6">
  <b-card-code title="GELECEK GÜNCELLEMELER">
   <app-timeline>
-        <app-timeline-item
-        
-      title="Yoklama Denetim Modülü"
-      subtitle="Yoklama denetim sorgulama sayfası aktif edilecek."  
-
-      variant="warning"
-    />
+  
     <app-timeline-item
       title="Naylon Fatura Sorgulama Modülü"
       subtitle="Mükellef naylon fatura sorgulama sayfası aktif edilecek."

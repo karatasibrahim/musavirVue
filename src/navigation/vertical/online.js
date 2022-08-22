@@ -77,26 +77,26 @@ export default [
         title: 'Beyannameler',
         route: 'online-maliye-beyannameler',
       },
-      {
-        title: 'Borcu Yoktur',
-        route: { name: 'online-maliye-borcu-yoktur' },
-      },
-      {
-        title: 'Kalan Beyannameler',
-        route: { name: 'online-maliye-kalan-beyannameler' },
-      },
+      // {
+      //   title: 'Borcu Yoktur',
+      //   route: { name: 'online-maliye-borcu-yoktur' },
+      // },
+      // {
+      //   title: 'Kalan Beyannameler',
+      //   route: { name: 'online-maliye-kalan-beyannameler' },
+      // },
       // {
       //   title: 'Mükellefiyet Yazısı',
       //   route: { name: 'online-maliye-mükellef-yazısı' },
       // },
-      {
-        title: 'Ödenen G-Geçici',
-        route: { name: 'online-maliye-odenen-ggecici' },
-      },
-      {
-        title: 'Ödenen K-Geçici',
-        route: { name: 'online-maliye-odenen-kgecici' },
-      },
+      // {
+      //   title: 'Ödenen G-Geçici',
+      //   route: { name: 'online-maliye-odenen-ggecici' },
+      // },
+      // {
+      //   title: 'Ödenen K-Geçici',
+      //   route: { name: 'online-maliye-odenen-kgecici' },
+      // },
       {
         title: 'Pos Sorgulama',
         route: { name: 'online-maliye-pos-sorgulama' },
@@ -116,10 +116,10 @@ export default [
     route: 'apps-todo',
     icon: 'CommandIcon',
     children: [
-      {
-        title: 'Asgari İşçilik Hesabı',
-        route: 'online-sgk-işçilik-hesabı',
-      },
+      // {
+      //   title: 'Asgari İşçilik Hesabı',
+      //   route: 'online-sgk-işçilik-hesabı',
+      // },
       {
         title: 'Bildirgeler',
         route: { name: 'online-sgk-sgkbildirgeler', params: { id: 4987 } },
@@ -141,6 +141,17 @@ export default [
         route: { name: 'online-sgk-viziteler' },
       },
     ],
+  },
+
+  {
+    title: 'Takvim-Ajanda',
+    route: 'apps-calendar',
+    icon: 'CalendarIcon',
+  },
+  {
+    title: 'Ayarlar',
+    route: 'pages-account-setting',
+    icon: 'SettingsIcon',
   },
   // {
   //   title: 'Finans İşlemleri',
