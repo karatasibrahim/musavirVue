@@ -546,8 +546,7 @@
               <label>Birim Maliyet </label>
               <input type="text" v-model="sgkPerson.BirimMaliyet" />
             </div>
-          </div>
-
+          </div> 
           <div class="m-flex-row">
             <div class="m-input">
               <label>Şube Açilişi </label>
@@ -1017,26 +1016,30 @@ export default {
     },
     fetch(data) {
       let arr = [];
-      console.log((this.sgk = []));
+  
+      console.log("SGK",(this.sgk = []));
       let subeıd = [];
       for (let i = 0; i < this.getMukellefData.length; i++) {
         const element = this.getMukellefData[i];
         arr.push(element.MukellefId);
+   
       }
 
-      console.log(subeıd);
+ 
+
+      console.log("ŞUBE",subeıd);
       //* Sgk Tab
       if (data == "branch") {
         this.sgk = [];
-
+let musavir=JSON.parse(localStorage.getItem("userData")).userId
         console.log(this.getFirmadata.length);
-        this.fetchSgkFirmaalar(arr);
-
+        this.fetchSgkFirmaalar(musavir);
+console.log("VERİLER", this.getSgkDatas);
         console.log(data);
         setTimeout(() => {
           const sgk = this.getFirmadata.filter((fil) => {
             console.log("filter in", data);
-            return this.person[0].tckn == fil.tckn;
+            return this.person[0].tckn == fil.Tckn;
           });
           this.sgk = [];
           this.sgk = sgk;
@@ -1115,6 +1118,10 @@ export default {
       }
     },
     //#endregion
+getSgkDatas(){
+return this.reSgkFirmalar;
+},
+
     getsgkdata(data) {
       console.log(data);
       this.sgkPerson = data;
@@ -1169,7 +1176,7 @@ export default {
       console.log("PERSON", this.getMukellefData);
       console.log("SEÇİLİ",this.sgkPerson.tckn );
       this.AddNewSgkData(datas);
-      console.log(this.getFirmadata);
+      console.log("FİRMALAR",this.getFirmadata[0].SubeAdi);
       this.sgk.push(datas);
     },
     AddNewFaaliyet() {
@@ -1289,7 +1296,7 @@ export default {
           DAMGA: null,
         };
         this.faaliyetdata = [];
-        this.fetchFaaliyet([this.person[0].MukellefId]);
+        this.fetchFaaliyet([this.person[0].tckn]);
         this.iletisimdata = [];
         this.popup.hasOwnProperty("iletisim")
           ? (this.iletisimdata = this.popup.iletisim)
@@ -1306,6 +1313,7 @@ export default {
 
   mounted() {
     this.fetchIlAndIlce();
+ 
   },
 };
 </script>

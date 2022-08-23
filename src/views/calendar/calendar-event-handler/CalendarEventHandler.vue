@@ -210,17 +210,17 @@
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 multiple
                 :close-on-select="false"
-                :options="getMükellef"
+                :options="getMukellef"
                 label="name"
                 input-id="add-guests"
               >
 
-                <template #option="{  Unvan }">
-                  <span class="ml-50 align-middle"> {{ Unvan }}</span>
+                <template #option="{  unvan }">
+                  <span class="ml-50 align-middle"> {{ unvan }}</span>
                 </template>
 
-                <template #selected-option="{ Unvan}">
-                  <span class="ml-50 align-middle"> {{ Unvan }}</span>
+                <template #selected-option="{ unvan}">
+                  <span class="ml-50 align-middle"> {{ unvan }}</span>
                 </template>
               </v-select>
             </b-form-group>
@@ -336,7 +336,7 @@ export default {
   },
   computed:{
     ...mapGetters(["reMukellef"]),
-    getMükellef(){
+    getMukellef(){
       return this.reMukellef
     }
   },

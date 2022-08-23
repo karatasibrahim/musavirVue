@@ -260,11 +260,10 @@ payload.forEach(el=>{
         return state.SgkBildirge.push(el.data())
       })
     },
-    setSgkFirma(state, payload) {
-     
+    setSgkFirma(state, payload) {     
       payload.forEach(el => {
         return state.SgkFirmalar.push(el.data())
-      })
+      })     
     },
     SetSgkBildirge(state, payload) {
       payload.forEach(el => {
@@ -484,7 +483,8 @@ context.dispatch("actionArr",{
   payload:payload,
   MutName:"setVergiLevhalari"
 
-})   
+}) 
+ 
     },
 fetchYoklamaDenetim(context,payload)
 {
@@ -583,7 +583,11 @@ context.dispatch("actionArr",{
         MutName: "setVergiTebligat"
       })
     },
+
+
+    
     async fetchSgkFirmaalar(context, payload) {
+      console.log("PPP",payload);
       this.state.SgkFirmalar = []
 
       context.dispatch("actionArr", {
@@ -592,7 +596,7 @@ context.dispatch("actionArr",{
         payload: payload,
         MutName: "setSgkFirma"
       })
-
+      
     },
     async fetchSgkBildirge(context, payload) {
       this.state.SgkBildirge = []
