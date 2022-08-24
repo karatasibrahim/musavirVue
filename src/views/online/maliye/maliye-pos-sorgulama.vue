@@ -291,6 +291,12 @@ directives: {
         },
         
         {
+          dataField: "ay",
+          caption: "Ay",
+          width:"100",
+         alignment: "right"
+        },
+          {
           dataField: "pos_uye_isy",
           caption: "Pos Üye İşyeri No",
           width:"200",
@@ -473,10 +479,16 @@ this.mukellefler=[...new Set(arr)]
               unvan: ex.unvan,
               tckn: ex.tckn,
               genelToplam: ex.veri.toplam_genel,
+               
+              ay:ex.veri.ay,
             })
+           
           );
-        });
+        
+        });  
       });
+
+      
       console.log(expected_alt);
       this.items = expected_alt;
 

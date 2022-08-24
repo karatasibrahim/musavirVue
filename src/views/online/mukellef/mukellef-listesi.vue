@@ -519,8 +519,8 @@
               <input type="text" v-model="sgkPerson.SubeKullanicAdi" />
             </div>
             <div class="m-input">
-              <label>Kullanıcı Kodu </label>
-              <input type="text" v-model="sgk.SubeKullaniciKodu" />
+              <label>Şube Kodu </label>
+              <input type="text" v-model="sgkPerson.SubeKodu" />
             </div>
           </div>
 
@@ -1163,14 +1163,14 @@ return this.reSgkFirmalar;
         Tckn:this.person[0].tckn , 
         SicilNo: "",
         SistemSifresi: "**",
-        SubeAcilis: null,
+        SubeAcilis: "",
         SubeAdi: "Şube Adı",
         SubeId: Math.floor(Math.random() * 10000 + 559),
-        SubeKapanis: null,
-        SubeKodu: null,
+        SubeKapanis: "",
+        SubeKodu: "",
         SubeKullanicAdi: "",
         SubeKullaniciKodu: "",
-        SubeNot: null,
+        SubeNot: "",
         İsyeriSifresi: "",
       };
       console.log("PERSON", this.getMukellefData);

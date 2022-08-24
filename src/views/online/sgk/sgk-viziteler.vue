@@ -173,7 +173,7 @@ return this.reSgkVizite;
       })
      var expected2 =this.getfirma.map(a=>Object.assign(a,expected.find(b=>b.Tckn==tc)));
     expected2.forEach(a=>{
-      this.sgkinfo.push({SistemSifresi:a.SistemSifresi,SubeKodu:a.SubeKodu,SubeKullanicAdi:a.SubeKullanicAdi })
+      this.sgkinfo.push({SistemSifresi:a.SistemSifresi,SubeKodu:a.SubeKodu,SubeKullanicAdi:a.SubeKullanicAdi,isyeriSifre:a.İsyeriSifresi })
     })
      console.log("EŞLEŞEN",expected2);
       //var expected2 = this.getCalisan.map(a => Object.assign(a,expected.find(b => b.        SubeId == a.SubeId)));
@@ -185,7 +185,7 @@ return this.reSgkVizite;
 this.sgkinfo.forEach(veri=>{
   let Kadi=veri.SubeKullanicAdi;
   let subeKodu=veri.SubeKodu;
-  let sistemSifre=veri.SistemSifresi;
+  let sistemSifre=veri.isyeriSifre;
 
   const data = {
         KullaniciUid: JSON.parse(localStorage.getItem("userData")).userId,

@@ -61,7 +61,9 @@
 
 <template #mukellef>
 <DxDropDownBox
+
   type="success"
+  
         :data-source="mukellefData" 
       placeholder="Lütfen Mükellef Seçiniz"
       display-expr="title"
@@ -75,6 +77,7 @@
               :data-source="mukellefData"
       @item-selection-changed="treeView_itemSelectionChanged($event)"
               key-expr="tckn"
+               
              :select-by-click="true"
               :select-nodes-recursive="false"
               selection-mode="multiple"              
