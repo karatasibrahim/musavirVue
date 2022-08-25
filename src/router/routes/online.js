@@ -167,17 +167,17 @@ export default [
   //   component: () => import("@/views/online/finans/finans-muhasebe-ücretleri"),
   // },
 
-  // // E-Devlet İşlemleri Menüsü
-  // {
-  //   path: "/edevlet/edevlet-dava-dosyaları",
-  //   name: "online-edevlet-dava-dosyaları",
-  //   component: () => import("@/views/online/edevlet/edevlet-dava-dosyaları"),
-  // },
-  // {
-  //   path: "/edevlet/edevlet-icra-dosyaları",
-  //   name: "online-edevlet-icra-dosyaları",
-  //   component: () => import("@/views/online/edevlet/edevlet-icra-dosyaları"),
-  // },
+  // E-Devlet İşlemleri Menüsü
+  {
+    path: "/edevlet/edevlet-dava-dosyaları",
+    name: "online-edevlet-dava-dosyaları",
+    component: () => import("@/views/online/edevlet/edevlet-dava-dosyaları"),
+  },
+  {
+    path: "/edevlet/edevlet-icra-dosyaları",
+    name: "online-edevlet-icra-dosyaları",
+    component: () => import("@/views/online/edevlet/edevlet-icra-dosyaları"),
+  },
 
   // // Hızlı Giriş Menüsü
   // {

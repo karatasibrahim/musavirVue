@@ -142,7 +142,21 @@ export default [
       },
     ],
   },
+  {
+    title: 'E-Devlet İşlemleri',
+    icon: 'MonitorIcon',
+    children: [
+      {
+        title: 'Dava Dosyaları',
+        route: 'online-edevlet-dava-dosyaları',
+      },
+      {
+        title: 'İcra Dosyaları',
+        route: 'online-edevlet-icra-dosyaları'  ,
+      },
 
+    ],
+  },
   {
     title: 'Takvim-Ajanda',
     route: 'apps-calendar',
@@ -172,21 +186,7 @@ export default [
   //     },
   //   ],
   // },
-  // {
-  //   title: 'E-Devlet İşlemleri',
-  //   icon: 'MonitorIcon',
-  //   children: [
-  //     {
-  //       title: 'Dava Dosyaları',
-  //       route: 'online-edevlet-dava-dosyaları',
-  //     },
-  //     {
-  //       title: 'İcra Dosyaları',
-  //       route: { name: 'online-edevlet-icra-dosyaları', params: { id: 4987 } },
-  //     },
-
-  //   ],
-  // },
+  
   //  {
   //    title: 'Hızlı Girişler',
   //    icon: 'ChevronsRightIcon',

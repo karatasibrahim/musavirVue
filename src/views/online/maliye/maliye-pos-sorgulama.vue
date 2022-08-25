@@ -475,11 +475,11 @@ this.mukellefler=[...new Set(arr)]
   
         ex.veri.posBilgileriTable.map((ve) => {
           expected_alt.push(
+            
             Object.assign(ve, {
               unvan: ex.unvan,
               tckn: ex.tckn,
-              genelToplam: ex.veri.toplam_genel,
-               
+              genelToplam: ex.veri.toplam_genel, 
               ay:ex.veri.ay,
             })
            

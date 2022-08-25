@@ -295,6 +295,12 @@ export default {
           width: "140",
           
         },
+         {
+          dataField: "Vadesi",
+          caption: "Vadesi",
+          width: "100",
+          
+        },
         {
           dataField: "FisNo",
           caption: "Fiş No",
@@ -454,11 +460,7 @@ export default {
         }, 500);
       });
     },
-    // async getQRCode(phone, msg) {
-    //   const res = await axios.post("http://localhost:8087/api", { phone, msg });
-    //   this.setQRCode = res.data;
-    //   console.log(res.data);
-    // },
+ 
     gelendata(value) {
       let arr = value.map((a) =>
         Object.assign(
@@ -498,7 +500,7 @@ export default {
             tel.HitapŞekli + "," + " "+
             "Son ödeme tarihi " +
             " "+
-            iletim.donem + " " + "olan" +
+            iletim.Vadesi + " " + "olan" +
             " "+
              iletim.beyannameTuru + " "+ "ödemeniz"+
             // iletim.unvan +
@@ -507,13 +509,7 @@ export default {
             iletim.Toplam + " "+ "TL dir."
             " " ;
             
-            // let msgUrl=   `${
-            //   "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
-            //   iletim.tckn +
-            //   "%2FBEYANNAME%2F" +
-            //   iletim.beyannameOid +
-            //   ".pdf?alt=media"
-            // }`;
+        
             let beyanid= iletim.beyannameOid;
             let msgTah=`${
             "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/" +
@@ -606,12 +602,12 @@ const data={
       this.selectredrow.forEach((a) => {
         a.iletisim.forEach((il) => {
           console.log(
-            `Son ödeme tarihi ${a.donem} olan ${a.beyannameKodu} ödenmeniz ${a.Toplam}Tl dir.`
+            `Son ödeme tarihi ${a.Vadesi} olan ${a.beyannameKodu} ödemeniz ${a.Toplam}Tl dir.`
           );
           let msgBaslik=  il.HitapŞekli + "," + " "+
             "Son ödeme tarihi " +
             " "+
-            a.donem + " " + "olan" +
+            a.Vadesi + " " + "olan" +
             " "+
              a.beyannameTuru + " "+ "ödemeniz"+
             // iletim.unvan +
@@ -735,7 +731,7 @@ this.AddNewsMailSorgu(data);
       let msgBaslik=  il.HitapŞekli + "," + " "+
             "Son odeme tarihi " +
             " "+
-            a.donem + " " + "olan" +
+            a.Vadesi + " " + "olan" +
             " "+
              a.beyannameTuru + " "+ "odemeniz"+
             " " + 
