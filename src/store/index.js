@@ -413,12 +413,32 @@ return kullaniciData
     async fetchBeyanname(context, payload) {
      
       let ar = []
-     context.dispatch("actionArr", {
+     context.dispatch("actionArrBey", {
         dbName: "Beyanname",
         İtemName: "Kullanici", 
         payload: payload.kullaniciuid,
         limit: payload.limitSize,   
         order:{data:"donem"},
+        MutName: "setBeyanname"
+      }).then(el => {
+        el.forEach(e => {
+          
+          ar.push(Object.assign(e.data(), {
+            id: e.id
+          }))
+        })
+
+      })
+      return ar
+    },
+    async fetchBeyannameFilter(context, payload) {
+     
+      let ar = []
+     context.dispatch("actionArr", {
+        dbName: "Beyanname",
+        İtemName: "Kullanici", 
+        payload: payload.kullaniciuid,
+         order:{data:"donem"},
         MutName: "setBeyanname"
       }).then(el => {
         el.forEach(e => {

@@ -424,14 +424,14 @@ export default {
         ".pdf?alt=media"
       }`;
       window.open(url, "_blank");
-      console.log(e);
+      //console.log(e);
     },
     onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
-      console.log(selectedRowsData);
+     // console.log(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;   
       this.$emit("onSelectionChanged",selectedRowsData)
-      console.log(this.pageSizeRef,this.$refs["appGrid"].instance);
+     // console.log(this.pageSizeRef,this.$refs["appGrid"].instance);
     },
     saveLayout(state) {
       state.columns.forEach((element) => {
@@ -482,28 +482,28 @@ export default {
   },
   watch:{
 pageSizeRefValue(){
-console.log(this.pagesz,this.pageSizeRefValue);
+//console.log(this.pagesz,this.pageSizeRefValue);
   
  if(this.pageSizeRefValue>10){
    this.pagesz=10
  }else{
 this.pagesz=this.pageSizeRefValue
  }
- console.log(this.pagesz);
+ //console.log(this.pagesz);
   this.$emit("pageSizes",this.pageSizeRefValue)
-  console.log(this.pageSizeRefValue,this.pagesz);
+  //console.log(this.pageSizeRefValue,this.pagesz);
 
 }
   },
 mounted(){
   const ela= document.getElementsByClassName("dx-page-size")
-console.log(ela);
+//console.log(ela);
 for (let i = 0; i < ela.length; i++) {
   const element = ela[i];
-  console.log(element);
+//  console.log(element);
 element.addEventListener('click',()=>{
   this.pageSizeRefValue=element.innerHTML=="Tümü"?3000:Number(element.innerHTML);
-  console.log(element.innerHTML=="Tümü"?3000:Number(element.innerHTML));
+  //console.log(element.innerHTML=="Tümü"?3000:Number(element.innerHTML));
 })
 
 }

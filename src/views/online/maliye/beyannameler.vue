@@ -39,7 +39,7 @@
       @onSelectionChanged="gelendata"
       :deleteInsuranceClick="deleteInsuranceClick"
       :pk="id"
-      :items="items"
+      :items="items"      
       :totalRows="16"
       :title="'Beyannameler'"
       :clickposta="clickposta"
@@ -57,6 +57,7 @@
       cancel-title="İptal"
       cancel-variant="outline-secondary"
       @ok="inquireClick"
+             :header-bg-variant="headerBgVariant"
     >
       <b-row>
         <b-col cols="12">
@@ -101,10 +102,11 @@
       cancel-title="İptal"
       cancel-variant="outline-secondary"
       @ok="listRunClick"
+       :header-bg-variant="headerBgVariant"
     >
       <b-row>
         <b-col cols="12">
-          <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4">
+          <b-form-group label="Ünvan" label-for="h-type" label-cols-md="4" >
             <v-select
               v-model="listRequest.title"
               :options="unvanlar"
@@ -114,7 +116,7 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12">
+        <!-- <b-col cols="12">
           <b-form-group label="Tür" label-for="h-type" label-cols-md="4">
             <v-select
               v-model="listRequest.type"
@@ -124,7 +126,7 @@
               label="BeyanTuru"
             />
           </b-form-group>
-        </b-col>
+        </b-col> -->
         <b-col cols="12">
           <b-form-group
             label="Başlangıç Tarihi"
@@ -209,6 +211,7 @@ export default {
   },
   data() {
     return {
+       headerBgVariant: 'danger',
         busy: false,
     timeout: null,
       setQRCode: null,
@@ -242,6 +245,7 @@ export default {
       activePdfUrl:
         "https://firebasestorage.googleapis.com/v0/b/emusavirim-3c193.appspot.com/o/0012167353%2FBEYANNAME%2F10l09o1t551oys.pdf?alt=media",
       items: [],
+      filterItems:[],
       unvanlar: [],
       turler: [],
       columns: [
@@ -415,6 +419,7 @@ export default {
     ...mapActions([
       "AddNewsBeyanSorgu",
       "fetchBeyanname",
+      "fetchBeyannameFilter",
       "nextButtons",
       "prevButtonVuex",
       "DeleteBeyanData",
@@ -422,7 +427,7 @@ export default {
       "DeleteGelenFatura"
     ]),
     deleteInsuranceClick(e) {
-      console.log(e);
+      
       this.DeleteBeyanData(e);
       let fin = this.items.findIndex((el) => {
         return el.id == e;
@@ -467,8 +472,7 @@ export default {
           a,
           { unvan: this.mukelefData.find((b) => b.tckn == a.tckn) }.unvan
         )
-      );
-      console.log(arr);
+      ); 
       this.selectredrow = arr;
     },
     queryClick() {
@@ -564,7 +568,7 @@ const data={
 
         SorguDurumu: 0,
       };
-      console.log(data);
+ 
       //Actionu çağirip ona veri göndermemiz lazım aksi halde çalişmaz
       this.AddNewsBeyanSorgu(data);
       //Data da ayarladiğimiz verileri vuexe gönderdik
@@ -788,29 +792,30 @@ this.AddNewsMailSorgu(data);
       let time2 = new Date(this.listRequest.endDate);
       const fil = this.beyannameData.filter((el) => {
         const time = new Date(
-          el.yuklemezamani.slice(0, 10).split(".").reverse().join("/")
+          el.donem.slice(0, 10).split(".").reverse().join("/")
         );
-        console.log(Object.values(this.listRequest));
+        console.log("TARİH DONEM", el.donem);
+        //console.log(Object.values(this.listRequest));
         if (
           this.listRequest.title.length > 0 ||
           this.listRequest.type.length > 0
         ) {
-          console.log("1.if");
+         // console.log("1.if");
           return (
             this.listRequest.title.includes(el.unvan) &&
-            this.listRequest.type.includes(el.beyannameKodu) &&
+            // this.listRequest.type.includes(el.beyannameKodu) &&
             now.getTime() >= time <= time2.getTime()
           );
         } else if (this.listRequest.type.length > 0) {
-          console.log("2.if");
+        //  console.log("2.if");
           return;
         } else {
-          console.log("else");
+         // console.log("else");
           return el;
         }
       });
       this.items = fil;
-      console.log(fil);
+      
     },
     /////////////////////////////////
     fetch() {
@@ -820,31 +825,22 @@ this.AddNewsMailSorgu(data);
         limitSize: Number(10),
         
       };
-      console.log(this.kullaniciUid);
-      
+          
       this.fetchBeyanname(data).then((el) => {
         let ar = [];
         let unvanlaar = [];
-        let beyantype = [];
-
-        // setTimeout(()=>{
-
-        // },)
-        //setTimeout(() => {
-          console.log(this.beyannameData);
+        let beyantype = []; 
           this.beyannameData.forEach((eld) => {
             ar.push(eld.vergiDairesi);
             beyantype.push(eld.beyannameKodu);
-
             beyan = el;
           });
           this.mukelefData.forEach((esl) => {
             unvanlaar.push(esl.unvan);
-          });
-        //}, 300);
+          });        
 
         setTimeout(() => {
-          console.log(ar);
+          // console.log(ar);
           this.turler = [...new Set(beyantype)];
           this.unvanlar = [...new Set(unvanlaar)];
           this.fetchvergiDairesi(ar).then((res) => {
@@ -857,14 +853,49 @@ this.AddNewsMailSorgu(data);
                 ).VergiDaire,
               })
             );
-            console.log(this.items);
+             //console.log(this.items);
           });
+        }, 2500);
+      });
+         const dataf = {
+        kullaniciuid: JSON.parse(localStorage.getItem("userData")).userId,
+      };
+       this.fetchBeyannameFilter(dataf).then((el) => {
+       
+        //  console.log(this.beyannameData);
+          this.beyannameData.forEach((eld) => {
+            ar.push(eld.vergiDairesi);
+            beyantype.push(eld.beyannameKodu);
+
+            beyan = el;
+          });
+          this.mukelefData.forEach((esl) => {
+            unvanlaar.push(esl.unvan);
+          });
+        //}, 300);
+
+        setTimeout(() => {
+         // console.log(ar);
+          this.turler = [...new Set(beyantype)];
+          this.unvanlar = [...new Set(unvanlaar)];
+          // this.fetchvergiDairesi(ar).then((res) => {
+          //   setTimeout(() => {}, 900);
+
+          //   this.filterItems = beyan.map((a) =>
+          //     Object.assign(a, {
+          //       vergiDairesi: this.getVDairesi.find(
+          //         (b) => b.VergiDaireKod == a.vergiDairesi
+          //       ).VergiDaire,
+          //     })
+          //   );
+          //   console.log(this.items);
+          // });
         }, 2500);
       });
       this.fetchKullaniciAyarlar(
         JSON.parse(localStorage.getItem("userData")).userId ).then(()=>{
 
-console.log(this.getKullaniciAyar);
+//console.log(this.getKullaniciAyar);
       });
     },
   },

@@ -358,7 +358,7 @@ export default {
       };
       console.log(data);
       this.AddGelenFaturaSorgu(data);
-     // this.AddGidenFaturaSorgu(data);
+      this.AddGidenFaturaSorgu(data);
       this.$toast({
         component: ToastificationContent,
         position: "top-right",

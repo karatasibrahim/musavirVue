@@ -127,7 +127,7 @@
           <img
             src="https://i.ibb.co/CvqLvpj/beyanname.jpg"
             @click="showPdfPopupClick(data.data.tckn,
-            data.data.veri.ceEVergiLevhaTcknTx,)"
+            data.data.veri.ceEVergiLevhaVknTx)"
           />
         </div>
       </template>
