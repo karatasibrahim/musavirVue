@@ -790,6 +790,8 @@ this.AddNewsMailSorgu(data);
     listRunClick() {
       let now = new Date(this.listRequest.startDate);
       let time2 = new Date(this.listRequest.endDate);
+            console.log("BAŞLANGIÇ",this.listRequest.startDate);
+      console.log("BİTİŞ",this.listRequest.endDate);
       const fil = this.beyannameData.filter((el) => {
         const time = new Date(
           el.donem.slice(0, 10).split(".").reverse().join("/")
